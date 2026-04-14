@@ -306,9 +306,19 @@ def _load_facilities() -> None:
     import json as _json
     from pathlib import Path
 
-    registry_path = Path("knowledge-base/health-facilities/uganda-facility-registry.json")
-    if not registry_path.exists():
-        logger.warning("Facility registry not found at %s", registry_path)
+    # Try multiple paths (works in Docker /app and local dev)
+    candidates = [
+        Path("knowledge-base/health-facilities/uganda-facility-registry.json"),
+        Path("../knowledge-base/health-facilities/uganda-facility-registry.json"),
+        Path(__file__).parent.parent.parent / "knowledge-base/health-facilities/uganda-facility-registry.json",
+    ]
+    registry_path = None
+    for p in candidates:
+        if p.exists():
+            registry_path = p
+            break
+    if registry_path is None:
+        logger.warning("Facility registry not found in any expected location")
         return
 
     try:
@@ -406,16 +416,19 @@ async def nearby_facilities(
 # ── SMS/USSD Gateway (Twilio + USSD menu) ─────────────────────────────────
 
 @app.post("/v1/ussd/callback")
-async def ussd_callback(
-    sessionId: str = "",
-    phoneNumber: str = "",
-    text: str = "",
-    serviceCode: str = "",
-):
-    """USSD callback webhook for feature phone menu navigation."""
+async def ussd_callback(request: Request):
+    """USSD callback webhook for feature phone menu navigation.
+
+    Accepts application/x-www-form-urlencoded (standard for USSD gateways).
+    """
     from app.sms_gateway import handle_ussd_callback
-    response = handle_ussd_callback(sessionId, phoneNumber, text, serviceCode)
-    return Response(content=response, media_type="text/plain")
+    form = await request.form()
+    session_id = str(form.get("sessionId", ""))
+    phone = str(form.get("phoneNumber", ""))
+    text = str(form.get("text", ""))
+    service_code = str(form.get("serviceCode", ""))
+    resp = handle_ussd_callback(session_id, phone, text, service_code)
+    return Response(content=resp, media_type="text/plain")
 
 
 @app.post("/v1/sms/send")

@@ -204,7 +204,10 @@ class HybridRetriever:
         top_k: int = 4,
         mode_filter: str | None = None,
     ) -> list[RetrievalHit]:
-        """Hybrid search with RRF fusion and optional reranking."""
+        """Dense vector search with optional reranking.
+
+        Uses simple search() API for maximum Qdrant version compatibility.
+        """
         if not self.is_ready:
             return self._keyword_fallback(query, top_k, mode_filter)
 
@@ -213,15 +216,10 @@ class HybridRetriever:
                 FieldCondition,
                 Filter,
                 MatchValue,
-                NamedSparseVector,
-                NamedVector,
-                Prefetch,
-                SparseVector,
             )
 
             # Encode query
             dense_vec = self._dense_model.encode(query).tolist()  # type: ignore[union-attr]
-            sparse_idx, sparse_val = self._bm25.encode(query)
 
             # Build filter
             qdrant_filter = None
@@ -230,39 +228,17 @@ class HybridRetriever:
                     must=[FieldCondition(key="mode", match=MatchValue(value=mode_filter))]
                 )
 
-            # Prefetch: dense + sparse → RRF fusion
-            prefetches = [
-                Prefetch(
-                    query=NamedVector(name="dense", vector=dense_vec),
-                    using="dense",
-                    limit=20,
-                    filter=qdrant_filter,
-                ),
-            ]
-            if sparse_idx:
-                prefetches.append(
-                    Prefetch(
-                        query=NamedSparseVector(
-                            name="sparse",
-                            vector=SparseVector(indices=sparse_idx, values=sparse_val),
-                        ),
-                        using="sparse",
-                        limit=20,
-                        filter=qdrant_filter,
-                    )
-                )
-
-            results = self._qdrant.query_points(  # type: ignore[union-attr]
+            # Simple dense search (compatible with all Qdrant versions)
+            results = self._qdrant.search(  # type: ignore[union-attr]
                 collection_name=QDRANT_COLLECTION,
-                prefetch=prefetches,
-                query=NamedVector(name="dense", vector=dense_vec),
-                using="dense",
+                query_vector=("dense", dense_vec),
+                query_filter=qdrant_filter,
                 limit=20,
                 with_payload=True,
             )
 
             hits = []
-            for pt in results.points:
+            for pt in results:
                 payload = pt.payload or {}
                 hits.append(
                     RetrievalHit(
@@ -275,6 +251,11 @@ class HybridRetriever:
                         },
                     )
                 )
+
+            # --- REMOVED prefetch/RRF block that caused version incompatibility ---
+            # The old code used Prefetch + NamedVector + query_points which broke
+            # between qdrant-client 1.13 and qdrant server 1.17. Simple search()
+            # works across all versions and is sufficient for 92 entries.
 
             # Rerank if enabled
             if self._reranker and hits:

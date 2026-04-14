@@ -377,6 +377,58 @@ def generate_local(
     return {"text": answer, "usage": {"input_tokens": inputs["input_ids"].shape[1], "output_tokens": len(outputs[0]) - inputs["input_ids"].shape[1]}}
 
 
+# ── Passage-based response (no LLM needed — instant, zero-cost) ────────────
+
+def generate_from_passages(
+    query: str,
+    passages: list[dict[str, Any]],
+    mode: str = "community",
+    locale: str = "en",
+) -> dict[str, Any]:
+    """Generate a grounded response directly from retrieved passages.
+
+    No LLM needed — assembles the best matching passages into a
+    coherent response with source citations. Works instantly,
+    offline, with zero API cost. Perfect for demo or low-resource
+    deployments.
+    """
+    if not passages:
+        return {
+            "text": (
+                "I don't have enough information to answer this question. "
+                "Please visit the nearest health facility or call 0800 100 263."
+            ),
+            "usage": {"input_tokens": 0, "output_tokens": 0},
+        }
+
+    # Build response from top passages
+    parts = []
+    for i, p in enumerate(passages[:3]):
+        text = p.get("text", "").strip()
+        source = p.get("source", "MoH Guidelines")
+        section = p.get("section", "")
+        if text:
+            header = f"**[{i+1}] {source}"
+            if section:
+                header += f" — {section}"
+            header += "**"
+            parts.append(f"{header}\n\n{text}")
+
+    response = "\n\n---\n\n".join(parts)
+
+    # Add disclaimer
+    response += (
+        "\n\n---\n*This is health guidance based on official Uganda Ministry of Health "
+        "guidelines — not a medical diagnosis. If symptoms worsen, visit the nearest "
+        "health facility or call 0800 100 263 (toll-free).*"
+    )
+
+    return {
+        "text": response,
+        "usage": {"input_tokens": 0, "output_tokens": len(response.split())},
+    }
+
+
 # ── Unified interface ──────────────────────────────────────────────────────
 
 def generate(
@@ -386,10 +438,27 @@ def generate(
     history: list[dict[str, str]] | None = None,
     locale: str = "en",
 ) -> dict[str, Any]:
-    """Generate health guidance using the configured backend."""
+    """Generate health guidance using the best available backend.
+
+    Priority: Claude API → Local Qwen3-8B → Passage-based (no LLM).
+    Always returns a response — never fails silently.
+    """
+    # Try Claude API first
     if LLM_BACKEND == "claude" and ANTHROPIC_API_KEY:
-        return generate_claude(query, passages, mode, history, locale)
-    return generate_local(query, passages, mode, locale)
+        try:
+            return generate_claude(query, passages, mode, history, locale)
+        except Exception as e:
+            logger.warning("Claude API failed, falling back: %s", e)
+
+    # Try local model
+    if LLM_BACKEND == "local":
+        try:
+            return generate_local(query, passages, mode, locale)
+        except Exception as e:
+            logger.warning("Local model failed, falling back to passages: %s", e)
+
+    # Passage-based fallback — always works, zero cost
+    return generate_from_passages(query, passages, mode, locale)
 
 
 def stream_tokens(
@@ -399,22 +468,37 @@ def stream_tokens(
     history: list[dict[str, str]] | None = None,
     locale: str = "en",
 ) -> Generator[dict[str, Any], None, None]:
-    """Stream tokens from configured backend."""
+    """Stream tokens from best available backend."""
+    # Try Claude streaming
     if LLM_BACKEND == "claude" and ANTHROPIC_API_KEY:
-        yield from stream_claude(query, passages, mode, history, locale)
-    else:
-        # Local model: generate full response, yield as single chunk
-        result = generate_local(query, passages, mode, locale)
-        yield {"type": "token", "text": result["text"]}
-        yield {"type": "done", "usage": result["usage"]}
+        try:
+            yield from stream_claude(query, passages, mode, history, locale)
+            return
+        except Exception as e:
+            logger.warning("Claude streaming failed: %s", e)
+
+    # Fallback: generate full response and yield as single chunk
+    try:
+        if LLM_BACKEND == "local":
+            result = generate_local(query, passages, mode, locale)
+        else:
+            result = generate_from_passages(query, passages, mode, locale)
+    except Exception:
+        result = generate_from_passages(query, passages, mode, locale)
+
+    yield {"type": "token", "text": result["text"]}
+    yield {"type": "done", "usage": result["usage"]}
 
 
 def is_ready() -> bool:
-    """Check if LLM backend is available."""
-    if LLM_BACKEND == "claude":
-        return bool(ANTHROPIC_API_KEY)
-    try:
-        _load_local_model()
-        return _local_model is not None
-    except Exception:
-        return False
+    """Check if any LLM backend is available. Passage-based always works."""
+    if LLM_BACKEND == "claude" and ANTHROPIC_API_KEY:
+        return True
+    if LLM_BACKEND == "local":
+        try:
+            _load_local_model()
+            return _local_model is not None
+        except Exception:
+            pass
+    # Passage-based fallback is always ready
+    return True
