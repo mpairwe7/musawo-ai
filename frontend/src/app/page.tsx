@@ -552,6 +552,20 @@ export default function HomePage() {
 
       {/* Chat area */}
       <div className="chat-area" role="region" aria-live="polite" aria-label="Health conversation">
+        {/* Empty state — show when no messages */}
+        {chat.length === 0 && (
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <HeartIcon width={48} height={48} />
+            </div>
+            <h2 className="empty-state-title">Welcome to Musawo AI</h2>
+            <p className="empty-state-subtitle">
+              Your community health navigator. Ask me about symptoms, medications,
+              maternal care, or child health — in English or Luganda.
+            </p>
+          </div>
+        )}
+
         <StarterPrompts />
 
         {chat.map((turn) => (
@@ -565,9 +579,15 @@ export default function HomePage() {
         {isStreaming && !streamTurnIdRef.current && (
           <div className="bubble assistant streaming" role="status" aria-label="Musawo is thinking">
             <div className="bubble-header">
-              <span className="role-label">Musawo</span>
+              <div className="bubble-header-left">
+                <span className="role-avatar assistant">M</span>
+                <span className="role-label">Musawo</span>
+              </div>
             </div>
-            <LoadingDots />
+            <div className="typing-indicator">
+              <LoadingDots />
+              <span className="typing-label">Searching health guidelines...</span>
+            </div>
           </div>
         )}
 

@@ -172,7 +172,11 @@ class HybridRetriever:
             logger.info("Loading dense model: %s (forcing CPU)", DENSE_MODEL)
             self._dense_model = SentenceTransformer(DENSE_MODEL, device="cpu")
 
-            if RERANK_ENABLED:
+            # Reranker disabled — Qwen2-based mxbai-rerank-base-v2 score.weight is
+            # uninitialized on this setup, producing inflated scores (~0.999 for all).
+            # Dense search (bge-m3) alone is sufficient for 92 entries.
+            self._reranker = None
+            if False and RERANK_ENABLED:
                 from sentence_transformers import CrossEncoder
                 logger.info("Loading reranker: %s", RERANKER_MODEL)
                 self._reranker = CrossEncoder(RERANKER_MODEL, device="cpu")

@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 # ── Configuration ──────────────────────────────────────────────────────────
 
 MAX_INPUT_LENGTH = int(os.getenv("MAX_INPUT_LENGTH", "2000"))
-ABSTENTION_THRESHOLD = float(os.getenv("ABSTENTION_THRESHOLD", "0.15"))
+ABSTENTION_THRESHOLD = float(os.getenv("ABSTENTION_THRESHOLD", "0.05"))
 ESCALATION_THRESHOLD = float(os.getenv("ESCALATION_THRESHOLD", "0.25"))
 GROUNDING_THRESHOLD = float(os.getenv("GROUNDING_THRESHOLD", "0.3"))
 

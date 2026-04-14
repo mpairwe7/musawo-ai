@@ -48,8 +48,8 @@ LLM_DEADLINE_SECONDS = int(os.getenv("LLM_INFERENCE_TIMEOUT", "45"))
 GROUNDING_THRESHOLD = float(os.getenv("GROUNDING_THRESHOLD", "0.3"))
 SESSION_TTL = int(os.getenv("SESSION_TTL_SECONDS", "86400"))
 MAX_SESSIONS = 5000
-MAX_HISTORY = 20
-HISTORY_WINDOW = 5  # Turns sent to LLM
+MAX_HISTORY = 40
+HISTORY_WINDOW = 10  # Last 10 turn-pairs sent to LLM for deep context
 LLM_WORKERS = int(os.getenv("LLM_WORKERS", "2"))
 
 # Emergency contacts (Uganda)
@@ -175,12 +175,17 @@ class HealthService:
         route = classify(req.query, current_mode=req.mode)
         effective_mode = route.mode
 
-        # 4. Retrieval
+        # 4. Retrieval — try mode-filtered first, fall back to unfiltered
         hits = self.retriever.search(
             query=req.query,
             top_k=4,
             mode_filter=effective_mode.value,
         )
+        # If mode filter returns too few/weak results, search across all modes
+        if len(hits) < 2 or (hits and max(h.score for h in hits) < 0.3):
+            all_hits = self.retriever.search(query=req.query, top_k=4, mode_filter=None)
+            if all_hits and (not hits or max(h.score for h in all_hits) > max((h.score for h in hits), default=0)):
+                hits = all_hits
 
         # Scrub retrieved passages for indirect injection
         for hit in hits:

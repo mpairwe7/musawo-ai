@@ -2,13 +2,12 @@
 const nextConfig = {
   output: "standalone",
 
-  // Turbopack workspace root
   experimental: {
     turbopackRoot: ".",
   },
 
-  // PWA headers
   async headers() {
+    const isDev = process.env.NODE_ENV !== "production";
     return [
       {
         source: "/(.*)",
@@ -28,11 +27,14 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline'",
+              // React dev needs unsafe-eval; production doesn't
+              isDev
+                ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+                : "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://*.tile.openstreetmap.org",
-              "connect-src 'self' http://localhost:8000",
+              "connect-src 'self' http://localhost:8000 http://localhost:8888 http://localhost:3200 ws://localhost:3200",
               "frame-src 'self' https://www.openstreetmap.org https://www.google.com",
               "worker-src 'self'",
             ].join("; "),
@@ -42,10 +44,9 @@ const nextConfig = {
     ];
   },
 
-  // API proxy to backend
   async rewrites() {
     const apiUrl =
-      process.env.INTERNAL_API_URL || "http://localhost:8000";
+      process.env.INTERNAL_API_URL || "http://localhost:8888";
     return [
       {
         source: "/api/:path*",

@@ -218,7 +218,7 @@ def generate_groq(
             messages.append(turn)
     messages.append({
         "role": "user",
-        "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}",
+        "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly to the patient/VHT. Do NOT show your thinking process.",
     })
 
     try:
@@ -229,6 +229,20 @@ def generate_groq(
             temperature=GROQ_TEMPERATURE,
         )
         answer = response.choices[0].message.content or ""
+
+        # Strip Qwen3 thinking blocks if present
+        import re as _re
+        answer = _re.sub(r"<think>.*?</think>", "", answer, flags=_re.DOTALL).strip()
+        # Strip conversational preamble ("Okay, let's see...")
+        for prefix in ["Okay, let's see", "Let me think", "Hmm,", "Alright,"]:
+            if answer.startswith(prefix):
+                # Find the first actual content line
+                lines = answer.split("\n")
+                for idx, line in enumerate(lines):
+                    if line.strip().startswith(("##", "**", "- ", "1.", "For ", "The ", "Based", "According")):
+                        answer = "\n".join(lines[idx:])
+                        break
+
         return {
             "text": answer,
             "usage": {
@@ -259,7 +273,7 @@ def stream_groq(
             messages.append(turn)
     messages.append({
         "role": "user",
-        "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}",
+        "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly. Do NOT show thinking.",
     })
 
     try:
