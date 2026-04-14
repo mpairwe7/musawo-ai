@@ -1,0 +1,149 @@
+# Musawo AI — Docker Compose (Community Health Navigator)
+# Usage:
+#   docker compose up                    # Core stack (redis, qdrant, api, frontend)
+#   docker compose --profile monitoring up  # + Prometheus, Grafana
+#   docker compose --profile vllm up     # + local Qwen3-8B on GPU
+
+name: musawo
+
+services:
+  # ── Redis: rate limiting + semantic cache ─────────────────────
+  redis:
+    image: redis:7.4-alpine
+    container_name: musawo-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: >
+      redis-server
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # ── Qdrant: vector store for health knowledge base ────────────
+  qdrant:
+    image: qdrant/qdrant:v1.17.1
+    container_name: musawo-qdrant
+    ports:
+      - "${QDRANT_HTTP_PORT:-6333}:6333"
+      - "${QDRANT_GRPC_PORT:-6334}:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      QDRANT__SERVICE__GRPC_PORT: 6334
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # ── API: FastAPI health service ───────────────────────────────
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: musawo-api
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      WORKERS: ${WORKERS:-2}
+      # LLM
+      LLM_BACKEND: ${LLM_BACKEND:-claude}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      CLAUDE_MODEL: ${CLAUDE_MODEL:-claude-sonnet-4-6-20250514}
+      CLAUDE_PROMPT_CACHING: ${CLAUDE_PROMPT_CACHING:-true}
+      CLAUDE_MAX_TOKENS: ${CLAUDE_MAX_TOKENS:-4096}
+      CLAUDE_TEMPERATURE: ${CLAUDE_TEMPERATURE:-0.3}
+      # Retrieval
+      QDRANT_URL: http://qdrant:6333
+      QDRANT_COLLECTION: ${QDRANT_COLLECTION:-musawo_health_kb}
+      DENSE_MODEL: ${DENSE_MODEL:-BAAI/bge-m3}
+      DENSE_DIM: ${DENSE_DIM:-1024}
+      RERANKER_MODEL: ${RERANKER_MODEL:-mixedbread-ai/mxbai-rerank-base-v2}
+      RERANK_ENABLED: ${RERANK_ENABLED:-true}
+      # Guardrails
+      MAX_INPUT_LENGTH: ${MAX_INPUT_LENGTH:-2000}
+      ABSTENTION_THRESHOLD: ${ABSTENTION_THRESHOLD:-0.15}
+      ESCALATION_THRESHOLD: ${ESCALATION_THRESHOLD:-0.25}
+      GROUNDING_THRESHOLD: ${GROUNDING_THRESHOLD:-0.3}
+      # CORS
+      ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:8000"
+    volumes:
+      - ./knowledge-base:/app/knowledge-base:ro
+      - api_logs:/app/logs
+      - hf_cache:/home/musawo/.cache/huggingface
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  # ── Frontend: Next.js 16 PWA ──────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    container_name: musawo-frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      INTERNAL_API_URL: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Monitoring (optional) ─────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: musawo-prometheus
+    profiles: ["monitoring"]
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus_data:/prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: musawo-grafana
+    profiles: ["monitoring"]
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-musawo}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  qdrant_data:
+  api_logs:
+  hf_cache:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  default:
+    name: musawo-network

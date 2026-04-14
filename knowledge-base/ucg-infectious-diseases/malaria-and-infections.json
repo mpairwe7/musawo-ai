@@ -1,0 +1,79 @@
+{
+  "source": "Uganda Clinical Guidelines 2016, Chapters 2 & 5: Infectious & Respiratory Diseases",
+  "version": "2016",
+  "publisher": "Ministry of Health Uganda",
+  "entries": [
+    {
+      "text": "MALARIA — CLINICAL FEATURES (UCG 2.5.2): Malaria is caused by Plasmodium species transmitted by female Anopheles mosquitoes. Uganda has predominantly P. falciparum (>95%). UNCOMPLICATED MALARIA: Fever (may be intermittent or continuous), chills and rigors, headache, body/joint pains, malaise, nausea/vomiting, loss of appetite. In children: irritability, poor feeding, vomiting, diarrhoea. SEVERE MALARIA — DANGER SIGNS (refer immediately): Prostration/inability to sit up, altered consciousness/coma, convulsions, respiratory distress/acidotic breathing, jaundice, dark/tea-coloured urine, severe anaemia (Hb <5 g/dl), hypoglycaemia, shock. INVESTIGATIONS: Rapid Diagnostic Test (RDT) or blood smear at HC2 level. Always test before treating — do NOT treat malaria without confirmed diagnosis.",
+      "section": "Malaria Diagnosis",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 2.5.2",
+      "severity": "yellow",
+      "topic": "Malaria"
+    },
+    {
+      "text": "MALARIA TREATMENT — UNCOMPLICATED (UCG 2.5.2.3): First-line treatment is Artemether-Lumefantrine (AL/Coartem) for ALL age groups. Give with fatty food or breast milk to improve absorption. DOSING BY WEIGHT (tablets = 20/120mg): 5-14 kg: 1 tablet twice daily for 3 days. 15-24 kg: 2 tablets twice daily for 3 days. 25-34 kg: 3 tablets twice daily for 3 days. Over 35 kg: 4 tablets twice daily for 3 days. Give first dose under observation. Second dose at 8 hours, then every 12 hours. Second-line (if AL not available): Artesunate-Amodiaquine. In PREGNANCY: First trimester — Oral quinine 10 mg/kg every 8 hours for 7 days plus Clindamycin 300 mg every 8 hours for 7 days. Second and third trimester — AL (same as non-pregnant). LOC: HC2 for uncomplicated, HC4 for severe malaria.",
+      "section": "Malaria Treatment",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 2.5.2.3",
+      "severity": "yellow",
+      "topic": "Malaria"
+    },
+    {
+      "text": "SEVERE MALARIA — EMERGENCY TREATMENT (UCG 2.5.2.4): REFER IMMEDIATELY to HC4 or Hospital. Pre-referral treatment at lower levels: Artesunate rectal suppository (for children <6 years if injectable not available): Child <1 year (5-8 kg): one 50 mg suppository. Child 1-2 years: one 100 mg suppository. Child 2-3 years: one 150 mg suppository. Child 3-5 years: one 200 mg suppository. AT HOSPITAL: IV Artesunate 2.4 mg/kg at 0, 12, 24 hours then once daily until patient can take oral medication. Then complete with oral AL for 3 days. If Artesunate unavailable: IM Artemether 3.2 mg/kg loading dose then 1.6 mg/kg daily. Or IV Quinine 20 mg/kg loading dose in glucose 5% over 4 hours, then 10 mg/kg every 8 hours. SUPPORTIVE CARE: Treat hypoglycaemia (glucose 10% IV), control seizures (diazepam), correct severe anaemia (blood transfusion if Hb <5).",
+      "section": "Severe Malaria",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 2.5.2.4",
+      "severity": "red",
+      "topic": "Malaria"
+    },
+    {
+      "text": "MALARIA PREVENTION AND CONTROL (UCG 2.5.2.7): (1) Sleep under Long-Lasting Insecticidal Nets (LLINs) every night — all family members, especially pregnant women and children under 5. (2) Indoor Residual Spraying (IRS) in targeted districts. (3) Intermittent Preventive Treatment in Pregnancy (IPTp): Give Sulfadoxine-Pyrimethamine (SP/Fansidar) 3 tablets as single dose at each ANC visit from 2nd trimester, at least 4 weeks apart. At least 3 doses during pregnancy. Do NOT give SP in first trimester or within 4 weeks of delivery. (4) Prompt diagnosis and treatment within 24 hours of fever onset. (5) Environmental management: drain stagnant water, clear bushes, use window screens. (6) Malaria chemoprophylaxis for travellers to endemic areas.",
+      "section": "Malaria Prevention",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 2.5.2.7",
+      "severity": "green",
+      "topic": "Malaria Prevention"
+    },
+    {
+      "text": "MEASLES (UCG 2.3.3): Highly communicable viral infection. Notifiable disease. Spread by droplet and direct contact. Clinical features: Catarrhal stage with high fever, Koplik's spots (diagnostic), runny nose, barking cough, conjunctivitis. Later: generalised maculopapular rash followed by desquamation. Complications: bronchopneumonia, otitis media, severe acute malnutrition, cancrum oris, corneal ulceration leading to blindness, encephalitis. MANAGEMENT (LOC HC2): Isolate patient. Paracetamol for fever. Tetracycline eye ointment 1% every 12 hours for 5 days. Increase fluids and nutrition. Vitamin A: Child <6 months: 50,000 IU. Child 6-12 months: 100,000 IU. Child >12 months: 200,000 IU. Give 3 doses — first at diagnosis, 2nd next day, 3rd on day 14. Monitor for secondary bacterial infections and treat with antibiotics. PREVENTION: Measles vaccination (see UNEPI schedule). Educate against myth of feeding meat/fish to measles patients.",
+      "section": "Measles",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 2.3.3",
+      "severity": "yellow",
+      "topic": "Measles"
+    },
+    {
+      "text": "EBOLA AND MARBURG VIRAL HAEMORRHAGIC FEVERS (UCG 2.3.6.1): Severe zoonotic multisystem febrile diseases caused by RNA viruses. NOTIFIABLE DISEASES — highly contagious. Transmission: contact with body fluids of infected humans or animals (including semen for months after recovery). Risk factors: communities around game parks, endemic areas, cultural burial practices, poor infection control. EARLY SIGNS: Sudden fever, weakness, headache, muscle pains, loss of appetite, conjunctivitis. LATE SIGNS: Watery/bloody diarrhoea, vomiting, GI bleeding (chest pain, respiratory distress), CNS dysfunction (confusion, seizures), miscarriage in pregnancy, kidney injury. Note: Haemorrhage seen in less than a third of Ebola patients. MANAGEMENT (LOC RR): Refer ALL patients to regional referral hospital. Notify the district health team. Strict isolation. PPE for all health workers. Supportive treatment: rehydration, antipyretics, manage organ failure. Contact tracing essential. Dead body handling: no washing/touching, designated burial team, no gatherings at funeral.",
+      "section": "Ebola and Marburg",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 2.3.6.1",
+      "severity": "red",
+      "topic": "Ebola"
+    },
+    {
+      "text": "INTESTINAL WORMS — DEWORMING (UCG 2.4.1): Common types in Uganda: Ascariasis (roundworm), Enterobiasis (threadworm), Hookworm, Strongyloides, Trichuriasis (whipworm). Hookworm causes iron-deficiency anaemia — major cause of anaemia in children and pregnant women. TREATMENT (LOC HC1 — community level): Roundworm, threadworm, hookworm, whipworm: Albendazole 400 mg single dose (Child <2 years: 200 mg). OR Mebendazole 500 mg single dose (Child <2 years: 250 mg). Strongyloides: Albendazole 400 mg every 12 hours for 3 days. Or Ivermectin 150-200 mcg/kg single dose (LOC HC3). PREVENTION: Proper faecal disposal (use latrine). Personal and food hygiene. Regular deworming of children every 3-6 months. Avoid walking barefoot. DEWORMING IN PREGNANCY: Give Mebendazole 500 mg single dose in 2nd trimester at ANC visit. Safe and important — reduces anaemia and low birth weight.",
+      "section": "Intestinal Worms",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 2.4.1",
+      "severity": "green",
+      "topic": "Deworming"
+    },
+    {
+      "text": "PNEUMONIA IN CHILDREN (UCG 5.2.9): PNEUMONIA IN INFANT UP TO 2 MONTHS (very serious — LOC HC3): Any of: fast breathing (≥60/min), severe chest indrawing, grunting, not feeding well, convulsions, fever or hypothermia. Treatment: Ampicillin 50 mg/kg IV every 6 hours PLUS Gentamicin 7.5 mg/kg IV once daily for at least 5 days. If no improvement in 48 hours: switch to Ceftriaxone 50-80 mg/kg IV once daily. PNEUMONIA IN CHILD 2 MONTHS TO 5 YEARS (LOC HC2-HC3): Non-severe (fast breathing only — 2-12 months: ≥50/min, 12 months-5 years: ≥40/min): Amoxicillin 40 mg/kg twice daily for 5 days. Reassess in 2-3 days. Severe (chest indrawing): Ampicillin 50 mg/kg IV 6-hourly plus Gentamicin 7.5 mg/kg IV daily for 5 days (LOC HC3). Very severe (cyanosis, unable to drink, convulsions): As above plus oxygen. Refer to hospital.",
+      "section": "Childhood Pneumonia",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 5.2.9",
+      "severity": "yellow",
+      "topic": "Pneumonia"
+    },
+    {
+      "text": "ASTHMA MANAGEMENT (UCG 5.1.1): Classify severity: MILD TO MODERATE: Talks in phrases, prefers sitting, not agitated, respiratory rate increased, accessory muscles not used. SEVERE: Talks in words, hunched forward, agitated, respiratory rate >30/min, accessory muscles in use, pulse >120. LIFE-THREATENING: Cyanosis, drowsy, confused, silent chest. URGENT — transfer to higher facility. MILD/MODERATE TREATMENT (LOC HC3): Salbutamol inhaler 2-10 puffs via spacer (or 5 mg nebuliser, 2.5 mg in children) every 20-30 min if necessary. Prednisolone 50 mg (children 1 mg/kg). Monitor 30-60 minutes. SEVERE (LOC HC4): Admit. High-flow oxygen ≥5 L/min to maintain SpO2 ≥94%. Salbutamol nebuliser every 20 min for 1st hour. Prednisolone 50 mg or Hydrocortisone 100 mg IV. If poor response: add Ipratropium bromide nebuliser 500 mcg (children 250 mcg). CHRONIC ASTHMA: Step 1 — salbutamol PRN. Step 2 — add beclomethasone inhaler 100-400 mcg twice daily. Step 3 — increase beclomethasone 400-1000 mcg. Step 4 — add prednisolone 10-20 mg daily.",
+      "section": "Asthma",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 5.1.1",
+      "severity": "yellow",
+      "topic": "Asthma"
+    }
+  ]
+}

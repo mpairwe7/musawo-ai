@@ -1,0 +1,38 @@
+{
+  "source": "Uganda MoH Essential Maternal Guidelines / WHO Emergency Obstetric Care",
+  "version": "2025",
+  "entries": [
+    {
+      "text": "POSTPARTUM HEMORRHAGE (PPH) — LEADING CAUSE OF MATERNAL DEATH: PPH is heavy bleeding after delivery (soaking more than 2 pads in 30 minutes). This is an EMERGENCY. IMMEDIATE ACTIONS at community level: (1) Call for help and arrange URGENT transport to health facility. (2) Rub the uterus firmly in a circular motion through the abdomen (uterine massage). The uterus should feel firm like a ball. (3) Encourage the mother to breastfeed immediately (helps the uterus contract). (4) If available, give Misoprostol 800mcg under the tongue (ONLY if trained). (5) Keep the mother warm. (6) Elevate her legs. (7) Give fluids by mouth if she is conscious. (8) Do NOT pack the vagina with cloth. (9) REFER IMMEDIATELY — PPH kills within 2 hours without treatment. Every minute counts.",
+      "section": "Postpartum Hemorrhage",
+      "mode": "maternal",
+      "guideline": "Emergency Obstetric Care",
+      "severity": "red",
+      "topic": "PPH"
+    },
+    {
+      "text": "ECLAMPSIA (CONVULSIONS IN PREGNANCY): Eclampsia is convulsions (fits) in a pregnant woman or within 48 hours after delivery, usually caused by very high blood pressure. This is a LIFE-THREATENING EMERGENCY. SIGNS: Severe headache, blurred vision, upper abdominal pain, swelling of face and hands, then sudden convulsions. IMMEDIATE ACTIONS: (1) Protect the woman from injury — move hard objects away, place her on her side. (2) Do NOT put anything in her mouth. (3) Do NOT restrain her during the fit. (4) After the fit: keep her on her side (recovery position). (5) Check breathing — if not breathing, tilt head back and lift chin. (6) REFER IMMEDIATELY to the nearest health facility. (7) If available and trained: give Magnesium Sulfate injection. (8) Keep environment quiet and dark. Eclampsia can recur — the woman needs emergency care.",
+      "section": "Eclampsia",
+      "mode": "maternal",
+      "guideline": "Emergency Obstetric Care",
+      "severity": "red",
+      "topic": "Eclampsia"
+    },
+    {
+      "text": "CHOKING — FIRST AID: FOR ADULTS AND CHILDREN OVER 1 YEAR: (1) Encourage coughing — if the person can cough, let them try to clear it. (2) If they cannot breathe, speak, or cough: Stand behind them, lean them slightly forward. (3) Give 5 sharp back blows between the shoulder blades with the heel of your hand. (4) If still choking: Abdominal thrusts (Heimlich maneuver) — stand behind, place fist above navel, pull sharply inward and upward. Repeat up to 5 times. (5) Alternate: 5 back blows, 5 abdominal thrusts. (6) If person becomes unconscious: lay them flat, call for help, begin CPR if trained. FOR INFANTS UNDER 1 YEAR: (1) Lay baby face down along your forearm, supporting the head. (2) Give 5 back blows between shoulder blades. (3) Turn baby face up. Give 5 chest thrusts (2 fingers on breastbone). (4) Look in mouth — remove visible object. (5) Repeat. NEVER do blind finger sweeps in a baby's mouth.",
+      "section": "Choking First Aid",
+      "mode": "community",
+      "guideline": "First Aid Guidelines",
+      "severity": "red",
+      "topic": "Choking"
+    },
+    {
+      "text": "SEVERE ALLERGIC REACTION (ANAPHYLAXIS): Anaphylaxis is a severe, life-threatening allergic reaction that can happen within minutes. Common causes: insect stings (bees, wasps), certain foods (groundnuts, fish), medications. SIGNS: Difficulty breathing, swelling of lips/tongue/throat, widespread rash/hives, dizziness or fainting, fast heartbeat, feeling of doom. WHAT TO DO: (1) Call for emergency help immediately. (2) If the person has an adrenaline injector (EpiPen): help them use it in the outer thigh. (3) Lay the person flat with legs elevated (unless they have breathing difficulty — let them sit up). (4) If not breathing: begin CPR if trained. (5) REFER TO HEALTH FACILITY IMMEDIATELY. (6) Do NOT give anything by mouth. (7) Monitor breathing continuously. Anaphylaxis can be fatal within minutes without treatment.",
+      "section": "Anaphylaxis",
+      "mode": "community",
+      "guideline": "Emergency First Aid",
+      "severity": "red",
+      "topic": "Allergic Reaction"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "source": "Uganda MoH VHT Strategy & Operational Guidelines / iCCM Protocol",
+  "version": "2022",
+  "entries": [
+    {
+      "text": "DANGER SIGNS IN CHILDREN UNDER 5: The child must be referred IMMEDIATELY to the nearest health facility if any of the following danger signs are present: (1) Convulsions or fits, (2) Not able to drink or breastfeed, (3) Vomiting everything, (4) Unconscious or very sleepy/lethargic, (5) Chest indrawing, (6) Very high fever (above 38.5°C). If ANY danger sign is present, give first dose of treatment if applicable, and REFER URGENTLY.",
+      "section": "General Danger Signs Assessment",
+      "mode": "vht",
+      "guideline": "iCCM",
+      "severity": "red",
+      "topic": "Danger Signs"
+    },
+    {
+      "text": "MALARIA ASSESSMENT AND TREATMENT: If the child has fever (reported or measured ≥37.5°C), perform a Rapid Diagnostic Test (RDT). If RDT is POSITIVE: Give ACT (Artemether-Lumefantrine/Coartem) according to age. For children 2-11 months: 1 tablet twice daily for 3 days. For children 12-59 months: 2 tablets twice daily for 3 days. If RDT is NEGATIVE: Do NOT give ACT. Refer if fever persists for more than 3 days.",
+      "section": "Malaria Management",
+      "mode": "vht",
+      "guideline": "iCCM",
+      "severity": "yellow",
+      "topic": "Malaria"
+    },
+    {
+      "text": "PNEUMONIA ASSESSMENT: Count the child's breathing for ONE FULL MINUTE. Fast breathing thresholds: 2 months to 12 months: 50 breaths per minute or more. 12 months to 5 years: 40 breaths per minute or more. If the child has fast breathing WITHOUT chest indrawing: Give Amoxicillin dispersible tablets — 250mg twice daily for 5 days (age 2-11 months) or 500mg twice daily for 5 days (age 12-59 months). If chest indrawing is present: REFER IMMEDIATELY — this is severe pneumonia.",
+      "section": "Pneumonia Management",
+      "mode": "vht",
+      "guideline": "iCCM",
+      "severity": "yellow",
+      "topic": "Pneumonia"
+    },
+    {
+      "text": "DIARRHOEA MANAGEMENT: For any child with diarrhoea (3 or more loose stools in 24 hours): (1) Give ORS — mix one packet with 1 litre of clean water. Give small, frequent sips. Continue until diarrhoea stops. (2) Give Zinc tablets — children 2-6 months: half tablet (10mg) daily for 10 days. Children 6 months to 5 years: 1 tablet (20mg) daily for 10 days. (3) Continue feeding and breastfeeding. REFER if: blood in stool, child is severely dehydrated (sunken eyes, skin pinch goes back slowly, restless/irritable), or diarrhoea lasts more than 14 days.",
+      "section": "Diarrhoea Management",
+      "mode": "vht",
+      "guideline": "iCCM",
+      "severity": "yellow",
+      "topic": "Diarrhoea"
+    },
+    {
+      "text": "DEHYDRATION ASSESSMENT: Check for signs of dehydration: (1) SOME DEHYDRATION — restless/irritable, eyes slightly sunken, thirsty, skin pinch goes back slowly. Treatment: Give ORS solution, observe for 4 hours, continue breastfeeding. (2) SEVERE DEHYDRATION — lethargic or unconscious, eyes very sunken, not able to drink, skin pinch goes back very slowly. Treatment: REFER URGENTLY to health facility. If facility is more than 30 minutes away, begin ORS on the way.",
+      "section": "Dehydration Assessment",
+      "mode": "vht",
+      "guideline": "iCCM",
+      "severity": "red",
+      "topic": "Dehydration"
+    },
+    {
+      "text": "MALNUTRITION SCREENING (MUAC): Measure the Mid-Upper Arm Circumference of every child 6-59 months during home visits. GREEN (≥13.5 cm): Normal — counsel on good nutrition. YELLOW (12.5-13.4 cm): Moderate Acute Malnutrition (MAM) — refer to supplementary feeding program, counsel on diet. RED (<12.5 cm): Severe Acute Malnutrition (SAM) — REFER URGENTLY to health facility. Also check for bilateral pitting oedema (swelling of both feet). If present, refer for SAM treatment regardless of MUAC.",
+      "section": "Nutrition Screening",
+      "mode": "vht",
+      "guideline": "iCCM",
+      "severity": "yellow",
+      "topic": "Malnutrition"
+    },
+    {
+      "text": "VHT HOME VISIT PROTOCOL: During every household visit, the VHT should: (1) Check all children under 5 for illness (fever, cough, diarrhoea). (2) Check nutritional status of children 6-59 months (MUAC measurement). (3) Verify immunization status — refer for any missed vaccines. (4) Check pregnant women for danger signs and ANC attendance. (5) Promote sleeping under insecticide-treated mosquito nets. (6) Promote hand washing with soap. (7) Promote exclusive breastfeeding for infants under 6 months. (8) Record findings in the VHT register. (9) Report any disease outbreaks or unusual health events to the nearest health facility.",
+      "section": "Home Visit Checklist",
+      "mode": "vht",
+      "guideline": "VHT Operational Guidelines",
+      "severity": "green",
+      "topic": "Home Visits"
+    },
+    {
+      "text": "WHEN TO REFER — SUMMARY FOR VHTs: Refer the patient to the health facility IMMEDIATELY if any of these are present: Any general danger sign (convulsions, cannot drink, vomiting everything, very sleepy). Chest indrawing in a child. Blood in stool. Signs of severe dehydration. MUAC below 12.5cm (red zone). Fever lasting more than 7 days. Pregnancy danger signs (bleeding, severe headache, fits, swelling, fever). Any condition the VHT is not sure about. When referring: give first dose of available treatment, write a referral note with the child's details and symptoms, advise the caretaker on urgency, and follow up after referral.",
+      "section": "Referral Guidelines",
+      "mode": "vht",
+      "guideline": "iCCM",
+      "severity": "red",
+      "topic": "Referral"
+    }
+  ]
+}

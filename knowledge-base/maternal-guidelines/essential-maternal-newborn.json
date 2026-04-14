@@ -1,0 +1,86 @@
+{
+  "source": "Uganda MoH Essential Maternal and Newborn Clinical Care Guidelines (2022/2025)",
+  "version": "2025",
+  "entries": [
+    {
+      "text": "ANTENATAL CARE SCHEDULE: The World Health Organization and Uganda MoH recommend at least 8 antenatal care contacts during pregnancy. Timing: First contact before 12 weeks, then at 20, 26, 30, 34, 36, 38, and 40 weeks. At each visit: check blood pressure, weight, urine, fetal heartbeat, and fundal height. First visit includes: HIV testing, syphilis screening, blood group, haemoglobin, hepatitis B, and ultrasound if available. Ensure the mother receives: iron and folic acid daily, tetanus toxoid vaccination, IPTp-SP for malaria prevention (starting in 2nd trimester), and deworming (mebendazole in 2nd trimester).",
+      "section": "Antenatal Care",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines",
+      "severity": "green",
+      "topic": "ANC Schedule"
+    },
+    {
+      "text": "DANGER SIGNS IN PREGNANCY — REFER IMMEDIATELY: (1) Vaginal bleeding at any stage of pregnancy. (2) Severe headache with blurred vision (possible pre-eclampsia). (3) Convulsions or fits (possible eclampsia). (4) High fever (≥38°C). (5) Severe abdominal pain. (6) Swelling of face, hands, or legs (oedema). (7) Reduced or absent fetal movements after 28 weeks. (8) Rupture of membranes (water breaking) before 37 weeks. (9) Labour before 37 weeks (preterm labour). If ANY of these signs are present, the woman must go to the health facility IMMEDIATELY, day or night. Do not wait.",
+      "section": "Danger Signs in Pregnancy",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines",
+      "severity": "red",
+      "topic": "Pregnancy Danger Signs"
+    },
+    {
+      "text": "BIRTH PREPAREDNESS PLAN: Every pregnant woman should prepare before delivery by: (1) Identifying a health facility for delivery — preferably Health Centre IV or hospital. (2) Identifying a skilled birth attendant. (3) Saving money for transport and any hospital costs. (4) Arranging transport — know who to call day or night. (5) Identifying a potential blood donor (same blood group). (6) Preparing a clean delivery kit: clean cloth, razor blade, cord ties, clean cloths for baby. (7) Identifying a companion for labour and delivery. (8) Knowing the danger signs and when to go to the facility. Birth preparedness should be discussed at every ANC visit starting from the first.",
+      "section": "Birth Preparedness",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines",
+      "severity": "green",
+      "topic": "Birth Planning"
+    },
+    {
+      "text": "NUTRITION IN PREGNANCY: A pregnant woman needs extra nutrition. Key advice: (1) Eat one extra meal per day (4 meals instead of 3). (2) Eat a variety of foods: matooke, posho, cassava, beans, groundnuts, meat, fish, eggs, milk, green vegetables, and fruits. (3) Take iron and folic acid tablets daily as prescribed (prevent anaemia). (4) Drink plenty of clean, safe water. (5) Avoid alcohol completely. (6) Reduce salt intake. (7) Eat foods rich in iron: liver, dark green leafy vegetables (dodo, nakati), beans. (8) Eat foods rich in Vitamin A: yellow/orange fruits (mangoes, pawpaw), carrots, sweet potatoes. Iron deficiency anaemia is common in Uganda and increases the risk of complications during delivery.",
+      "section": "Nutrition",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines",
+      "severity": "green",
+      "topic": "Pregnancy Nutrition"
+    },
+    {
+      "text": "NEWBORN CARE — ESSENTIAL STEPS: Immediately after birth: (1) Dry the baby thoroughly with a clean, dry cloth. (2) Place the baby on the mother's chest for skin-to-skin contact (keeps baby warm). (3) Ensure the baby is breathing — if not breathing, begin resuscitation. (4) Clamp and cut the umbilical cord after 1-3 minutes (delayed clamping). (5) Initiate breastfeeding within the first hour. (6) Keep the baby warm — cover the head with a cap, avoid bathing for at least 24 hours. (7) Apply chlorhexidine gel to the umbilical cord stump (prevents infection). (8) Check the baby for danger signs: not feeding, fever, chest indrawing, convulsions, yellow colour (jaundice), bleeding from cord.",
+      "section": "Immediate Newborn Care",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines",
+      "severity": "green",
+      "topic": "Newborn Care"
+    },
+    {
+      "text": "NEWBORN DANGER SIGNS — REFER IMMEDIATELY: (1) Not feeding or sucking well. (2) Convulsions or fits. (3) Fast breathing (more than 60 breaths per minute). (4) Severe chest indrawing. (5) Fever (temperature ≥37.5°C) or cold (temperature <35.5°C). (6) Jaundice (yellow skin) in the first 24 hours, or deep jaundice after day 1. (7) Umbilical cord: redness, swelling, pus, or bad smell. (8) Bleeding from any site. (9) Very small baby (born before 37 weeks or weight less than 2.5 kg) — needs extra warmth (kangaroo mother care) and frequent feeding. If ANY danger sign is present, take the baby to the health facility IMMEDIATELY.",
+      "section": "Newborn Danger Signs",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines",
+      "severity": "red",
+      "topic": "Newborn Danger Signs"
+    },
+    {
+      "text": "BREASTFEEDING GUIDANCE: (1) EXCLUSIVE BREASTFEEDING for the first 6 months — no water, no other foods, no formula. Breast milk alone provides everything the baby needs. (2) Start breastfeeding within one hour of birth. (3) The first milk (colostrum) is yellowish and thick — it is very important and protects the baby from infections. Do NOT discard it. (4) Breastfeed on demand — whenever the baby wants, day and night (at least 8 times in 24 hours). (5) Correct positioning: baby's body faces mother, mouth wide open, lower lip turned out, chin touching breast. (6) If the mother has difficulty: express breast milk and feed with a clean cup and spoon. (7) Continue breastfeeding alongside complementary foods from 6 months up to 2 years or beyond.",
+      "section": "Breastfeeding",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines",
+      "severity": "green",
+      "topic": "Breastfeeding"
+    },
+    {
+      "text": "POSTNATAL DANGER SIGNS — MOTHER: After delivery, the mother must be watched for: (1) Heavy vaginal bleeding (soaking more than 2 pads in 30 minutes). (2) High fever (≥38°C). (3) Foul-smelling vaginal discharge. (4) Severe headache or blurred vision. (5) Convulsions. (6) Difficulty breathing. (7) Severe abdominal pain. (8) Painful, swollen, red breast (possible mastitis). Postnatal visits should happen: within 24 hours, day 3, between day 7-14, and at 6 weeks after delivery. If ANY danger sign appears, go to the health facility IMMEDIATELY.",
+      "section": "Postnatal Care — Mother",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines",
+      "severity": "red",
+      "topic": "Postnatal Danger Signs"
+    },
+    {
+      "text": "IMMUNIZATION SCHEDULE FOR NEWBORNS AND INFANTS (Uganda UNEPI): At birth: BCG (tuberculosis) + OPV-0 (polio). At 6 weeks: OPV-1 + Pentavalent-1 (DPT, Hep B, Hib) + PCV-1 (pneumococcal) + Rotavirus-1. At 10 weeks: OPV-2 + Pentavalent-2 + PCV-2 + Rotavirus-2. At 14 weeks: OPV-3 + Pentavalent-3 + PCV-3 + IPV (injectable polio). At 6 months: Vitamin A supplement. At 9 months: Measles-Rubella-1 + Yellow Fever. At 15 months: Measles-Rubella-2. Keep the child's immunization card safe. If any vaccine is missed, go to the health facility to catch up. Immunization protects your child from deadly diseases.",
+      "section": "Immunization",
+      "mode": "maternal",
+      "guideline": "UNEPI Schedule",
+      "severity": "green",
+      "topic": "Immunization"
+    },
+    {
+      "text": "FAMILY PLANNING AFTER DELIVERY: To protect the health of both mother and baby, it is recommended to wait at least 2 years before the next pregnancy. Options available at health facilities: (1) Exclusive breastfeeding (LAM) — effective for first 6 months if fully breastfeeding. (2) Implants (Jadelle, Implanon) — 3-5 years protection, can be used while breastfeeding. (3) Injectable (Depo-Provera) — every 3 months, safe during breastfeeding. (4) IUD (intrauterine device) — can be inserted after 6 weeks postpartum, lasts 5-12 years. (5) Condoms — also protect against STIs/HIV. (6) Pills — progestogen-only pills safe during breastfeeding. Talk to your health worker about the best method for you.",
+      "section": "Family Planning",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines",
+      "severity": "green",
+      "topic": "Family Planning"
+    }
+  ]
+}

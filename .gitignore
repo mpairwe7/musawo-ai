@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.egg
+
+# Node
+node_modules/
+.next/
+out/
+frontend/.next/
+frontend/node_modules/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.log
+
+# Data
+data/
+*.db
+*.sqlite
+
+# HuggingFace cache
+.cache/
+hf_cache/
+
+# Coverage
+htmlcov/
+.coverage
+coverage/
+
+# Test results
+test-results/
+.pytest_cache/
+
+# Build artifacts
+*.pyc
+tsconfig.tsbuildinfo

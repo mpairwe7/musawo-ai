@@ -1,0 +1,38 @@
+{
+  "source": "Uganda National Mental Health Policy / WHO mhGAP Guidelines",
+  "version": "2024",
+  "entries": [
+    {
+      "text": "DEPRESSION SCREENING FOR VHTs: Depression is common and treatable. Ask the patient: (1) In the past 2 weeks, have you felt sad, empty, or hopeless most of the day? (2) Have you lost interest or pleasure in activities you usually enjoy? If YES to both: Screen positive for depression. Additional questions: (3) Trouble sleeping or sleeping too much? (4) Feeling tired or having no energy? (5) Poor appetite or overeating? (6) Feeling bad about yourself — like a failure? (7) Trouble concentrating? (8) Moving or speaking slowly, or being restless/fidgety? (9) Thoughts of harming yourself or that you would be better off dead? If question 9 is YES → REFER IMMEDIATELY. Depression is NOT laziness or weakness. It is a medical condition that responds to treatment.",
+      "section": "Depression Screening",
+      "mode": "community",
+      "guideline": "mhGAP",
+      "severity": "yellow",
+      "topic": "Mental Health"
+    },
+    {
+      "text": "POSTPARTUM DEPRESSION: Postpartum depression affects 1 in 5 mothers in Uganda. It usually starts 2-8 weeks after delivery but can occur anytime in the first year. WARNING SIGNS: Persistent sadness or crying, lack of interest in the baby, difficulty bonding with the baby, withdrawing from family, changes in eating or sleeping, feeling worthless or guilty, thoughts of harming self or baby. WHAT TO DO: (1) This is NOT the mother's fault. (2) Listen without judging. (3) Ensure the mother and baby are safe. (4) Refer to the health facility — treatment (counseling + sometimes medication) is effective. (5) Encourage support from family. (6) If the mother has thoughts of harming herself or the baby → REFER IMMEDIATELY to the health facility.",
+      "section": "Postpartum Depression",
+      "mode": "maternal",
+      "guideline": "mhGAP / Maternal Guidelines",
+      "severity": "yellow",
+      "topic": "Postpartum Depression"
+    },
+    {
+      "text": "CRISIS / SUICIDE RISK: If a person talks about wanting to die, wanting to end their life, feeling like a burden, or having no reason to live — TAKE IT SERIOUSLY. DO: (1) Listen calmly and without judgment. (2) Ask directly: 'Are you thinking of killing yourself?' (This does NOT increase risk.) (3) Remove access to means of self-harm (pesticides, medications, sharp objects, ropes). (4) Do NOT leave the person alone. (5) Take them to the nearest health facility IMMEDIATELY. (6) Call the Mental Health Hotline: 0800 100 263. DO NOT: Argue, minimize their feelings, promise secrecy, or leave them alone. Suicide is preventable. Most people who survive a suicide attempt do not die by suicide later.",
+      "section": "Suicide Risk Management",
+      "mode": "community",
+      "guideline": "mhGAP",
+      "severity": "red",
+      "topic": "Crisis Intervention"
+    },
+    {
+      "text": "SUBSTANCE ABUSE: Alcohol and drug abuse are growing health concerns in Uganda. Signs of harmful alcohol use: drinking daily, needing more to get the same effect, neglecting responsibilities, drinking alone, health problems (liver, stomach), family conflict. Signs of drug abuse: changed behavior, weight loss, red eyes, financial problems, secretiveness, neglecting hygiene. WHAT TO DO: (1) Approach with care — not judgment. (2) Express concern about their health, not their character. (3) Encourage them to visit the health facility. (4) Support from family is crucial. (5) Withdrawal from alcohol can be dangerous — seek medical help. Uganda Health Hotline for substance abuse support: 0800 100 263.",
+      "section": "Substance Abuse",
+      "mode": "community",
+      "guideline": "Uganda Mental Health Policy",
+      "severity": "yellow",
+      "topic": "Substance Abuse"
+    }
+  ]
+}

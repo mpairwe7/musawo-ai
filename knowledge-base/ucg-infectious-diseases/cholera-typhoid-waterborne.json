@@ -1,0 +1,39 @@
+{
+  "source": "Uganda Clinical Guidelines 2016, Chapter 6: Gastrointestinal Diseases + Chapter 2: Infections",
+  "version": "2016",
+  "publisher": "Ministry of Health Uganda",
+  "entries": [
+    {
+      "text": "CHOLERA (UCG 6.2.3): Acute intestinal infection caused by Vibrio cholerae. NOTIFIABLE DISEASE. Transmitted through contaminated water and food. Can cause death within hours if untreated. Clinical features: Sudden onset of profuse watery diarrhoea ('rice water' stools), severe vomiting, rapid dehydration, muscle cramps, low or no urine output. NO fever usually. ASSESSMENT: Classify dehydration (most patients present with severe dehydration). TREATMENT (LOC HC2): MILD/MODERATE: ORS (same as diarrhoea Plan B). SEVERE (LOC HC3): Aggressive IV rehydration: Ringer's Lactate — Adult: 1 litre in first 30 minutes, then 1L/hour until clinical improvement. Child: 30 ml/kg in 1 hour, then 70 ml/kg in 5 hours. Target: urine output within 6 hours. PLUS: Doxycycline 300 mg single dose (Adult) OR Azithromycin 20 mg/kg single dose (Child, Pregnant). Alternative: Ciprofloxacin 1 g single dose (Adult). Zinc for children (same as diarrhoea protocol). PREVENTION: Boil/treat water, hand washing, safe food handling, proper sanitation. In outbreaks: oral cholera vaccine (OCV), chlorination of water sources.",
+      "section": "Cholera",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 6.2.3",
+      "severity": "red",
+      "topic": "Cholera"
+    },
+    {
+      "text": "TYPHOID FEVER (UCG 2.1.9): Systemic infection caused by Salmonella typhi. Transmitted through contaminated food/water (faecal-oral). Clinical features: Stepwise rising fever over 1-2 weeks (high in evenings), headache, malaise, abdominal pain, constipation (early) or diarrhoea (late), rose spots on trunk (rare), hepatosplenomegaly, relative bradycardia (pulse lower than expected for fever). COMPLICATIONS: Intestinal perforation (surgical emergency — sudden severe abdominal pain), GI haemorrhage, septic shock, encephalopathy. INVESTIGATIONS (LOC HC3): Blood culture (gold standard — positive week 1-2). Widal test (rising titre ≥1:160 — less reliable, many false positives in endemic areas). Full blood count (leucopenia with relative lymphocytosis). TREATMENT (LOC HC3): First-line: Ciprofloxacin 500 mg twice daily for 7-14 days. OR Azithromycin 500 mg daily for 7 days. Children: Azithromycin 20 mg/kg daily for 5 days. If severe/complicated (LOC HC4): IV Ceftriaxone 2 g daily (Child: 50-80 mg/kg) for 10-14 days. If perforation: Emergency laparotomy + IV antibiotics. PREVENTION: Safe water, food hygiene, hand washing. Typhoid conjugate vaccine (TCV) for children 6 months-15 years in endemic areas.",
+      "section": "Typhoid Fever",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 2.1.9",
+      "severity": "yellow",
+      "topic": "Typhoid"
+    },
+    {
+      "text": "BACILLARY DYSENTERY / SHIGELLOSIS (UCG 6.2.2): Acute intestinal infection caused by Shigella species. Transmitted faecal-oral (contaminated food/water/hands). Common in children <5 years and in crowded/poor sanitation settings. Clinical features: Frequent small-volume bloody/mucoid stools (>3/day), abdominal cramps, tenesmus (painful straining), fever, vomiting. Dehydration may be less prominent than cholera. TREATMENT (LOC HC2): Rehydration: ORS as per dehydration plan. Antibiotic: Ciprofloxacin 500 mg twice daily for 3 days (Adult). Child: Ciprofloxacin 15 mg/kg twice daily for 3 days. Alternative: Azithromycin 500 mg day 1, then 250 mg daily for 4 days. Zinc supplementation (children). DO NOT give anti-diarrhoeals (loperamide) — they can worsen the illness. Monitor for: severe dehydration, toxic megacolon, sepsis. PREVENTION: Hand washing with soap. Safe food and water. Proper faecal disposal. Report suspected outbreaks.",
+      "section": "Dysentery / Shigellosis",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 6.2.2",
+      "severity": "yellow",
+      "topic": "Dysentery"
+    },
+    {
+      "text": "AMOEBIASIS / AMOEBIC DYSENTERY (UCG 6.2.1): Intestinal infection caused by Entamoeba histolytica. Transmitted through contaminated water/food. Clinical features: Gradual onset of bloody diarrhoea with mucus, abdominal pain (especially right lower quadrant), mild fever or no fever. Can cause amoebic liver abscess (right upper quadrant pain, high fever, tender liver). TREATMENT (LOC HC2): Metronidazole 400-800 mg 3 times daily for 5-10 days (Adult). Child: 7.5 mg/kg 3 times daily for 5-10 days. PLUS: Diloxanide furoate 500 mg 3 times daily for 10 days (to eliminate intestinal cysts). Alternative: Tinidazole 2 g daily for 3 days. Amoebic liver abscess (LOC HC4): Metronidazole IV 500 mg 3 times daily for 10 days. If no response: ultrasound-guided aspiration. PREVENTION: Boil/treat drinking water. Wash hands before eating. Proper sewage disposal.",
+      "section": "Amoebiasis",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 6.2.1",
+      "severity": "yellow",
+      "topic": "Amoebiasis"
+    }
+  ]
+}

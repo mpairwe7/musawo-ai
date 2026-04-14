@@ -1,0 +1,65 @@
+{
+  "name": "Musawo AI — Community Health Navigator",
+  "short_name": "Musawo",
+  "description": "Offline-first health guidance for rural Uganda. VHT triage, maternal care, and community health support.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a0f0a",
+  "theme_color": "#2E7D32",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["health", "medical"],
+  "icons": [
+    {
+      "src": "/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "VHT Triage",
+      "short_name": "VHT",
+      "url": "/?mode=vht",
+      "description": "Village Health Team symptom triage"
+    },
+    {
+      "name": "Maternal Care",
+      "short_name": "Maternal",
+      "url": "/?mode=maternal",
+      "description": "Pregnancy & newborn companion"
+    },
+    {
+      "name": "Community Health",
+      "short_name": "Health",
+      "url": "/?mode=community",
+      "description": "General health guidance"
+    }
+  ]
+}

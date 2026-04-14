@@ -1,0 +1,38 @@
+{
+  "source": "Uganda MoH Essential Maternal and Newborn Clinical Care Guidelines / WHO ENCC",
+  "version": "2025",
+  "entries": [
+    {
+      "text": "NEONATAL JAUNDICE: Jaundice is the yellow coloring of a baby's skin and eyes caused by excess bilirubin. NORMAL jaundice: appears after 24 hours of life, mild yellowing of face/chest, baby feeds well and is active. Usually resolves in 1-2 weeks. DANGER jaundice (REFER IMMEDIATELY): (1) Appears within the first 24 hours of life. (2) Yellow colour reaches the palms of hands or soles of feet. (3) Baby is very sleepy, not feeding. (4) Baby has fever or is cold. (5) Dark yellow urine or pale stools. MANAGEMENT: Keep breastfeeding frequently (at least 8 times in 24 hours). Expose baby to indirect sunlight for 30 minutes twice daily (NOT direct harsh sunlight). Monitor for danger signs. If jaundice worsens or baby becomes lethargic → REFER URGENTLY for phototherapy.",
+      "section": "Neonatal Jaundice",
+      "mode": "maternal",
+      "guideline": "Essential Newborn Care",
+      "severity": "yellow",
+      "topic": "Jaundice"
+    },
+    {
+      "text": "NEWBORN BREATHING PROBLEMS: A normal newborn breathes 40-60 times per minute. DANGER SIGNS — REFER IMMEDIATELY: (1) Not breathing at birth (needs immediate resuscitation). (2) Fast breathing: more than 60 breaths per minute. (3) Severe chest indrawing (ribs pulling in with each breath). (4) Grunting sound with each breath. (5) Blue colour (cyanosis) of lips, tongue, or whole body. (6) Nasal flaring. WHAT TO DO: (1) Keep the baby warm (skin-to-skin contact). (2) Keep the airway clear (gently clear mouth/nose if blocked). (3) If not breathing: stimulate by rubbing the back. Begin bag-and-mask resuscitation if trained. (4) REFER URGENTLY to health facility. Do not give anything by mouth if baby has breathing difficulty.",
+      "section": "Breathing Difficulties",
+      "mode": "maternal",
+      "guideline": "Essential Newborn Care",
+      "severity": "red",
+      "topic": "Neonatal Respiratory"
+    },
+    {
+      "text": "LOW BIRTH WEIGHT / PREMATURE BABY CARE: A baby born before 37 weeks or weighing less than 2.5 kg needs special care. KANGAROO MOTHER CARE (KMC): (1) Place the baby upright between the mother's breasts, skin-to-skin. (2) Cover baby's back with a blanket and wear a wrapper to hold baby in place. (3) Continue KMC 24 hours a day — baby should only be removed for diaper changes and bathing. (4) Breastfeed frequently — at least every 2 hours. If baby cannot suckle, express breast milk and feed with a cup/syringe. (5) Monitor temperature — baby should feel warm to touch. (6) Watch for danger signs: not feeding, fast breathing, fever or cold, convulsions. KMC saves lives. It keeps the baby warm, promotes bonding, and improves breastfeeding. Continue until the baby weighs 2.5 kg and is feeding well.",
+      "section": "Kangaroo Mother Care",
+      "mode": "maternal",
+      "guideline": "Essential Newborn Care",
+      "severity": "yellow",
+      "topic": "Preterm Care"
+    },
+    {
+      "text": "NEONATAL SEPSIS (NEWBORN INFECTION): Newborn infection (sepsis) can spread rapidly and kill within hours. DANGER SIGNS — REFER IMMEDIATELY: (1) Baby stops feeding or feeds poorly. (2) Very sleepy or difficult to wake. (3) Body temperature: high (>37.5°C) or low (<35.5°C). (4) Fast breathing or chest indrawing. (5) Convulsions. (6) Skin: red, swollen, or has pustules. (7) Umbilical cord: red, swollen, draining pus, or foul-smelling. (8) Abdomen distended (swollen belly). PREVENTION: (1) Clean delivery — hand washing, sterile cord cutting. (2) Apply chlorhexidine to cord stump. (3) Exclusive breastfeeding from first hour. (4) Keep baby warm and clean. (5) Limit handling by many people.",
+      "section": "Neonatal Sepsis",
+      "mode": "maternal",
+      "guideline": "Essential Newborn Care",
+      "severity": "red",
+      "topic": "Neonatal Infection"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "source": "Uganda Clinical Guidelines 2016, Chapter 17: Childhood Illnesses + WHO/UNICEF Developmental Milestones",
+  "version": "2016",
+  "publisher": "Ministry of Health Uganda",
+  "entries": [
+    {
+      "text": "CHILDHOOD DEVELOPMENTAL MILESTONES — SCREENING (WHO/MoH): VHTs and mothers should watch for these milestones during home visits. DELAYED milestones may indicate disability or illness — refer for assessment. BY 6 MONTHS: Holds head steady, rolls over, reaches for objects, responds to sounds, smiles socially, babbles. BY 9 MONTHS: Sits without support, transfers objects between hands, responds to own name, stranger anxiety, says 'mama/dada' (non-specific). BY 12 MONTHS: Pulls to stand, cruises furniture, pincer grasp (picks up small objects), says 1-2 words with meaning, waves bye-bye, understands 'no'. BY 18 MONTHS: Walks independently, stacks 2-3 blocks, says 6-20 words, points to body parts, feeds self with spoon (messy), follows simple instructions. BY 2 YEARS: Runs, kicks ball, stacks 6 blocks, says 2-word phrases, names pictures, parallel play. BY 3 YEARS: Pedals tricycle, copies circle, says 3-word sentences, knows age and name, plays with other children. BY 5 YEARS: Hops on one foot, draws a person (3+ parts), speaks clearly, counts to 10, dresses independently. RED FLAGS — REFER: No head control by 4 months, not sitting by 9 months, not walking by 18 months, no words by 18 months, loss of skills at any age.",
+      "section": "Developmental Milestones",
+      "mode": "maternal",
+      "guideline": "WHO Developmental Milestones / UCG 2016 Ch.17",
+      "severity": "green",
+      "topic": "Child Development"
+    },
+    {
+      "text": "SICK NEWBORN — DANGER SIGNS EXAMINATION (UCG 17.1.1): Assess EVERY newborn for danger signs at birth and during postnatal visits. CHECK FOR GENERAL DANGER SIGNS: (1) History of convulsions. (2) Not feeding well / unable to breastfeed. (3) Vomiting everything. (4) Movement only when stimulated (lethargic) or no movement at all. IF ANY GENERAL DANGER SIGN PRESENT → URGENT REFERRAL (pre-referral treatment if applicable). ASSESS FOR SPECIAL TREATMENT NEEDS: Temperature: Normal 36.5-37.5°C. Low (<35.5°C) = hypothermia → warm with KMC. High (>37.5°C) = fever → look for infection. Breathing: Count for 1 full minute. Fast breathing = >60/min. Severe chest indrawing. Grunting. Apnoea (no breathing for >20 sec). Weight: <2500 g = low birth weight → KMC, frequent feeding. <1500 g → refer to hospital. Umbilical cord: Redness extending to skin, pus, foul smell → possible serious infection. Eyes: Pus or swelling → treat with Tetracycline eye ointment 1% + refer if severe (ophthalmia neonatorum). Skin: Pustules >10, or large areas of redness → serious bacterial infection.",
+      "section": "Sick Newborn Examination",
+      "mode": "maternal",
+      "guideline": "UCG 2016 Section 17.1",
+      "severity": "red",
+      "topic": "Newborn Assessment"
+    },
+    {
+      "text": "SICK CHILD 2 MONTHS TO 5 YEARS — GENERAL DANGER SIGNS (UCG 17.3.1): At EVERY visit for a sick child, check for general danger signs FIRST. If ANY present → give urgent pre-referral treatment and REFER. GENERAL DANGER SIGNS: (1) Unable to drink or breastfeed. (2) Vomits everything. (3) Convulsions (now or in this illness). (4) Lethargic or unconscious. PRE-REFERRAL TREATMENT at community/HC2 level: If convulsing: Diazepam rectal 0.5 mg/kg (max 10 mg). If severe febrile illness (possible severe malaria): Rectal Artesunate (if <6 years and IM/IV not available). If severe dehydration: Start ORS by mouth/NGT if child can swallow. If very severe pneumonia: First dose Amoxicillin. Write referral note with: child's name, age, weight, symptoms, danger signs found, treatment given, time of referral. ADVISE mother: Go IMMEDIATELY. Keep child warm. Continue breastfeeding if possible. Give ORS sips during transport.",
+      "section": "General Danger Signs — Children",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 17.3.1",
+      "severity": "red",
+      "topic": "Paediatric Danger Signs"
+    },
+    {
+      "text": "INTEGRATED COMMUNITY CASE MANAGEMENT — iCCM (UCG 17.4): VHTs trained in iCCM can assess, classify, and treat THREE conditions in children 2 months to 5 years: (1) MALARIA: If fever (reported or felt hot) → do RDT. If RDT POSITIVE → give ACT (Artemether-Lumefantrine) by age. Age 2-11 months: 1 tablet twice daily for 3 days. Age 12-59 months: 2 tablets twice daily for 3 days. If RDT NEGATIVE → do NOT give ACT. Refer if fever persists >3 days. (2) PNEUMONIA: Count breathing for 1 FULL minute. Fast breathing: 2-11 months ≥50/min, 12-59 months ≥40/min. If fast breathing WITHOUT chest indrawing → give Amoxicillin dispersible tablet. 2-11 months: 250 mg twice daily for 5 days. 12-59 months: 500 mg twice daily for 5 days. If chest indrawing → REFER (severe pneumonia). (3) DIARRHOEA: Give ORS + Zinc for ALL diarrhoea. ORS: Mix 1 packet in 1 litre clean water. Give sips. Continue feeding. Zinc: <6 months 10 mg/day, ≥6 months 20 mg/day for 10 days. REFER if: blood in stool, signs of severe dehydration, not improving in 3 days. FOLLOW UP all treated children after 3 days.",
+      "section": "iCCM Protocol Summary",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 17.4",
+      "severity": "yellow",
+      "topic": "iCCM"
+    },
+    {
+      "text": "FEBRILE CONVULSIONS IN CHILDREN (UCG 1.1.5): Seizures associated with fever in children aged 6 months to 5 years, in the absence of CNS infection. Most common seizure type in children. SIMPLE FEBRILE CONVULSION: Generalised, duration <15 minutes, does not recur within 24 hours. COMPLEX FEBRILE CONVULSION (refer): Focal, duration >15 minutes, recurs within 24 hours, or associated with neurological deficit. IMMEDIATE MANAGEMENT (LOC HC2): (1) During seizure: protect the child (lay on side, clear area). Do NOT put anything in mouth. (2) If seizure >5 minutes: Diazepam rectal: 0.5 mg/kg (max 10 mg). May repeat once after 10 minutes. Or Diazepam IV: 0.25-0.5 mg/kg slow IV over 3-5 min (LOC HC3). (3) Reduce fever: Paracetamol 15 mg/kg every 6 hours. Tepid sponging. Remove excess clothing. (4) Identify and treat the cause of fever (malaria, pneumonia, UTI, meningitis). (5) REFER if: complex seizure, seizure >15 min, not responding to Diazepam, stiff neck (possible meningitis), repeated seizures. COUNSEL parents: Febrile convulsions are frightening but usually NOT harmful. They do NOT cause brain damage or epilepsy in most cases. Teach fever management at home.",
+      "section": "Febrile Convulsions",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 1.1.5",
+      "severity": "red",
+      "topic": "Febrile Convulsions"
+    }
+  ]
+}

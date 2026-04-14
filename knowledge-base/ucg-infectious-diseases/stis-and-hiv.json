@@ -1,0 +1,63 @@
+{
+  "source": "Uganda Clinical Guidelines 2016, Chapter 3: HIV/AIDS and Sexually Transmitted Infections",
+  "version": "2016",
+  "publisher": "Ministry of Health Uganda",
+  "entries": [
+    {
+      "text": "HIV — FIRST-LINE ART REGIMENS (UCG 3.1.3.3): Start ART in ALL HIV-positive individuals regardless of CD4 count (Test and Treat). ADULTS AND ADOLESCENTS (≥15 years): Preferred first-line: TDF + 3TC + DTG (Tenofovir + Lamivudine + Dolutegravir) — one pill once daily. Alternative (if DTG not tolerated): TDF + 3TC + EFV (Tenofovir + Lamivudine + Efavirenz 600 mg) once daily at bedtime. PREGNANT/BREASTFEEDING WOMEN: TDF + 3TC + DTG (preferred). Continue ART for life (Option B+). If on EFV-based regimen and stable, may continue. CHILDREN: 0-4 weeks: AZT + 3TC + NVP (Zidovudine + Lamivudine + Nevirapine). 4 weeks to <15 kg: ABC + 3TC + LPV/r (Abacavir + Lamivudine + Lopinavir/ritonavir). 15-19.9 kg: ABC + 3TC + DTG (10 mg). ≥20 kg: TDF + 3TC + DTG. MONITORING: Viral load at 6 months, 12 months, then annually. Target: undetectable (<1000 copies/ml). If virological failure after adherence counselling: switch to second-line. LOC: HC3 for ART initiation.",
+      "section": "HIV ART Regimens",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 3.1.3",
+      "severity": "yellow",
+      "topic": "HIV Treatment"
+    },
+    {
+      "text": "PMTCT — PREVENTION OF MOTHER-TO-CHILD TRANSMISSION (UCG 3.1.4): All HIV-positive pregnant women must start ART immediately (Option B+): TDF + 3TC + DTG for life. INFANT PROPHYLAXIS: Low risk (mother on ART >4 weeks before delivery, viral load suppressed): NVP (Nevirapine) syrup daily for 6 weeks. High risk (mother started ART late, unknown viral load, or detectable VL): AZT + NVP for 12 weeks. BREASTFEEDING: Exclusive breastfeeding for 6 months with complementary feeds to 12 months. Continue ART throughout breastfeeding. INFANT TESTING: DNA PCR at 6 weeks (early infant diagnosis). If negative: repeat at 9 months (rapid test) and 18 months (final test). If positive at any point: start ART immediately. CARE OF HIV-EXPOSED INFANT: Cotrimoxazole prophylaxis from 6 weeks until confirmed HIV-negative and no longer breastfeeding. Monitor growth closely. Immunize per UNEPI schedule. LOC: HC3.",
+      "section": "PMTCT",
+      "mode": "maternal",
+      "guideline": "UCG 2016 Section 3.1.4",
+      "severity": "yellow",
+      "topic": "HIV in Pregnancy"
+    },
+    {
+      "text": "POST-EXPOSURE PROPHYLAXIS — PEP (UCG 3.1.6.1): PEP is emergency ART taken within 72 HOURS of potential HIV exposure to prevent infection. INDICATIONS: Needle stick injury, sexual assault/rape, unprotected sex with known HIV+ partner, broken condom. REGIMEN (28 days): Adults: TDF + 3TC + DTG once daily for 28 days. Children <25 kg: AZT + 3TC + LPV/r for 28 days. TIMING IS CRITICAL: Must start within 72 hours (ideally <2 hours). Effectiveness decreases with every hour of delay. After 72 hours — PEP is NOT effective. BASELINE TESTING: HIV rapid test before starting PEP. If already HIV+ → start ART, not PEP. Hepatitis B test. Pregnancy test (for women). FOLLOW-UP: HIV test at 6 weeks, 3 months, and 6 months after exposure. SEXUAL ASSAULT: Also give emergency contraception, STI prophylaxis (Ceftriaxone 250 mg IM + Azithromycin 1 g + Metronidazole 2 g), tetanus toxoid, Hepatitis B vaccine, and counselling. LOC: HC3.",
+      "section": "Post-Exposure Prophylaxis",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 3.1.6.1",
+      "severity": "red",
+      "topic": "PEP"
+    },
+    {
+      "text": "URETHRAL DISCHARGE SYNDROME — MALE STI (UCG 3.2.1): Syndromic management — treat without waiting for lab results. Causes: Gonorrhoea (Neisseria gonorrhoeae), Chlamydia (Chlamydia trachomatis). Clinical features: Purulent urethral discharge, dysuria (painful urination), urethral itching. TREATMENT (LOC HC2): Ceftriaxone 250 mg IM single dose (for gonorrhoea) PLUS Azithromycin 1 g oral single dose (for chlamydia). Alternative if Ceftriaxone unavailable: Ciprofloxacin 500 mg oral single dose PLUS Doxycycline 100 mg twice daily for 7 days. PARTNER TREATMENT: Treat all sexual partners from the last 60 days with the same regimen. No sexual contact until both partners complete treatment. COUNSEL: Use condoms consistently. HIV testing and counselling. Return if symptoms persist after 7 days.",
+      "section": "Urethral Discharge (Male STI)",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 3.2.1",
+      "severity": "yellow",
+      "topic": "STI"
+    },
+    {
+      "text": "VAGINAL DISCHARGE SYNDROME — FEMALE STI (UCG 3.2.2): Syndromic management for abnormal vaginal discharge. Causes: Candidiasis (thrush), Bacterial Vaginosis, Trichomonas, Gonorrhoea, Chlamydia. ASSESSMENT: Ask about: colour/smell of discharge, itching, pain, dyspareunia, lower abdominal pain, sexual partners. TREATMENT (LOC HC2): If LOW risk (monogamous, no other symptoms): Clotrimazole pessary 500 mg single dose OR Fluconazole 150 mg oral single dose (for candida) PLUS Metronidazole 2 g oral single dose (for BV/Trichomonas). If HIGH risk (multiple partners, partner with symptoms, cervical motion tenderness): ADD Ceftriaxone 250 mg IM + Azithromycin 1 g oral (for gonorrhoea/chlamydia). If pregnant: Clotrimazole pessary 100 mg nightly for 7 days (NOT Fluconazole in 1st trimester). Metronidazole 200 mg oral 3 times daily for 7 days (avoid in 1st trimester). Do NOT use Doxycycline or Ciprofloxacin in pregnancy.",
+      "section": "Vaginal Discharge Syndrome",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 3.2.2",
+      "severity": "yellow",
+      "topic": "STI"
+    },
+    {
+      "text": "GENITAL ULCER DISEASE — SYPHILIS AND OTHERS (UCG 3.2.4): Syndromic management for genital ulcers. Causes: Syphilis (Treponema pallidum), Herpes simplex (HSV-2), Chancroid (H. ducreyi), Lymphogranuloma venereum. TREATMENT (LOC HC2): Benzathine Penicillin 2.4 million IU IM single dose (for syphilis) PLUS Aciclovir 400 mg oral 3 times daily for 7 days (for herpes). If penicillin allergic: Erythromycin 500 mg 4 times daily for 14 days. For recurrent herpes: Aciclovir 400 mg 3 times daily for 5 days. SYPHILIS IN PREGNANCY: Screen ALL pregnant women at first ANC visit (RPR/VDRL test). If positive: Benzathine Penicillin 2.4 MU IM weekly for 3 weeks. Treat partner. Untreated syphilis causes: miscarriage, stillbirth, premature birth, congenital syphilis (blindness, bone deformities, death). LOC HC2 for screening, HC3 for treatment.",
+      "section": "Genital Ulcer Disease / Syphilis",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 3.2.4",
+      "severity": "yellow",
+      "topic": "STI"
+    },
+    {
+      "text": "PELVIC INFLAMMATORY DISEASE — PID (UCG 3.2.3): Infection of the upper female reproductive tract (uterus, fallopian tubes, ovaries). Usually caused by untreated gonorrhoea or chlamydia. Clinical features: Lower abdominal pain, abnormal vaginal discharge, fever, pain during sex, irregular bleeding, cervical motion tenderness on exam. TREATMENT (LOC HC3): Mild/moderate: Ceftriaxone 250 mg IM single dose PLUS Doxycycline 100 mg twice daily for 14 days PLUS Metronidazole 400 mg twice daily for 14 days. Severe (high fever, peritoneal signs, tubo-ovarian abscess): Admit. IV Ceftriaxone 1 g daily PLUS IV Metronidazole 500 mg 3 times daily PLUS Doxycycline 100 mg twice daily. Continue IV for 48 hours after improvement, then switch to oral for 14 days total. COMPLICATIONS if untreated: Infertility, ectopic pregnancy, chronic pelvic pain, tubo-ovarian abscess. COUNSEL: Treat partner. Use condoms. HIV test.",
+      "section": "Pelvic Inflammatory Disease",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 3.2.3",
+      "severity": "yellow",
+      "topic": "STI"
+    }
+  ]
+}

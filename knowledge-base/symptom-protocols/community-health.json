@@ -1,0 +1,70 @@
+{
+  "source": "Uganda Clinical Guidelines / WHO Community Health Guidance",
+  "version": "2024",
+  "entries": [
+    {
+      "text": "MALARIA PREVENTION AT HOME: Malaria is spread by mosquitoes that bite mainly at night. Prevention measures: (1) Sleep under a Long-Lasting Insecticidal Net (LLIN) every night — even during dry season. (2) Ensure all family members, especially children under 5 and pregnant women, sleep under the net. (3) Tuck the net under the mattress. (4) Clear bushes around the home. (5) Drain stagnant water where mosquitoes breed. (6) Wear long sleeves in the evening. (7) If you develop fever, headache, body aches, and chills — go to the health facility for an RDT test within 24 hours. Early treatment saves lives. Do NOT buy medicine from the market without testing first.",
+      "section": "Malaria Prevention",
+      "mode": "community",
+      "guideline": "Uganda Clinical Guidelines",
+      "severity": "green",
+      "topic": "Malaria Prevention"
+    },
+    {
+      "text": "WHEN TO SEEK CARE — GENERAL GUIDANCE: Go to the health facility if you have any of these: (1) Fever lasting more than 3 days. (2) Difficulty breathing or chest pain. (3) Severe headache with stiff neck. (4) Vomiting blood or blood in stool. (5) Sudden severe pain anywhere. (6) Injury or wound that is deep, bleeding heavily, or infected. (7) Confusion or loss of consciousness. (8) Seizures or convulsions. (9) Sudden weakness on one side of the body. (10) High fever with rash. Do not wait — delays in seeking care can lead to serious complications or death. The health facility is free for basic services.",
+      "section": "When to Seek Care",
+      "mode": "community",
+      "guideline": "Community Health Guidance",
+      "severity": "yellow",
+      "topic": "General Guidance"
+    },
+    {
+      "text": "SAFE WATER AND HYGIENE: (1) Always drink clean, safe water. Boil water for at least 1 minute or use water treatment chemicals (WaterGuard). (2) Wash hands with soap: before eating, before preparing food, after using the toilet, after changing a baby's nappy, after handling animals. (3) Use a latrine — do not defecate in the open. (4) Keep food covered and stored safely. (5) Wash fruits and vegetables before eating. (6) Keep your home and compound clean. Diarrhoea, cholera, and typhoid are caused by dirty water and poor hygiene. Hand washing with soap can reduce diarrhoea by 40%.",
+      "section": "Water, Sanitation & Hygiene",
+      "mode": "community",
+      "guideline": "Community Health Guidance",
+      "severity": "green",
+      "topic": "WASH"
+    },
+    {
+      "text": "HIV/AIDS — WHAT EVERYONE SHOULD KNOW: (1) HIV is spread through: unprotected sex, sharing needles/sharp instruments, mother to child (during pregnancy, delivery, or breastfeeding). (2) HIV is NOT spread through: shaking hands, hugging, sharing food, mosquito bites. (3) Know your status — get tested. Testing is free and confidential at all health facilities. (4) Prevention: use condoms consistently, be faithful to one partner, avoid sharing needles. (5) If HIV positive: start ART (antiretroviral therapy) immediately. ART is FREE at government facilities. Take medicines every day at the same time. You can live a long, healthy life with HIV on treatment. (6) Prevention of Mother-to-Child Transmission (PMTCT): all HIV-positive pregnant women should be on ART to protect the baby.",
+      "section": "HIV/AIDS",
+      "mode": "community",
+      "guideline": "Uganda Clinical Guidelines",
+      "severity": "green",
+      "topic": "HIV"
+    },
+    {
+      "text": "DIABETES WARNING SIGNS AND MANAGEMENT: Diabetes is a condition where the body cannot properly control blood sugar. Warning signs: excessive thirst, frequent urination, unexplained weight loss, blurred vision, slow-healing wounds, tingling in hands or feet, extreme fatigue. If you have these signs, go to the health facility for a blood sugar test. Management: (1) Take prescribed medicine every day as directed. (2) Eat balanced meals — reduce sugar, white bread, soda, and sweets. (3) Eat more vegetables, beans, and whole grains. (4) Exercise regularly — at least 30 minutes of walking daily. (5) Check blood sugar regularly at the clinic. (6) Care for your feet — check daily for wounds. DANGER: If you feel very dizzy, confused, or very thirsty, go to the facility IMMEDIATELY.",
+      "section": "Diabetes",
+      "mode": "community",
+      "guideline": "NCD Guidelines",
+      "severity": "yellow",
+      "topic": "Diabetes"
+    },
+    {
+      "text": "HYPERTENSION (HIGH BLOOD PRESSURE): Hypertension often has no symptoms but can lead to stroke, heart attack, and kidney damage. Risk factors: age, obesity, too much salt, stress, alcohol, family history. Management: (1) Take prescribed blood pressure medicine EVERY DAY — do not stop when you feel well. (2) Reduce salt in food. (3) Eat more fruits and vegetables. (4) Exercise regularly. (5) Maintain a healthy weight. (6) Limit alcohol. (7) Stop smoking. (8) Manage stress. Get your blood pressure checked at least once a year. DANGER SIGNS — go to facility immediately: severe headache, chest pain, difficulty breathing, sudden blurred vision, nosebleed that won't stop.",
+      "section": "Hypertension",
+      "mode": "community",
+      "guideline": "NCD Guidelines",
+      "severity": "yellow",
+      "topic": "Hypertension"
+    },
+    {
+      "text": "FIRST AID FOR COMMON INJURIES: BURNS: Cool the burn immediately with clean, cool running water for at least 20 minutes. Do NOT apply toothpaste, butter, or other home remedies. Cover with a clean, loose bandage. If the burn is large, deep, on the face/hands/genitals, or if it blisters — go to the health facility. WOUNDS: Clean with clean water and mild soap. Apply pressure with a clean cloth to stop bleeding. Cover with a clean bandage. Go to the health facility if: bleeding won't stop, the wound is deep, caused by a rusty object (needs tetanus), or shows signs of infection (redness, swelling, pus, fever). SNAKE BITE: Keep the person calm and still. Do NOT cut, suck, or apply tourniquet. Go to the health facility IMMEDIATELY for antivenom.",
+      "section": "First Aid",
+      "mode": "community",
+      "guideline": "Community Health Guidance",
+      "severity": "yellow",
+      "topic": "First Aid"
+    },
+    {
+      "text": "TUBERCULOSIS (TB): TB is spread through the air when a person with TB coughs, sneezes, or spits. Symptoms: persistent cough for more than 2 weeks, coughing blood, fever (especially at night), weight loss, night sweats, chest pain. If you have a cough lasting more than 2 weeks, go to the health facility for a TB test (free). Treatment: TB is curable! Take the full 6-month course of medicine as prescribed. Do NOT stop treatment when you feel better — incomplete treatment leads to drug-resistant TB. Prevention: cover mouth when coughing, ensure good ventilation in homes, BCG vaccination for newborns. People living with HIV are at higher risk for TB and should be screened regularly.",
+      "section": "Tuberculosis",
+      "mode": "community",
+      "guideline": "Uganda Clinical Guidelines",
+      "severity": "yellow",
+      "topic": "TB"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "source": "Uganda Clinical Guidelines 2016, Chapter 1: Emergencies and Trauma",
+  "version": "2016 (reprint December 2016)",
+  "publisher": "Ministry of Health Uganda, Pharmacy Department",
+  "entries": [
+    {
+      "text": "ANAPHYLACTIC SHOCK (UCG 1.1.1): A severe, life-threatening allergic reaction. Common causes: drugs (penicillin, aspirin, NSAIDs), vaccines, sera, insect stings, foods. Clinical features: rapid onset of bronchospasm, laryngeal oedema, hypotension, urticaria, angioedema. MANAGEMENT (LOC HC3): (1) Secure airway and give high-flow oxygen. (2) Adrenaline (epinephrine) 1:1000 IM: Adult 0.5 ml, Child 0.01 ml/kg (max 0.5 ml). Repeat every 5-15 minutes if no improvement. (3) Set up IV line with Normal Saline 0.9%. (4) Chlorpheniramine IV: Adult 10 mg, Child 0.2 mg/kg. (5) Hydrocortisone IV: Adult 200 mg, Child 4 mg/kg. (6) If bronchospasm: Salbutamol nebuliser 5 mg (Child 2.5 mg). (7) Monitor pulse, BP, breathing every 5 minutes. CAUTION: Do NOT give adrenaline IV except in cardiac arrest.",
+      "section": "Anaphylactic Shock",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 1.1.1",
+      "severity": "red",
+      "topic": "Anaphylaxis"
+    },
+    {
+      "text": "HYPOVOLAEMIC SHOCK CLASSIFICATION (UCG 1.1.2): Classify severity by indicators: CLASS 1 (Mild): Blood loss <0.75L (<15%), pulse normal, BP normal, alert. CLASS 2 (Progressing): Blood loss 0.75-1.5L (15-30%), pulse >100, BP normal, anxious. CLASS 3 (Severe): Blood loss 1.5-2L (30-40%), pulse >120, BP decreased, confused. CLASS 4 (End Stage): Blood loss >2L (>40%), pulse >140, BP very low/absent, unconscious. MANAGEMENT (LOC HC3): Control bleeding with pressure. Set 2 large bore IV lines. Give Normal Saline 0.9% or Ringer's Lactate 20-30 ml/kg over 60 minutes. If blood loss >1 litre: blood transfusion 1-2 units. CAUTION: Do not use glucose solutions or plain water as replacement fluids.",
+      "section": "Hypovolaemic Shock",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 1.1.2",
+      "severity": "red",
+      "topic": "Shock"
+    },
+    {
+      "text": "HYPOVOLAEMIC SHOCK IN CHILDREN (UCG 1.1.2.1): Vital signs may change little even with up to 25% blood loss. Tachycardia is often the first response. Normal vital signs by age: Under 1 year: Pulse 120-160, BP 70-90, Resp 30-40, Blood vol 85-90 ml/kg. Age 1-5: Pulse 100-120, BP 80-90, Resp 25-30, Blood vol 80 ml/kg. Age 6-12: Pulse 80-100, BP 90-110, Resp 20-25, Blood vol 80 ml/kg. Over 12: Pulse 60-100, BP 100-120, Resp 15-20, Blood vol 70 ml/kg. MANAGEMENT (LOC HC3): Initial fluid challenge 20-30 ml/kg Normal Saline 0.9% or Ringer's Lactate over 60 minutes. Repeat up to 3 times if needed, up to max 60 ml/kg. If no response: blood transfusion 20 ml/kg whole blood or 10 ml/kg packed cells (LOC HC4).",
+      "section": "Shock in Children",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 1.1.2.1",
+      "severity": "red",
+      "topic": "Paediatric Shock"
+    },
+    {
+      "text": "DEHYDRATION IN CHILDREN UNDER 5 — CLASSIFICATION (UCG 1.1.3.1): Assess by signs: NO DEHYDRATION: General condition well/alert, eyes not sunken, drinks normally, skin pinch goes back immediately. Treatment: Plan A. SOME DEHYDRATION: Restless/irritable, eyes sunken, drinks eagerly/thirsty, skin pinch goes back slowly (<2 seconds). Treatment: Plan B. SEVERE DEHYDRATION: Lethargic/drowsy/unconscious, eyes sunken, drinks poorly or not able to drink, skin pinch goes back very slowly (>2 seconds). Treatment: Plan C. PLAN A (No dehydration — LOC HC2): Counsel mother on 4 rules — extra fluids, continue feeding, zinc supplementation, when to return. Give ORS after each loose stool: Child <2 years: 50-100 ml, Child 2-5 years: 100-200 ml. Zinc: Child <6 months 10 mg daily for 10 days, Child >6 months 20 mg daily for 10 days.",
+      "section": "Dehydration Plan A",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 1.1.3.1",
+      "severity": "green",
+      "topic": "Dehydration"
+    },
+    {
+      "text": "DEHYDRATION PLAN B — SOME DEHYDRATION (UCG 1.1.3.1): Give ORS in the following approximate amounts during the first 4 hours: Age <4 months (weight <6 kg): 200-400 ml. Age 4-12 months (weight 6-9.9 kg): 400-700 ml. Age 13-24 months (weight 10-11.9 kg): 700-900 ml. Age 25-60 months (weight 12-19 kg): 900-1400 ml. Alternatively calculate: weight (kg) x 75 ml for 4 hours. Show mother how to give ORS — frequent small sips from cup. If child vomits, wait 10 minutes then continue more slowly. Reassess every 30-60 minutes. After 4 hours: reassess, reclassify dehydration, select Plan A, B, or C. For infants <6 months not breastfed: also give 100-200 ml clean water during first 4 hours.",
+      "section": "Dehydration Plan B",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 1.1.3.1",
+      "severity": "yellow",
+      "topic": "Dehydration"
+    },
+    {
+      "text": "DEHYDRATION PLAN C — SEVERE DEHYDRATION (UCG 1.1.3.1): If IV available (LOC HC3): Give 100 ml/kg Ringer's Lactate (or half-strength Darrow's solution in glucose 2.5%, or sodium chloride 0.9%). Infants <1 year: First give 30 ml/kg in 1 hour, then give 70 ml/kg in 5 hours. Children 1-5 years: First give 30 ml/kg in 30 minutes, then give 70 ml/kg in 2.5 hours. Repeat once if radial pulse still very weak or undetectable. Reassess every 30-60 minutes. If IV NOT available but nasogastric tube available (LOC HC2): Start rehydration with ORS by NGT or mouth: 20 ml/kg/hour for 6 hours (total = 120 ml/kg). If NOT improving within 3 hours, refer urgently for IV therapy. As soon as patient can drink (usually after 3-4 hours in infants, 1-2 hours in children): also give ORS 5 ml/kg/hour.",
+      "section": "Dehydration Plan C",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 1.1.3.1",
+      "severity": "red",
+      "topic": "Dehydration"
+    },
+    {
+      "text": "DEHYDRATION IN OLDER CHILDREN AND ADULTS (UCG 1.1.3.2): MILD: Thirsty, alert, pulse normal, skin pinch returns rapidly. Treatment (LOC HC2): Oral ORS 25 ml/kg in first 4 hours. MODERATE: Thirsty, alert, rapid pulse, skin pinch returns slowly, sunken eyes, dry mucous membranes, reduced urine. Treatment (LOC HC2): Oral ORS 50 ml/kg in first 4 hours. SEVERE: Anxious, clammy, cold extremities, cyanosis, wrinkly skin, cramps, dizzy, rapid/thready/absent pulse, low BP, very sunken eyes, absent tears, very dry mucosae, anuria. Treatment (LOC HC3): Ringer's Lactate or Normal Saline 0.9% IV — 50 ml/kg in first 4 hours. IV schedule: First hour 1L, next 3 hours 2L, next 20 hours 3L. After 4 hours evaluate rehydration by clinical signs. Start fluid maintenance alternating ORS and water.",
+      "section": "Adult Dehydration",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 1.1.3.2",
+      "severity": "yellow",
+      "topic": "Dehydration"
+    },
+    {
+      "text": "SNAKEBITES (UCG 1.2.1.1): Uganda has several venomous snakes including cobras, mambas, vipers, and boomslang. Clinical features depend on snake type: NEUROTOXIC (cobras, mambas): Ptosis, dysphagia, respiratory paralysis — can kill within hours. HAEMOTOXIC (vipers): Swelling, bleeding from bite/gums/wounds, dark urine — can be fatal. CYTOTOXIC: Severe local tissue destruction, necrosis. FIRST AID: Keep patient calm and still. Do NOT cut, suck, or apply tourniquet. Immobilise the bitten limb like a fracture. Remove rings/watches before swelling. Transport to health facility IMMEDIATELY. MANAGEMENT (LOC HC3): Monitor airway, breathing, circulation. Clean wound. Give Tetanus Toxoid if not up to date. If signs of envenomation: Polyvalent Anti-Snake Venom (ASV) — give 1 vial diluted in 200-500 ml Normal Saline IV over 1 hour. May repeat if symptoms progress. WATCH for anaphylaxis — have adrenaline ready.",
+      "section": "Snakebites",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 1.2.1.1",
+      "severity": "red",
+      "topic": "Snakebite"
+    },
+    {
+      "text": "BURNS MANAGEMENT (UCG 1.2.3): Assess burn depth: SUPERFICIAL (1st degree): Red, painful, no blisters — heals in 5-7 days. PARTIAL THICKNESS (2nd degree): Blisters, very painful, red/moist — heals in 2-3 weeks. FULL THICKNESS (3rd degree): White/charred, painless (nerve damage), leathery — needs skin grafting. Assess burn area (Rule of Nines for adults): Head 9%, each arm 9%, front trunk 18%, back trunk 18%, each leg 18%, perineum 1%. REFER burns >15% in adults, >10% in children, or any burn to face/hands/feet/genitals/joints, or chemical/electrical burns. FLUID RESUSCITATION for burns >15%: Parkland formula — 4 ml/kg x %BSA of Ringer's Lactate in first 24 hours. Give half in first 8 hours, remaining half over next 16 hours. Plus maintenance fluids. WOUND CARE: Clean gently with Normal Saline. Apply Silver Sulfadiazine cream 1%. Cover with sterile non-adherent dressing. Pain relief: Paracetamol, or Pethidine 1-2 mg/kg IM for severe pain.",
+      "section": "Burns",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 1.2.3",
+      "severity": "yellow",
+      "topic": "Burns"
+    },
+    {
+      "text": "POISONING — GENERAL MANAGEMENT (UCG 1.3.1): Maintain airway, breathing, circulation. Identify the poison if possible — ask what, when, how much. Do NOT induce vomiting if: patient is unconscious, has swallowed corrosive/petroleum products, or is having convulsions. ACTIVATED CHARCOAL (if within 1 hour of ingestion): Adult 50 g, Child 1 g/kg mixed in water. Effective for most drug overdoses. NOT effective for: iron, lithium, acids, alkalis, alcohols, petroleum products. ORGANOPHOSPHATE POISONING (pesticides — common in Uganda): Signs: excessive salivation, sweating, lacrimation, small pupils, muscle twitching, breathing difficulty. TREATMENT: Atropine 2 mg IV every 15 minutes until secretions dry (may need large doses). Pralidoxime 1-2 g IV over 15-30 minutes if available. PARACETAMOL OVERDOSE: N-acetylcysteine (NAC) if >150 mg/kg ingested. Loading dose: 150 mg/kg in glucose 5% over 15 minutes, then 50 mg/kg over 4 hours, then 100 mg/kg over 16 hours.",
+      "section": "Poisoning",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 1.3",
+      "severity": "red",
+      "topic": "Poisoning"
+    }
+  ]
+}

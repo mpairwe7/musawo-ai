@@ -1,0 +1,47 @@
+{
+  "source": "Uganda Clinical Guidelines 2016, Chapter 16: Obstetric Conditions + Essential Maternal Guidelines 2022",
+  "version": "2016/2022",
+  "publisher": "Ministry of Health Uganda",
+  "entries": [
+    {
+      "text": "PRE-ECLAMPSIA — DEFINITION AND CLASSIFICATION (UCG 16.3.7): Pre-eclampsia is hypertension (BP ≥140/90 mmHg) developing after 20 weeks of pregnancy WITH proteinuria (≥300 mg/24h or ≥2+ on dipstick). MILD PRE-ECLAMPSIA: BP 140-159/90-109, proteinuria 2+, no symptoms. SEVERE PRE-ECLAMPSIA: BP ≥160/110 OR proteinuria 3+ OR any of: severe headache, visual disturbances (blurred/flashing), epigastric/right upper quadrant pain, nausea/vomiting, oliguria (<400 ml/24h), elevated liver enzymes, low platelets (<100,000), pulmonary oedema. MANAGEMENT MILD (LOC HC3): Admit for observation. Monitor BP 4-hourly. Check urine protein daily. Fetal monitoring. If BP rises or symptoms develop → treat as severe. If stable and >37 weeks → plan delivery. MANAGEMENT SEVERE (LOC HC4): Admit immediately. Antihypertensive: Nifedipine 10 mg oral, repeat after 30 min if needed (max 3 doses). OR Hydralazine 5 mg slow IV, repeat every 20 min (max 20 mg). Target BP: 130-150/80-100. Seizure prophylaxis: Magnesium Sulfate (MgSO4) — Loading dose: 4 g IV over 20 minutes PLUS 5 g IM in each buttock (10 g IM total). Maintenance: 5 g IM every 4 hours for 24 hours. Monitor: respiratory rate (must be >16/min), urine output (>30 ml/hr), patellar reflexes (must be present). ANTIDOTE if MgSO4 toxicity: Calcium Gluconate 1 g IV over 10 minutes. Plan delivery — pre-eclampsia only resolves after delivery.",
+      "section": "Pre-eclampsia",
+      "mode": "maternal",
+      "guideline": "UCG 2016 Section 16.3.7",
+      "severity": "red",
+      "topic": "Pre-eclampsia"
+    },
+    {
+      "text": "ECLAMPSIA — EMERGENCY MANAGEMENT (UCG 16.3.8): Eclampsia = convulsions in a woman with pre-eclampsia. MATERNAL MORTALITY: 5-10% even with treatment. IMMEDIATE ACTIONS: (1) Call for help. (2) Protect the woman — turn on left side, clear airway, do NOT restrain or put anything in mouth. (3) After convulsion: assess breathing, give oxygen if available. (4) MAGNESIUM SULFATE — SAME loading dose as severe pre-eclampsia: 4 g IV over 20 min + 10 g IM. If seizure recurs: give additional 2 g IV over 5 minutes (ONCE only). (5) Antihypertensive if BP ≥160/110: Nifedipine 10 mg oral or Hydralazine 5 mg IV. (6) Insert urinary catheter — monitor output (must be >30 ml/hr). (7) Prepare for delivery — eclampsia is an indication for emergency delivery (vaginal or caesarean depending on cervical dilatation and fetal condition). (8) Continue MgSO4 maintenance for 24 hours after last seizure or after delivery (whichever is later). MONITORING every 15 minutes: Respiratory rate (stop MgSO4 if <16), patellar reflexes (stop if absent), urine output (stop if <30 ml/hr). LOC: HC4 minimum, refer to hospital.",
+      "section": "Eclampsia",
+      "mode": "maternal",
+      "guideline": "UCG 2016 Section 16.3.8",
+      "severity": "red",
+      "topic": "Eclampsia"
+    },
+    {
+      "text": "POSTPARTUM HAEMORRHAGE — DETAILED PROTOCOL (UCG 16.4.6): PPH = blood loss ≥500 ml after vaginal delivery or ≥1000 ml after caesarean. CAUSES (4 T's): Tone (uterine atony — 70% of PPH), Trauma (tears/lacerations), Tissue (retained placenta/membranes), Thrombin (coagulopathy). ACTIVE MANAGEMENT OF 3RD STAGE (AMTSL) — PREVENTS PPH: (1) Give Oxytocin 10 IU IM within 1 minute of delivery. (2) Controlled cord traction to deliver placenta. (3) Uterine massage after placenta delivered. IF PPH OCCURS (LOC HC3): (1) Shout for help. (2) Rub the uterus firmly until it contracts (feels hard like a ball). (3) Give Oxytocin 20 IU in 1 L Ringer's Lactate IV at 60 drops/min. (4) If Oxytocin not available: Misoprostol 800 mcg sublingual. (5) If bleeding from tears: repair immediately. (6) If placenta retained >30 min: manual removal under anaesthesia (LOC HC4). (7) Empty bladder (catheterise). (8) IV fluids for volume replacement. (9) If severe: blood transfusion, refer to hospital. (10) Tranexamic acid 1 g IV over 10 min (give within 3 hours of PPH onset). BIMANUAL UTERINE COMPRESSION: If uterus still not contracting — insert fist into vagina against anterior uterine wall, press other hand on abdomen behind uterus. Compress between both hands. Continue until bleeding stops or surgical team available.",
+      "section": "Postpartum Haemorrhage",
+      "mode": "maternal",
+      "guideline": "UCG 2016 Section 16.4.6",
+      "severity": "red",
+      "topic": "PPH"
+    },
+    {
+      "text": "EMERGENCY CONTRACEPTION (UCG 15.2.7): Emergency contraception prevents pregnancy after unprotected sex. Must be taken as soon as possible — effectiveness decreases with time. INDICATIONS: Unprotected sex, condom breakage, missed pills, sexual assault. METHODS: (1) LEVONORGESTREL (preferred): 1.5 mg oral single dose. OR 0.75 mg, repeat after 12 hours. Effective up to 72 hours (3 days) after unprotected sex. Most effective within 12 hours. (2) COMBINED ORAL CONTRACEPTIVE PILLS (Yuzpe method): Ethinylestradiol 100 mcg + Levonorgestrel 0.5 mg. Take first dose, repeat in 12 hours. Effective up to 72 hours. More side effects (nausea) than Levonorgestrel alone. (3) COPPER IUD: Insert within 5 days (120 hours). Most effective emergency method (>99%). Also provides ongoing contraception. LOC: HC2 for pills, HC3 for IUD insertion. IMPORTANT: Emergency contraception is NOT an abortion pill. It prevents fertilisation or implantation. If already pregnant, it will NOT harm the pregnancy. Counsel about regular contraception for the future.",
+      "section": "Emergency Contraception",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 15.2.7",
+      "severity": "yellow",
+      "topic": "Emergency Contraception"
+    },
+    {
+      "text": "MALARIA IN PREGNANCY (UCG 16.2.4): Malaria in pregnancy is MORE DANGEROUS — increased risk of severe malaria, anaemia, miscarriage, premature delivery, low birth weight, stillbirth, and maternal death. PREVENTION (IPTp-SP): Give Sulfadoxime-Pyrimethamine 3 tablets at each ANC visit from 2nd trimester. Minimum 3 doses, at least 4 weeks apart. Give under direct observation. Do NOT give in 1st trimester. Sleep under LLIN every night. TREATMENT — UNCOMPLICATED: 1st trimester: Oral Quinine 10 mg/kg every 8 hours for 7 days PLUS Clindamycin 300 mg every 8 hours for 7 days. 2nd and 3rd trimester: Artemether-Lumefantrine (AL) — same dosing as non-pregnant adults (4 tablets twice daily for 3 days). SEVERE MALARIA IN PREGNANCY (LOC HC4): IV Artesunate 2.4 mg/kg at 0, 12, 24 hours then daily. Same protocol as non-pregnant. Monitor fetal heart rate. Emergency delivery may be needed if maternal condition deteriorates.",
+      "section": "Malaria in Pregnancy",
+      "mode": "maternal",
+      "guideline": "UCG 2016 Section 16.2.4",
+      "severity": "red",
+      "topic": "Malaria in Pregnancy"
+    }
+  ]
+}

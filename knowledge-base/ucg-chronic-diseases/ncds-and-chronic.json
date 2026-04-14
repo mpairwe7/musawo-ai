@@ -1,0 +1,71 @@
+{
+  "source": "Uganda Clinical Guidelines 2016, Chapters 4, 8, 9: Cardiovascular, Endocrine, Mental Health",
+  "version": "2016",
+  "publisher": "Ministry of Health Uganda",
+  "entries": [
+    {
+      "text": "HYPERTENSION (UCG 4.1.6): Definition: Persistent BP ≥140/90 mmHg on at least 2 occasions. Classification: Normal <120/80, High Normal 120-139/80-89, Grade 1 (Mild) 140-159/90-99, Grade 2 (Moderate) 160-179/100-109, Grade 3 (Severe) ≥180/110. Risk factors: Age, obesity, excessive salt, alcohol, smoking, stress, family history, diabetes, kidney disease. LOC HC3 — Non-pharmacological (ALL patients): Reduce salt intake (<5 g/day), regular exercise (30 min/day brisk walking), maintain healthy weight (BMI <25), limit alcohol, stop smoking, eat more fruits and vegetables, reduce stress. PHARMACOLOGICAL: Start if BP ≥160/100 or ≥140/90 with organ damage/diabetes/high cardiovascular risk. First-line: Calcium Channel Blocker — Amlodipine 5-10 mg daily OR Nifedipine retard 20-40 mg twice daily. OR ACE inhibitor: Enalapril 5-20 mg daily (preferred if diabetic). Add Hydrochlorothiazide 12.5-25 mg daily if not controlled. Target: BP <140/90 (<130/80 if diabetic).",
+      "section": "Hypertension",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 4.1.6",
+      "severity": "yellow",
+      "topic": "Hypertension"
+    },
+    {
+      "text": "HYPERTENSIVE EMERGENCIES (UCG 4.1.6.1): BP >180/120 with acute organ damage (encephalopathy, heart failure, aortic dissection, stroke, eclampsia, acute kidney injury). MANAGEMENT (LOC HC4): Admit immediately. Target: reduce BP by 20-25% in first hour, then gradually to 160/100 over 24-48 hours. Do NOT reduce BP too quickly. Sublingual Nifedipine 10 mg — can repeat after 30 min. IV Hydralazine 5-10 mg slow IV, repeat every 20-30 min (max 40 mg). IV Labetalol 20 mg slow IV over 2 min (if available). Furosemide 40-80 mg IV if pulmonary oedema. Refer to specialist. STROKE: If BP >220/120 — reduce cautiously. If BP <220/120 — do NOT lower BP in first 24-48 hours (risk of worsening stroke). Cerebral oedema: elevate head 30 degrees, IV Mannitol 20% 1g/kg over 20 min.",
+      "section": "Hypertensive Emergency",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 4.1.6.1",
+      "severity": "red",
+      "topic": "Hypertension"
+    },
+    {
+      "text": "DIABETES MELLITUS (UCG 8.1.3): TYPE 1: Autoimmune destruction of pancreatic beta cells. Usually young patients. Presents with polyuria, polydipsia, weight loss, fatigue. Can present as Diabetic Ketoacidosis (DKA) — EMERGENCY. TYPE 2: Insulin resistance ± reduced secretion. Usually adults >30, overweight. May be asymptomatic for years. Risk factors: obesity, family history, physical inactivity, age >45. DIAGNOSIS: Fasting blood glucose ≥7.0 mmol/L (126 mg/dL) OR Random blood glucose ≥11.1 mmol/L (200 mg/dL) with symptoms OR HbA1c ≥6.5%. MANAGEMENT TYPE 2 (LOC HC3): Step 1: Lifestyle modifications — diet (reduce sugar, refined carbs, increase fibre/vegetables), exercise (30 min daily), weight loss. Step 2: Metformin 500 mg twice daily, increase to 1000 mg twice daily (max 3000 mg/day). Step 3: Add Glibenclamide 2.5-5 mg daily (max 15 mg) OR Glimepiride 1-4 mg daily. Step 4: If not controlled on oral agents → Insulin (refer to HC4). Target: Fasting BG 4-7 mmol/L, HbA1c <7%.",
+      "section": "Diabetes",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 8.1.3",
+      "severity": "yellow",
+      "topic": "Diabetes"
+    },
+    {
+      "text": "DIABETIC KETOACIDOSIS (DKA) (UCG 8.1.4): Life-threatening emergency. Blood glucose usually >14 mmol/L, ketonuria, metabolic acidosis. Clinical features: Deep rapid breathing (Kussmaul), fruity breath smell, dehydration, abdominal pain, nausea/vomiting, confusion progressing to coma. MANAGEMENT (LOC HC4): (1) IV Normal Saline 0.9%: 1 L in first hour, then 1 L over 2 hours, then 1 L over 4 hours, then 1 L over 6 hours. (2) Soluble Insulin 0.1 units/kg/hour IV infusion. Monitor blood glucose hourly. When BG <14 mmol/L: change to glucose 5% with saline. (3) Potassium replacement: If K+ <3.5: give 40 mmol/L KCl in each litre of IV fluid. If K+ 3.5-5.5: give 20 mmol/L. If K+ >5.5: do not give KCl. (4) Monitor: BG hourly, electrolytes every 2-4 hours, fluid balance, consciousness. (5) Treat underlying cause (infection, missed insulin). CAUTION: Do NOT give bicarbonate unless pH <6.9.",
+      "section": "Diabetic Ketoacidosis",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 8.1.4",
+      "severity": "red",
+      "topic": "Diabetes"
+    },
+    {
+      "text": "DEPRESSION (UCG 9.2.2): Definition: Persistent low mood and/or loss of interest or pleasure for at least 2 weeks. Core symptoms: depressed mood most of the day, markedly diminished interest/pleasure, fatigue/loss of energy. Additional: Weight change, sleep disturbance, psychomotor agitation/retardation, feelings of worthlessness/guilt, difficulty concentrating, recurrent thoughts of death. MILD DEPRESSION (LOC HC3): Psychoeducation, supportive counselling, structured physical activity, follow-up in 2-4 weeks. If not improving after 4-8 weeks → medication. MODERATE/SEVERE (LOC HC3-HC4): Fluoxetine 20 mg daily (first-line). Start low, increase gradually. May take 2-4 weeks to show effect. Continue for at least 9-12 months after remission. Alternative: Amitriptyline 25-75 mg at bedtime (sedating — useful if sleep problems). SEVERE with suicidal ideation: REFER to specialist. Remove access to means of self-harm. Do NOT leave patient alone. POSTNATAL DEPRESSION (UCG 9.2.2.1): Screen all mothers 4-6 weeks after delivery. Same treatment principles. Consider breastfeeding safety of medications — Fluoxetine is preferred.",
+      "section": "Depression",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 9.2.2",
+      "severity": "yellow",
+      "topic": "Depression"
+    },
+    {
+      "text": "SUICIDAL BEHAVIOUR AND SELF-HARM (UCG 9.2.2.2): Every mention of suicide must be taken seriously. ASSESS RISK: Ask directly — 'Are you thinking of ending your life?' (This does NOT increase risk.) HIGH RISK factors: Previous suicide attempt, stated plan with means, hopelessness, male >45 or adolescent, substance abuse, chronic illness, isolation, recent loss. IMMEDIATE MANAGEMENT (LOC HC3): (1) Ensure safety — remove means (pesticides, medications, sharp objects, ropes). (2) Do NOT leave person alone. (3) Establish therapeutic relationship — listen without judgment. (4) Assess mental state and treat underlying condition (depression, psychosis). (5) If imminent risk: admit to hospital under close observation. (6) If discharged: safety plan, follow-up within 1 week, involve family/friends. (7) Refer to mental health specialist. COMMON METHODS IN UGANDA: Pesticide/poison ingestion (most common, most preventable — restrict access), hanging, jumping. PREVENTION: Restrict access to means (especially pesticides). Train health workers to recognise and treat depression. Reduce stigma around mental illness.",
+      "section": "Suicide Risk",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 9.2.2.2",
+      "severity": "red",
+      "topic": "Suicide Prevention"
+    },
+    {
+      "text": "EPILEPSY (UCG 9.1.1): Recurrent unprovoked seizures. Common in Uganda (prevalence ~1%). TYPES: Generalised tonic-clonic (grand mal): Loss of consciousness, stiffening, jerking of limbs, tongue biting, urinary incontinence. Absence (petit mal): Brief staring spells (common in children). Focal/partial: Symptoms depend on brain area affected. FIRST AID DURING SEIZURE: Place patient on their side (recovery position). Clear area of hard objects. Do NOT put anything in the mouth. Do NOT restrain the person. Time the seizure. If seizure >5 minutes or repeated → medical emergency (Status Epilepticus). TREATMENT (LOC HC3): First-line: Carbamazepine 200 mg twice daily, increase gradually to 400-600 mg twice daily (Child: 10-20 mg/kg/day in divided doses). OR Sodium Valproate 200-500 mg twice daily (Child: 15-30 mg/kg/day). Alternative: Phenytoin 200-300 mg daily (monitor levels). Continue treatment for minimum 2-3 years seizure-free before considering withdrawal. STATUS EPILEPTICUS (seizure >5 min — LOC HC3): Diazepam 10 mg IV/rectal (Child: 0.5 mg/kg). May repeat once after 10 minutes. If not controlled: Phenytoin 15-20 mg/kg IV slow infusion.",
+      "section": "Epilepsy",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 9.1.1",
+      "severity": "yellow",
+      "topic": "Epilepsy"
+    },
+    {
+      "text": "TUBERCULOSIS (TB) — DIAGNOSIS AND TREATMENT (UCG 5.3): TB is caused by Mycobacterium tuberculosis. Spread through airborne droplets. Notifiable disease. SUSPECT TB if: Cough for ≥2 weeks, night sweats, weight loss, fever, haemoptysis, chest pain. In HIV+ patients: suspect TB with ANY cough, fever, night sweats, or weight loss. DIAGNOSIS (LOC HC3): GeneXpert MTB/RIF test (preferred — also detects Rifampicin resistance). Or sputum smear microscopy (ZN stain) — 2 samples. Chest X-ray if smear-negative but clinical suspicion. TREATMENT — New patients (Category I): Intensive phase (2 months): RHZE — Rifampicin + Isoniazid + Pyrazinamide + Ethambutol daily. Continuation phase (4 months): RH — Rifampicin + Isoniazid daily. Fixed-dose combinations by weight: 30-37 kg: 2 tablets. 38-54 kg: 3 tablets. 55-70 kg: 4 tablets. >70 kg: 5 tablets. DIRECTLY OBSERVED THERAPY (DOT) for at least the intensive phase. DO NOT stop treatment early even if feeling better — incomplete treatment causes drug-resistant TB. Side effects to watch: Hepatitis (stop drugs, refer), peripheral neuropathy (give Pyridoxine 50 mg daily), visual changes from Ethambutol (stop immediately).",
+      "section": "Tuberculosis",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 5.3",
+      "severity": "yellow",
+      "topic": "TB"
+    }
+  ]
+}
