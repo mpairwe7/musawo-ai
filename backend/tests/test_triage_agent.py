@@ -74,13 +74,14 @@ class TestTriageAgentFlow:
         assert found_breathing_question
 
     def test_diarrhoea_treatment_includes_ors_zinc(self, agent):
-        agent.process("sess-7", "18 month old with diarrhoea for 2 days")
+        agent.process("sess-7", "18 month old with diarrhoea for 2 days, watery stool")
         agent.process("sess-7", "no danger signs, child can drink, eyes slightly sunken")
-        # Force classify
+        # Force to classify with enough diarrhoea keywords
         state = agent.get_or_create_state("sess-7")
+        state.symptoms_reported.append("loose stool diarrhoea dehydration")
         state.phase = TriagePhase.CLASSIFY
         result = agent.process("sess-7", "that's all")
-        if result.get("triage"):
-            manage = result["triage"].manage_at_home
-            all_text = " ".join(manage).lower()
-            assert "ors" in all_text or "zinc" in all_text
+        assert result.get("triage") is not None
+        manage = result["triage"].manage_at_home
+        all_text = " ".join(manage).lower()
+        assert "ors" in all_text or "zinc" in all_text
