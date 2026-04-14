@@ -41,7 +41,7 @@ logging.basicConfig(
 APP_ENV = os.getenv("APP_ENV", "development")
 PORT = int(os.getenv("PORT", "8000"))
 ALLOWED_ORIGINS = os.getenv(
-    "ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:8000"
+    "ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3200,http://localhost:8000,http://localhost:8888"
 ).split(",")
 RATE_LIMIT_REQUESTS = int(os.getenv("RATE_LIMIT_REQUESTS", "30"))
 RATE_LIMIT_WINDOW = int(os.getenv("RATE_LIMIT_WINDOW", "60"))

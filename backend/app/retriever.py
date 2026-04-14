@@ -169,13 +169,13 @@ class HybridRetriever:
         try:
             from sentence_transformers import SentenceTransformer
 
-            logger.info("Loading dense model: %s", DENSE_MODEL)
-            self._dense_model = SentenceTransformer(DENSE_MODEL)
+            logger.info("Loading dense model: %s (forcing CPU)", DENSE_MODEL)
+            self._dense_model = SentenceTransformer(DENSE_MODEL, device="cpu")
 
             if RERANK_ENABLED:
                 from sentence_transformers import CrossEncoder
                 logger.info("Loading reranker: %s", RERANKER_MODEL)
-                self._reranker = CrossEncoder(RERANKER_MODEL)
+                self._reranker = CrossEncoder(RERANKER_MODEL, device="cpu")
 
             from qdrant_client import QdrantClient
             self._qdrant = QdrantClient(url=QDRANT_URL, timeout=30)

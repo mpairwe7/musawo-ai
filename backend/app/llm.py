@@ -1,8 +1,9 @@
 """Musawo AI — LLM integration layer.
 
-Supports dual backend:
-- Claude API (primary, via Anthropic SDK) with prompt caching + extended thinking
-- Local Qwen3-8B (offline fallback)
+Supports multiple backends (priority order):
+1. Groq API (free, fast — llama-3.3-70b / qwen3-32b via OpenAI-compatible API)
+2. Claude API (Anthropic SDK, prompt caching + extended thinking)
+3. Passage-based (zero-cost, instant, no LLM needed)
 
 Health-specific system prompts for each mode (VHT, Maternal, Community).
 """
@@ -18,7 +19,15 @@ logger = logging.getLogger("musawo.llm")
 
 # ── Config ─────────────────────────────────────────────────────────────────
 
-LLM_BACKEND = os.getenv("LLM_BACKEND", "claude")  # "claude" | "local"
+LLM_BACKEND = os.getenv("LLM_BACKEND", "groq")  # "groq" | "claude" | "local" | "passages"
+
+# Groq (free tier, OpenAI-compatible)
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_MAX_TOKENS = int(os.getenv("GROQ_MAX_TOKENS", "4096"))
+GROQ_TEMPERATURE = float(os.getenv("GROQ_TEMPERATURE", "0.3"))
+
+# Claude API
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6-20250514")
 CLAUDE_THINKING_BUDGET = int(os.getenv("CLAUDE_THINKING_BUDGET", "10000"))
@@ -39,20 +48,31 @@ _BASE_SYSTEM = """You are Musawo AI, a Community Health Navigator for rural Ugan
 You provide health GUIDANCE only — you NEVER diagnose, prescribe medication, or
 replace a qualified health worker.
 
+RESPONSE FORMAT (you MUST follow this structure):
+- Use **bold** for key terms, drug names, and important numbers.
+- Use bullet points (- ) for lists of symptoms, steps, or instructions.
+- Use clear paragraph breaks between sections.
+- Structure every response with these sections (use ## headers):
+  1. **Assessment** — What the symptoms suggest
+  2. **Guidance** — What to do (step-by-step)
+  3. **When to Refer** — Warning signs that need facility care
+  4. **Sources** — Cite [1], [2] from passages
+- Keep language simple — many users have limited literacy.
+- Be concise but complete. Avoid long paragraphs — prefer bullet points.
+
 CRITICAL RULES:
 1. ONLY answer from the provided context passages. If the context does not cover
    the question, say "I don't have enough information" and recommend visiting
    the nearest health facility.
-2. Always show your confidence level: HIGH / MEDIUM / LOW.
+2. Always show your confidence level: **Confidence: HIGH / MEDIUM / LOW**
 3. If you detect ANY danger sign (red flag), IMMEDIATELY say:
-   "REFER NOW — Go to the nearest health facility immediately" and explain why.
+   "**REFER NOW** — Go to the nearest health facility immediately" and explain why.
 4. Cite your sources using [1], [2], etc. referencing the passage markers.
-5. Never store, repeat, or ask for personal health information (names, HIV status,
-   phone numbers).
-6. Respond in the same language the user writes in. If they write in Luganda,
-   respond in Luganda. You may use English medical terms with local explanation.
-7. Be warm, respectful, and culturally sensitive. Use simple language.
-8. End every response with the disclaimer that this is guidance, not diagnosis.
+5. Never store, repeat, or ask for personal health information.
+6. Respond in the same language the user writes in. Use English medical terms
+   with local explanation in parentheses.
+7. Be warm, respectful, and culturally sensitive.
+8. End with: *This is health guidance only — not a medical diagnosis.*
 
 LANGUAGES: English, Luganda, Runyankole, Swahili.
 """
@@ -162,6 +182,102 @@ def format_passages(passages: list[dict[str, Any]]) -> str:
         parts.append(f'<passage id="p{i+1}-{marker}">\n{header}\n{text}\n</passage>')
 
     return "\n\n".join(parts) if parts else "<no_context>No relevant content.</no_context>"
+
+
+# ── Groq API backend (free, fast, OpenAI-compatible) ──────────────────────
+
+_groq_client = None
+
+
+def _get_groq_client():
+    global _groq_client
+    if _groq_client is None:
+        from openai import OpenAI
+        _groq_client = OpenAI(
+            api_key=GROQ_API_KEY,
+            base_url="https://api.groq.com/openai/v1",
+        )
+    return _groq_client
+
+
+def generate_groq(
+    query: str,
+    passages: list[dict[str, Any]],
+    mode: str,
+    history: list[dict[str, str]] | None = None,
+    locale: str = "en",
+) -> dict[str, Any]:
+    """Generate via Groq (llama-3.3-70b or qwen3-32b). Free tier, ~500 tok/s."""
+    client = _get_groq_client()
+    system_prompt = SYSTEM_PROMPTS.get(mode, _COMMUNITY_SYSTEM)
+    context = format_passages(passages)
+
+    messages: list[dict] = [{"role": "system", "content": system_prompt}]
+    if history:
+        for turn in history[-10:]:
+            messages.append(turn)
+    messages.append({
+        "role": "user",
+        "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}",
+    })
+
+    try:
+        response = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=messages,
+            max_tokens=GROQ_MAX_TOKENS,
+            temperature=GROQ_TEMPERATURE,
+        )
+        answer = response.choices[0].message.content or ""
+        return {
+            "text": answer,
+            "usage": {
+                "input_tokens": response.usage.prompt_tokens if response.usage else 0,
+                "output_tokens": response.usage.completion_tokens if response.usage else 0,
+            },
+        }
+    except Exception as e:
+        logger.error("Groq API error: %s", e)
+        raise
+
+
+def stream_groq(
+    query: str,
+    passages: list[dict[str, Any]],
+    mode: str,
+    history: list[dict[str, str]] | None = None,
+    locale: str = "en",
+) -> Generator[dict[str, Any], None, None]:
+    """Streaming generation via Groq API."""
+    client = _get_groq_client()
+    system_prompt = SYSTEM_PROMPTS.get(mode, _COMMUNITY_SYSTEM)
+    context = format_passages(passages)
+
+    messages: list[dict] = [{"role": "system", "content": system_prompt}]
+    if history:
+        for turn in history[-10:]:
+            messages.append(turn)
+    messages.append({
+        "role": "user",
+        "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}",
+    })
+
+    try:
+        stream = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=messages,
+            max_tokens=GROQ_MAX_TOKENS,
+            temperature=GROQ_TEMPERATURE,
+            stream=True,
+        )
+        for chunk in stream:
+            delta = chunk.choices[0].delta if chunk.choices else None
+            if delta and delta.content:
+                yield {"type": "token", "text": delta.content}
+        yield {"type": "done", "usage": {}}
+    except Exception as e:
+        logger.error("Groq streaming error: %s", e)
+        raise
 
 
 # ── Claude API backend ─────────────────────────────────────────────────────
@@ -440,24 +556,31 @@ def generate(
 ) -> dict[str, Any]:
     """Generate health guidance using the best available backend.
 
-    Priority: Claude API → Local Qwen3-8B → Passage-based (no LLM).
+    Priority: Groq → Claude → Local → Passage-based.
     Always returns a response — never fails silently.
     """
-    # Try Claude API first
-    if LLM_BACKEND == "claude" and ANTHROPIC_API_KEY:
+    # Try Groq first (free, fast)
+    if GROQ_API_KEY:
+        try:
+            return generate_groq(query, passages, mode, history, locale)
+        except Exception as e:
+            logger.warning("Groq failed, falling back: %s", e)
+
+    # Try Claude API
+    if ANTHROPIC_API_KEY:
         try:
             return generate_claude(query, passages, mode, history, locale)
         except Exception as e:
-            logger.warning("Claude API failed, falling back: %s", e)
+            logger.warning("Claude failed, falling back: %s", e)
 
     # Try local model
     if LLM_BACKEND == "local":
         try:
             return generate_local(query, passages, mode, locale)
         except Exception as e:
-            logger.warning("Local model failed, falling back to passages: %s", e)
+            logger.warning("Local model failed: %s", e)
 
-    # Passage-based fallback — always works, zero cost
+    # Passage-based fallback — always works
     return generate_from_passages(query, passages, mode, locale)
 
 
@@ -469,8 +592,16 @@ def stream_tokens(
     locale: str = "en",
 ) -> Generator[dict[str, Any], None, None]:
     """Stream tokens from best available backend."""
+    # Try Groq streaming first
+    if GROQ_API_KEY:
+        try:
+            yield from stream_groq(query, passages, mode, history, locale)
+            return
+        except Exception as e:
+            logger.warning("Groq streaming failed: %s", e)
+
     # Try Claude streaming
-    if LLM_BACKEND == "claude" and ANTHROPIC_API_KEY:
+    if ANTHROPIC_API_KEY:
         try:
             yield from stream_claude(query, passages, mode, history, locale)
             return
@@ -491,8 +622,10 @@ def stream_tokens(
 
 
 def is_ready() -> bool:
-    """Check if any LLM backend is available. Passage-based always works."""
-    if LLM_BACKEND == "claude" and ANTHROPIC_API_KEY:
+    """Check if any LLM backend is available."""
+    if GROQ_API_KEY:
+        return True
+    if ANTHROPIC_API_KEY:
         return True
     if LLM_BACKEND == "local":
         try:
