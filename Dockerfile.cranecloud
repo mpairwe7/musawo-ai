@@ -104,13 +104,11 @@ server {
     location /_next/static/ { root /srv/nextjs; expires 365d; access_log off; add_header Cache-Control "public, immutable"; }
     location ~* \.(png|ico|svg|webmanifest|js)$ { root /srv/nextjs; try_files $uri @nextjs; expires 30d; access_log off; }
     location /health { proxy_pass http://127.0.0.1:8081/health; proxy_http_version 1.1; }
+    location /ready { proxy_pass http://127.0.0.1:8081/ready; proxy_http_version 1.1; }
     location /docs { proxy_pass http://127.0.0.1:8081/docs; proxy_http_version 1.1; }
     location /openapi.json { proxy_pass http://127.0.0.1:8081/openapi.json; proxy_http_version 1.1; }
-    location /chat { proxy_pass http://127.0.0.1:8081/chat; proxy_http_version 1.1; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_read_timeout 120s; }
-    location /chat/stream { proxy_pass http://127.0.0.1:8081/chat/stream; proxy_http_version 1.1; proxy_set_header Host $host; proxy_set_header Connection ''; proxy_buffering off; proxy_cache off; proxy_read_timeout 300s; }
-    location /feedback { proxy_pass http://127.0.0.1:8081/feedback; proxy_http_version 1.1; proxy_set_header Host $host; }
-    location /facilities { proxy_pass http://127.0.0.1:8081/facilities; proxy_http_version 1.1; }
     location /metrics { proxy_pass http://127.0.0.1:8081/metrics; proxy_http_version 1.1; }
+    location /v1/ { proxy_pass http://127.0.0.1:8081/v1/; proxy_http_version 1.1; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_set_header Connection ''; proxy_buffering off; proxy_cache off; proxy_read_timeout 300s; }
     location / { proxy_pass http://127.0.0.1:3000; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection 'upgrade'; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_cache_bypass $http_upgrade; }
     location @nextjs { proxy_pass http://127.0.0.1:3000; proxy_http_version 1.1; proxy_set_header Host $host; }
 }
@@ -128,7 +126,7 @@ user=root
 command=/opt/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8081 --workers 1
 directory=/app/backend
 user=musawo
-environment=PORT="8081",LOG_LEVEL="info",LLM_BACKEND="passages",KNOWLEDGE_BASE_DIR="/app/knowledge-base"
+environment=PORT="8081",LOG_LEVEL="info",LLM_BACKEND="passages",KNOWLEDGE_BASE_DIR="/app/knowledge-base",BM25_STATE_PATH="/app/knowledge-base/bm25_state.json"
 stdout_logfile=/dev/stdout
 stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
