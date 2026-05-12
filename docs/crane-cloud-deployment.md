@@ -98,3 +98,23 @@ docker run -d --gpus '"device=0"' -p 8080:8080 \
 ```
 
 The local model loading strategy: GGUF → 4-bit BnB → full precision (auto-detected).
+
+## Voice Streaming (Added 2026-05-12)
+
+WebSocket endpoint `/v1/voice/chat/stream` added for real-time voice conversations.
+
+| Feature | Status |
+|---------|--------|
+| Energy-based VAD | Enabled |
+| Sentence-chunked TTS | Enabled |
+| Barge-in | Enabled |
+| Sunbird STT/TTS | Requires `SUNBIRD_API_TOKEN` |
+| Multilingual (lg/nyn/sw) | Via Sunbird MT |
+
+See `docs/voice-system.md` for full protocol documentation.
+
+### Updated Production URL
+
+```
+https://musawo-ai-c29604f0.renu-01.cranecloud.io
+```
