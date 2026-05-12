@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1B5E20"/><stop offset="100%" stop-color="#2E7D32"/></linearGradient></defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <text x="100" y="220" font-family="system-ui,sans-serif" font-size="72" font-weight="bold" fill="white">Musawo AI</text>
+  <text x="100" y="300" font-family="system-ui,sans-serif" font-size="36" fill="#A5D6A7">Community Health Navigator</text>
+  <text x="100" y="380" font-family="system-ui,sans-serif" font-size="28" fill="#C8E6C9">VHT Triage • Maternal Care • Community Health</text>
+  <text x="100" y="430" font-family="system-ui,sans-serif" font-size="24" fill="#81C784">English • Luganda • Runyankole • Swahili</text>
+  <text x="100" y="530" font-family="system-ui,sans-serif" font-size="20" fill="#66BB6A">Offline-first • Evidence-based • MoH Guidelines</text>
+  <circle cx="1050" cy="315" r="120" fill="none" stroke="#4CAF50" stroke-width="4"/>
+  <text x="1050" y="300" text-anchor="middle" font-family="system-ui,sans-serif" font-size="48" fill="white">🏥</text>
+  <text x="1050" y="350" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#A5D6A7">Uganda</text>
+</svg>
