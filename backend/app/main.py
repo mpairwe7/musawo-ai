@@ -40,11 +40,32 @@ logging.basicConfig(
 
 APP_ENV = os.getenv("APP_ENV", "development")
 PORT = int(os.getenv("PORT", "8000"))
-ALLOWED_ORIGINS = os.getenv(
-    "ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3200,http://localhost:8000,http://localhost:8888"
-).split(",")
+_default_origins = (
+    "http://localhost:3000,http://localhost:3200,"
+    "http://localhost:8000,http://localhost:8888,"
+    "http://127.0.0.1:3200,http://127.0.0.1:8888"
+)
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", _default_origins).split(",")
+# In dev: allow network IPs (for testing via 192.168.x.x) but NOT wildcard
+# In production: strictly enforce ALLOWED_ORIGINS
+if APP_ENV == "development" and ALLOWED_ORIGINS == _default_origins.split(","):
+    # Add common private network patterns for dev convenience
+    import socket
+    try:
+        local_ip = socket.gethostbyname(socket.gethostname())
+        ALLOWED_ORIGINS.extend([
+            f"http://{local_ip}:3200", f"http://{local_ip}:8888",
+        ])
+    except Exception:
+        pass
 RATE_LIMIT_REQUESTS = int(os.getenv("RATE_LIMIT_REQUESTS", "30"))
 RATE_LIMIT_WINDOW = int(os.getenv("RATE_LIMIT_WINDOW", "60"))
+
+# API key for SMS send endpoint (prevents unauthorized billing)
+SMS_API_KEY = os.getenv("SMS_API_KEY", "")
+
+# Max audio upload size (10MB)
+MAX_AUDIO_SIZE = int(os.getenv("MAX_AUDIO_SIZE", str(10 * 1024 * 1024)))
 
 # ── Rate limiter (thread-safe, in-process) ─────────────────────────────────
 
@@ -73,9 +94,14 @@ def _check_rate_limit(ip: str, limit: int = RATE_LIMIT_REQUESTS, window: int = R
 
 
 def _get_client_ip(request: Request) -> str:
+    """Extract client IP. Uses rightmost X-Forwarded-For entry (closest proxy)."""
     forwarded = request.headers.get("x-forwarded-for", "")
     if forwarded:
-        return forwarded.split(",")[-1].strip()
+        # Rightmost entry is the one added by our trusted proxy
+        ip = forwarded.split(",")[-1].strip()
+        # Basic validation — must look like an IP
+        if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ip):
+            return ip
     return request.client.host if request.client else "unknown"
 
 
@@ -112,7 +138,7 @@ app.add_middleware(
     allow_origins=ALLOWED_ORIGINS,
     allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "X-Request-ID"],
+    allow_headers=["Accept", "Accept-Language", "Content-Language", "Content-Type", "X-Request-ID"],
 )
 
 
@@ -148,14 +174,17 @@ async def rate_limit_middleware(request: Request, call_next):
 
 # ── Health endpoints ───────────────────────────────────────────────────────
 
-@app.get("/health", response_model=HealthStatus)
+@app.get("/health")
 async def health():
-    return HealthStatus(
-        status="ok" if _service and _service.is_ready else "degraded",
-        mode="online" if _service and _service.retriever.is_ready else "offline",
-        retriever_ready=bool(_service and _service.retriever.is_ready),
-        llm_ready=bool(_service),
-    )
+    from app.sunbird import is_available as sunbird_ok
+    return {
+        "status": "ok" if _service and _service.is_ready else "degraded",
+        "mode": "online" if _service and _service.retriever.is_ready else "offline",
+        "retriever_ready": bool(_service and _service.retriever.is_ready),
+        "llm_ready": bool(_service),
+        "sunbird_ai": sunbird_ok(),
+        "version": "2.4.0",
+    }
 
 
 @app.get("/ready")
@@ -198,18 +227,24 @@ async def chat_stream(req: ChatRequest, request: Request):
 
     import asyncio
 
+    _SENTINEL = object()
+
+    def _next_event(gen):
+        """Wrapper to avoid StopIteration leaking through run_in_executor."""
+        return next(gen, _SENTINEL)
+
     async def event_generator():
         # Run sync generator in thread pool to avoid blocking event loop
         gen = _service.stream_response(req)
         loop = asyncio.get_event_loop()
         while True:
             try:
-                event = await loop.run_in_executor(None, next, gen)
-            except StopIteration:
-                break
+                event = await loop.run_in_executor(None, _next_event, gen)
             except Exception as e:
                 logger.error("Stream error: %s", e)
                 yield {"event": "error", "data": str(e)}
+                break
+            if event is _SENTINEL:
                 break
             evt = event.get("event", "data")
             data = event.get("data", "")
@@ -245,7 +280,7 @@ async def agentic_triage(req: ChatRequest, request: Request):
     session_id = req.session_id or str(uuid.uuid4())
 
     result = await asyncio.to_thread(
-        _service.triage_agent.process, session_id, req.query
+        _service.triage_agent.process, session_id, req.query, req.locale.value
     )
 
     # Serialize triage if present
@@ -432,8 +467,22 @@ async def ussd_callback(request: Request):
 
 
 @app.post("/v1/sms/send")
-async def send_sms_endpoint(phone: str, message: str):
-    """Send SMS via Twilio to a phone number."""
+async def send_sms_endpoint(request: Request, phone: str, message: str):
+    """Send SMS via Twilio. Requires API key for authorization."""
+    # Auth check
+    api_key = request.headers.get("x-api-key", "")
+    if SMS_API_KEY and api_key != SMS_API_KEY:
+        raise HTTPException(403, "Invalid or missing API key (x-api-key header)")
+
+    # Rate limit: max 10 SMS per IP per minute
+    ip = _get_client_ip(request)
+    if not _check_rate_limit(ip, limit=10, window=60):
+        raise HTTPException(429, "SMS rate limit exceeded")
+
+    # Validate phone format (Uganda: +256XXXXXXXXX)
+    if not re.match(r"^\+?\d{10,15}$", phone.replace(" ", "").replace("-", "")):
+        raise HTTPException(400, "Invalid phone number format")
+
     from app.sms_gateway import send_sms
     result = await send_sms(phone, message)
     if result["status"] == "sent":
@@ -443,12 +492,27 @@ async def send_sms_endpoint(phone: str, message: str):
 
 @app.post("/v1/sms/webhook")
 async def twilio_sms_webhook(request: Request):
-    """Twilio incoming SMS webhook.
+    """Twilio incoming SMS webhook with signature validation.
 
     Configure in Twilio console:
     Messaging > Phone Number > When a message comes in > Webhook URL:
     https://your-domain.com/v1/sms/webhook (HTTP POST)
     """
+    # Validate Twilio signature if auth token is configured
+    twilio_auth_token = os.getenv("TWILIO_AUTH_TOKEN", "")
+    if twilio_auth_token:
+        try:
+            from twilio.request_validator import RequestValidator
+            validator = RequestValidator(twilio_auth_token)
+            sig = request.headers.get("x-twilio-signature", "")
+            url = str(request.url)
+            form_data = dict(await request.form())
+            if not validator.validate(url, form_data, sig):
+                logger.warning("Invalid Twilio webhook signature from %s", _get_client_ip(request))
+                raise HTTPException(403, "Invalid Twilio signature")
+        except ImportError:
+            pass  # twilio library not installed, skip validation
+
     from app.sms_gateway import handle_incoming_sms, send_sms
 
     form = await request.form()
@@ -515,3 +579,125 @@ async def emergency_contacts():
         "mental_health": {"number": "0800 100 263", "label": "Mental Health Support"},
         "poison_centre": {"number": "+256-414-270-975", "label": "Uganda Poison Centre"},
     }
+
+
+# ── Sunbird AI endpoints (local language voice + translation) ─────────────
+
+@app.post("/v1/voice/stt")
+async def voice_speech_to_text(request: Request):
+    """Transcribe audio to text using Sunbird AI (supports Luganda, Runyankole, Swahili)."""
+    from app.sunbird import is_available, speech_to_text, LOCALE_TO_SUNBIRD
+    if not is_available():
+        raise HTTPException(503, "Sunbird AI not configured (set SUNBIRD_API_TOKEN)")
+
+    form = await request.form()
+    audio_file = form.get("audio")
+    locale = form.get("language", "lg")
+    if not audio_file:
+        raise HTTPException(400, "No audio file provided")
+
+    # Validate file size before reading into memory
+    audio_bytes = await audio_file.read()
+    if len(audio_bytes) > MAX_AUDIO_SIZE:
+        raise HTTPException(413, f"Audio file too large (max {MAX_AUDIO_SIZE // (1024*1024)}MB)")
+    if len(audio_bytes) < 100:
+        raise HTTPException(400, "Audio file too small or empty")
+    lang_code = LOCALE_TO_SUNBIRD.get(str(locale), str(locale))
+
+    import asyncio
+    result = await asyncio.to_thread(
+        speech_to_text, audio_bytes, lang_code, audio_file.filename or "audio.wav"
+    )
+    if not result:
+        raise HTTPException(502, "Speech-to-text failed")
+    return result
+
+
+@app.post("/v1/voice/tts")
+async def voice_text_to_speech(request: Request):
+    """Convert text to speech using Sunbird AI native Ugandan voices."""
+    from app.sunbird import is_available, text_to_speech
+    if not is_available():
+        raise HTTPException(503, "Sunbird AI not configured (set SUNBIRD_API_TOKEN)")
+
+    body = await request.json()
+    text = body.get("text", "")
+    locale = body.get("locale", "lg")
+    if not text:
+        raise HTTPException(400, "No text provided")
+
+    import asyncio
+    result = await asyncio.to_thread(text_to_speech, text, locale)
+    if not result:
+        raise HTTPException(502, "Text-to-speech failed")
+    return result
+
+
+@app.post("/v1/translate")
+async def translate_text(request: Request):
+    """Translate text between English and Ugandan languages via Sunbird AI."""
+    from app.sunbird import is_available, translate, LOCALE_TO_SUNBIRD
+    if not is_available():
+        raise HTTPException(503, "Sunbird AI not configured (set SUNBIRD_API_TOKEN)")
+
+    body = await request.json()
+    text = body.get("text", "")
+    source = body.get("source_locale", "en")
+    target = body.get("target_locale", "lg")
+    if not text:
+        raise HTTPException(400, "No text provided")
+
+    src_code = LOCALE_TO_SUNBIRD.get(source, source)
+    tgt_code = LOCALE_TO_SUNBIRD.get(target, target)
+
+    import asyncio
+    result = await asyncio.to_thread(translate, text, src_code, tgt_code)
+    if not result:
+        raise HTTPException(502, "Translation failed")
+    return {"translated_text": result, "source": source, "target": target}
+
+
+@app.post("/v1/detect-language")
+async def detect_language_endpoint(request: Request):
+    """Auto-detect language of text using Sunbird AI."""
+    from app.sunbird import is_available, detect_language
+    if not is_available():
+        raise HTTPException(503, "Sunbird AI not configured (set SUNBIRD_API_TOKEN)")
+
+    body = await request.json()
+    text = body.get("text", "")
+    if not text:
+        raise HTTPException(400, "No text provided")
+
+    import asyncio
+    result = await asyncio.to_thread(detect_language, text)
+    if not result:
+        raise HTTPException(502, "Language detection failed")
+    return result
+
+
+# ── Voice Streaming WebSocket ──────────────────────────────────────────────
+
+@app.websocket("/v1/voice/chat/stream")
+async def voice_chat_stream(websocket):
+    """Streaming voice chat: audio → ASR → LLM → TTS over WebSocket."""
+    from app.voice_ws import voice_stream_ws
+
+    from app.models import ChatRequest
+    def _generate_for_voice(query: str) -> dict:
+        try:
+            req = ChatRequest(query=query)
+            resp = _service.generate(req)
+            return {"answer": resp.answer, "confidence": getattr(resp, "confidence", 0), "sources": getattr(resp, "sources", [])}
+        except Exception as e:
+            return {"answer": f"Error: {e}", "confidence": 0}
+
+    # Get sunbird module
+    try:
+        from app import sunbird as _sunbird
+    except ImportError:
+        _sunbird = None
+
+    await voice_stream_ws(websocket, _sunbird, _generate_for_voice)
+
+
