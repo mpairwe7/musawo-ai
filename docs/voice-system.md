@@ -1,16 +1,22 @@
-# Voice & Speech System — Musawo AI
+# Voice & Speech System v2.6 — Musawo AI
 
-Streaming voice pipeline for multilingual health consultations in Luganda, Runyankole, Swahili, and English.
+Streaming voice pipeline for multilingual health consultations in Luganda, Runyankole, Swahili, and English. Upgraded with hybrid VAD, on-device STT, prosody-aware TTS, and semantic endpointing.
 
 ## Architecture
 
 ```
 Client speaks → PCM16 chunks → WebSocket
                                     ↓
-                          Energy-based VAD
-                          (silence 600ms → utterance complete)
+                      ┌─── Energy Gate (fast, <0.1ms) ───┐
+                      │         ↓ (energy detected)       │
+                      │   Silero VAD ONNX (<1ms)          │
+                      │   (neural speech confirmation)    │
+                      │         ↓ (confirmed speech)      │
+                      └──→ Utterance buffer               │
+                           + Noise Gate                   │
+                           + Semantic Endpointing         │
                                     ↓
-                          ASR (Sunbird AI cloud)
+                      ASR: Sunbird → On-device Whisper → Browser
                                     ↓
                     [If Luganda/etc] MT → English (Sunbird)
                                     ↓
@@ -19,11 +25,62 @@ Client speaks → PCM16 chunks → WebSocket
                                     ↓
                     [If Luganda/etc] MT → local language
                                     ↓
+                    Prosody detection (urgency → rate/pitch)
+                                    ↓
                     Sentence-chunked TTS (Sunbird)
-                    (first audio in <1s)
+                    (first audio in <250ms target)
                                     ↓
                     Client plays audio chunks
 ```
+
+## v2.6 Upgrades
+
+### Hybrid VAD (Silero + Energy)
+- **Energy gate** as fast path — zero neural cost on silent frames
+- **Silero VAD** (1.6MB ONNX) confirms speech when energy fires — eliminates noise false triggers
+- Sensitivity presets tuned for village environments:
+  - `low` (noisy clinic): energy=0.025, Silero threshold=0.6
+  - `medium` (default): energy=0.015, Silero threshold=0.5
+  - `high` (quiet room): energy=0.008, Silero threshold=0.35
+- Env var `VOICE_SILERO_ENABLED` (default "true") to disable
+- Requires `onnxruntime` (CPU-only, ~40MB)
+
+### On-Device STT
+- **@xenova/transformers** + `Xenova/whisper-tiny` (~50MB, cached in IndexedDB)
+- Runs entirely in browser via Web Worker + ONNX Runtime WASM
+- Automatic fallback when offline or Sunbird API fails
+- STT mode badge in VoiceModal: "Sunbird" / "Offline" / "Browser"
+- CSP requires `'wasm-unsafe-eval'` in production `script-src`
+
+### Noise Gate
+- Hard-gates residual noise below threshold before sending to STT
+- Complements browser-side `noiseSuppression: true`
+- Applied in `get_utterance_audio()` before ASR
+
+### Semantic Endpointing
+- Detects natural turn completions without waiting full silence duration
+- Triggers at 200ms silence (vs 400-800ms) when turn is clearly complete
+- Detection: question marks, EN/LG/NYN/SW completion phrases, short statements
+- `feed_audio()` accepts optional `partial_transcript` for real-time detection
+
+### Prosody-Aware TTS
+- `_detect_prosody()` analyzes text + triage severity
+- Red severity / REFER NOW: rate=1.1, pitch=1.15 (urgent)
+- Yellow: rate=1.0, pitch=1.05
+- Normal: rate=0.95, pitch=1.0 (slower for comprehension)
+- Yields `prosody_hint` VoiceEvent before TTS audio chunks
+
+### Connection Resilience
+- WebSocket heartbeat: ping every 15s, reconnect on 30s timeout
+- Exponential backoff with full jitter on reconnection
+- Connection state tracking: disconnected → connecting → connected → reconnecting
+
+### Voice Metrics (Prometheus)
+- `musawo_voice_asr_latency_seconds` — ASR processing latency
+- `musawo_voice_tts_first_chunk_seconds` — Time to first TTS audio
+- `musawo_voice_session_total` — Voice sessions started
+- `musawo_voice_barge_in_total` — Barge-in interruptions
+- `musawo_voice_utterance_duration_seconds` — Utterance durations
 
 ## Endpoints
 
@@ -42,16 +99,19 @@ Client speaks → PCM16 chunks → WebSocket
 ```
 Then send binary PCM16 LE mono audio chunks (16kHz, 20ms recommended).
 ```json
-{"type": "barge_in"}     // Interrupt AI mid-response
-{"type": "session_end"}  // End session
+{"type": "ping"}           // Heartbeat (every 15s)
+{"type": "barge_in"}       // Interrupt AI mid-response
+{"type": "session_end"}    // End session
 ```
 
 ### Server → Client
 
 ```json
 {"type": "session_ready", "session_id": "abc123"}
+{"type": "pong", "timestamp": 1715529600.0}
 {"type": "vad_state", "speaking": true}
 {"type": "transcript_final", "text": "Omwana wange alwadde", "language": "lg", "latency_s": 0.45}
+{"type": "prosody_hint", "rate": 1.1, "pitch": 1.15, "urgency": "high"}
 {"type": "audio_start", "sample_rate": 24000}
 // [binary: TTS audio PCM16 LE]
 {"type": "audio_end"}
@@ -60,83 +120,45 @@ Then send binary PCM16 LE mono audio chunks (16kHz, 20ms recommended).
 {"type": "latency_report", "asr_ms": 450, "mt_in_ms": 120, "llm_ms": 800, "tts_first_chunk_ms": 250, "total_ms": 1620}
 ```
 
-## Voice Activity Detection (VAD)
+## Environment Variables
 
-Energy-based VAD with configurable thresholds (no neural model needed):
-
-| Parameter | Env Var | Default | Description |
-|-----------|---------|---------|-------------|
-| Energy threshold | `VOICE_VAD_ENERGY_THRESHOLD` | 0.015 | RMS energy cutoff |
-| Silence duration | `VOICE_VAD_SILENCE_MS` | 600ms | Silence to end utterance |
-| Min speech | `VOICE_VAD_MIN_SPEECH_MS` | 250ms | Minimum speech to accept |
-| Max utterance | `VOICE_VAD_MAX_UTTERANCE_S` | 30s | Hard cutoff |
-
-Sensitivity presets: `low` (noisy environments), `medium` (default), `high` (quiet rooms).
-
-## Features
-
-- **Sentence-chunked TTS**: LLM output split into sentences, each TTS'd independently for sub-second time-to-first-audio
-- **Barge-in**: User can interrupt AI mid-response by speaking
-- **Multilingual**: Detect language → translate → LLM → translate back (Luganda, Runyankole, Swahili)
-- **Latency reporting**: Per-turn breakdown of ASR/MT/LLM/TTS timing
-- **Rate limiting**: 100 audio frames/sec, 64KB max per frame
-
-## Sunbird AI Integration
-
-Cloud STT/TTS/MT for Ugandan languages:
-
-| Service | API | Languages |
-|---------|-----|-----------|
-| STT | `POST /tasks/modal/stt` | English, Luganda, Runyankole, Acholi, Swahili |
-| TTS | `POST /tasks/modal/tts` | Luganda (female 248), Runyankole (female 243), Swahili (male 246) |
-| MT | `POST /tasks/modal/translate` | eng↔lug, eng↔nyn, eng↔ach, eng↔swa |
-| Detect | `POST /tasks/modal/language_detect` | All supported |
-
-Token refresh: auto-refresh every 6 days (7-day expiry). Credentials: `SUNBIRD_API_TOKEN` or `SUNBIRD_USERNAME`/`SUNBIRD_PASSWORD`.
-
-## LLM Fallback Chain
-
-```
-Groq (free, fast) → Claude API → Local Qwen3 (GGUF/BnB) → Passage-based
-```
-
-For voice, Groq is recommended (500 tok/s, free tier). Local Qwen3 adds ~2s latency per turn.
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VOICE_VAD_ENERGY_THRESHOLD` | 0.015 | RMS energy cutoff |
+| `VOICE_VAD_SILENCE_MS` | 600 | Silence to end utterance (ms) |
+| `VOICE_VAD_MIN_SPEECH_MS` | 250 | Minimum speech to accept (ms) |
+| `VOICE_VAD_MAX_UTTERANCE_S` | 30 | Hard cutoff (seconds) |
+| `VOICE_SILERO_ENABLED` | true | Enable Silero neural VAD |
 
 ## Files
 
 | File | Lines | Purpose |
 |------|-------|---------|
-| `backend/app/voice_stream.py` | 301 | VAD + streaming pipeline engine |
-| `backend/app/voice_ws.py` | 136 | WebSocket handler |
+| `backend/app/voice_stream.py` | ~510 | Hybrid VAD + noise gate + prosody + streaming pipeline |
+| `backend/app/voice_ws.py` | ~140 | WebSocket handler + ping/pong |
 | `backend/app/sunbird.py` | 657 | Sunbird AI STT/TTS/MT (with token refresh) |
-| `frontend/src/services/voiceWebSocket.ts` | 186 | WebSocket client + AudioRecorder |
+| `backend/app/metrics.py` | ~255 | Prometheus metrics (incl. voice) |
+| `backend/tests/test_voice_vad.py` | 186 | 27 voice tests |
+| `frontend/src/services/voiceWebSocket.ts` | ~300 | WebSocket client + heartbeat |
 | `frontend/src/lib/voiceOutput.ts` | 259 | Browser TTS + Sunbird TTS |
-
-## Deployment
-
-WebSocket requires nginx `Upgrade` header support (configured in `Dockerfile.cranecloud`):
-
-```nginx
-location /v1/voice/ {
-    proxy_pass http://127.0.0.1:8081/v1/voice/;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_read_timeout 300s;
-}
-```
+| `frontend/src/lib/onDeviceSTT.ts` | 145 | On-device Whisper STT |
+| `frontend/src/workers/whisperWorker.ts` | 85 | Whisper Web Worker |
+| `frontend/src/components/VoiceModal.tsx` | ~440 | Voice input UI + offline fallback |
 
 ## Testing
 
 ```bash
+# Run voice VAD tests (27 tests)
+cd backend && python3 -m pytest tests/test_voice_vad.py -v
+
 # Test batch STT
-curl -X POST https://musawo-ai-c29604f0.renu-01.cranecloud.io/v1/voice/stt \
-  -H "Content-Type: audio/wav" --data-binary @sample.wav
+curl -X POST https://musawo-ai.renu-01.cranecloud.io/v1/voice/stt \
+  -F "audio=@sample.wav" -F "language=lg"
 
 # Test batch TTS
-curl -X POST https://musawo-ai-c29604f0.renu-01.cranecloud.io/v1/voice/tts \
-  -H "Content-Type: application/json" -d '{"text": "Hello", "language": "en"}'
+curl -X POST https://musawo-ai.renu-01.cranecloud.io/v1/voice/tts \
+  -H "Content-Type: application/json" -d '{"text": "Hello", "locale": "en"}'
 
-# WebSocket: use browser console or wscat
-wscat -c wss://musawo-ai-c29604f0.renu-01.cranecloud.io/v1/voice/chat/stream
+# WebSocket streaming
+wscat -c wss://musawo-ai.renu-01.cranecloud.io/v1/voice/chat/stream
 ```

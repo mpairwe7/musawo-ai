@@ -38,8 +38,8 @@ COPY frontend/package.json frontend/package-lock.json* ./
 RUN npm install --omit=dev 2>/dev/null || npm install
 
 COPY frontend/ ./
-RUN NEXT_PUBLIC_API_URL="" npm run build \
-    && mkdir -p /srv/nextjs/_next/static \
+RUN mkdir -p /srv/nextjs/_next/static && NEXT_PUBLIC_API_URL="" npm run build \
+
     && cp -r .next/static/* /srv/nextjs/_next/static/ \
     && cp -r public/* /srv/nextjs/ 2>/dev/null || true \
     && mkdir -p .next/standalone/.next \
@@ -124,10 +124,9 @@ pidfile=/tmp/supervisord.pid
 user=root
 
 [program:backend]
-command=/opt/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8081 --workers 1
+command=sh -c "exec /opt/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8081 --workers 1"
 directory=/app/backend
-user=musawo
-environment=PORT="8081",LOG_LEVEL="info",LLM_BACKEND="passages",KNOWLEDGE_BASE_DIR="/app/knowledge-base",BM25_STATE_PATH="/app/knowledge-base/bm25_state.json"
+environment=HOME="/app",PORT="8081",KNOWLEDGE_BASE_DIR="/app/knowledge-base",BM25_STATE_PATH="/app/knowledge-base/bm25_state.json"
 stdout_logfile=/dev/stdout
 stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
@@ -141,7 +140,6 @@ stopsignal=TERM
 [program:frontend]
 command=node server.js
 directory=/app/frontend/.next/standalone
-user=musawo
 environment=PORT="3000",HOSTNAME="127.0.0.1"
 stdout_logfile=/dev/stdout
 stdout_logfile_maxbytes=0
@@ -167,7 +165,6 @@ stopsignal=QUIT
 SUPER
 
 ENV PORT=8081 \
-    LLM_BACKEND=passages \
     LOG_LEVEL=info
 
 EXPOSE 8080

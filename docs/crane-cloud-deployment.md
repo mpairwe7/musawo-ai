@@ -1,4 +1,4 @@
-# Crane Cloud Deployment — Musawo AI
+# Crane Cloud Deployment — Musawo AI v2.6
 
 Community Health Navigator for Rural Uganda, deployed on Crane Cloud RENU cluster.
 
@@ -8,11 +8,24 @@ Community Health Navigator for Rural Uganda, deployed on Crane Cloud RENU cluste
 |-------|-------|
 | URL | https://musawo-ai-cc3230cc.renu-01.cranecloud.io |
 | Image | `landwind/musawo-ai:latest` |
-| Size | ~5.5 GB |
+| Size (v2.5) | ~5.5 GB |
+| Size (v2.6 optimized) | ~1.2 GB (target) |
 | Port | 8080 (nginx → backend:8081 + frontend:3000) |
 | Cluster | RENU (`9e81a70e-8460-4e5d-b0a8-17abcac30f68`) |
 | App ID | `205f5e2a-e029-4f3e-b567-5f1f32cffde6` |
 | GitHub | https://github.com/mpairwe7/musawo-ai |
+
+## v2.6 Image Size Reduction
+
+The optimized Dockerfile (`Dockerfile.cranecloud.optimized`) reduces image size from ~5.5 GB to ~1.2 GB:
+
+| Optimization | Savings |
+|-------------|---------|
+| Node Alpine frontend builder | ~400 MB |
+| Aggressive venv cleanup (pyc, dist-info, tests, docs) | ~800 MB |
+| Gzip compression in nginx | Transfer size reduction |
+| No build tools in runtime stage | ~600 MB |
+| Total estimated reduction | ~4.3 GB |
 
 ## Environment Variables
 
@@ -50,8 +63,30 @@ Without Qdrant (Crane Cloud), the app uses **BM25 keyword fallback**:
 
 ## Build & Deploy
 
+### v2.6 Optimized Build (recommended)
+
 ```bash
-# Build
+# Build with optimized Dockerfile
+docker build -t landwind/musawo-ai:v2.6 -f Dockerfile.cranecloud.optimized .
+
+# Verify image size
+docker images landwind/musawo-ai:v2.6 --format '{{.Size}}'
+
+# Test locally
+docker run -d -p 8080:8080 \
+  -e GROQ_API_KEY=gsk_your_key \
+  -e LLM_BACKEND=groq \
+  landwind/musawo-ai:v2.6
+
+# Push
+docker tag landwind/musawo-ai:v2.6 landwind/musawo-ai:latest
+docker push landwind/musawo-ai:latest
+```
+
+### Legacy Build (v2.5)
+
+```bash
+# Build with original Dockerfile
 docker build -t landwind/musawo-ai:latest -f Dockerfile.cranecloud .
 
 # Test locally
