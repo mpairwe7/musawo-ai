@@ -6,13 +6,14 @@ Community Health Navigator for Rural Uganda, deployed on Crane Cloud RENU cluste
 
 | Field | Value |
 |-------|-------|
-| URL | https://musawo-ai-cc3230cc.renu-01.cranecloud.io |
+| URL | https://musawo-ai-ce243528.renu-01.cranecloud.io |
 | Image | `landwind/musawo-ai:latest` |
 | Size (v2.5) | ~5.5 GB |
 | Size (v2.6 optimized) | ~1.2 GB (target) |
 | Port | 8080 (nginx → backend:8081 + frontend:3000) |
 | Cluster | RENU (`9e81a70e-8460-4e5d-b0a8-17abcac30f68`) |
-| App ID | `205f5e2a-e029-4f3e-b567-5f1f32cffde6` |
+| Project ID | `3cc4bdd3-d085-449f-86e4-677dd791de7d` (MusawoAI) |
+| App ID | `d36c0871-fa6b-4475-b431-ec8bc6a72996` |
 | GitHub | https://github.com/mpairwe7/musawo-ai |
 
 ## v2.6 Image Size Reduction
@@ -151,5 +152,5 @@ See `docs/voice-system.md` for full protocol documentation.
 ### Updated Production URL
 
 ```
-https://musawo-ai-c29604f0.renu-01.cranecloud.io
+https://musawo-ai-ce243528.renu-01.cranecloud.io
 ```

@@ -12,48 +12,65 @@ from app.models import Mode, Severity
 # ── Keyword banks ──────────────────────────────────────────────────────────
 
 _VHT_KEYWORDS: set[str] = {
-    # iCCM symptoms
-    "malaria", "omusujja", "fever", "diarrhoea", "diarrhea", "ekiddukaano",
-    "pneumonia", "cough", "okukola", "senyiga", "measles", "dehydration",
-    "ors", "zinc", "act", "coartem", "amoxicillin", "rdt", "rapid test",
-    "mrdt", "danger sign", "convulsion", "vomiting", "okusesema",
-    "not eating", "not drinking", "chest indrawing", "fast breathing",
-    "stridor", "unconscious", "lethargic", "stiff neck", "swollen feet",
-    "bloody stool", "sunken eyes", "skin pinch", "muac", "malnutrition",
+    # iCCM symptoms (English)
+    "malaria", "fever", "diarrhoea", "diarrhea", "pneumonia", "cough",
+    "measles", "dehydration", "ors", "zinc", "act", "coartem",
+    "amoxicillin", "rdt", "rapid test", "mrdt", "danger sign",
+    "convulsion", "vomiting", "not eating", "not drinking",
+    "chest indrawing", "fast breathing", "stridor", "unconscious",
+    "lethargic", "stiff neck", "swollen feet", "bloody stool",
+    "sunken eyes", "skin pinch", "muac", "malnutrition",
     "kwashiorkor", "marasmus", "wasting", "stunting", "underweight",
     "vitamin a", "deworming", "mebendazole", "albendazole",
+    # Luganda
+    "omusujja", "musujja", "ekiddukaano", "okukola", "okufuuwa",
+    "senyiga", "okusesema", "okusaamusaamu", "okulwadde",
+    # Runyankole
+    "omushuija", "okushaarira", "okukora", "okushuuha", "okushandaga",
+    # Swahili
+    "homa", "kuharisha", "kikohozi", "kutapika", "degedege",
     # VHT-specific
     "vht", "village health", "community health worker", "iccm",
     "home visit", "referral", "register", "treat at home",
     "health centre", "classify", "assess", "triage",
+    "okulambula",  # Luganda: triage/assess
 }
 
 _MATERNAL_KEYWORDS: set[str] = {
-    # Pregnancy & antenatal
-    "pregnant", "olubuto", "pregnancy", "antenatal", "anc", "prenatal",
+    # Pregnancy & antenatal (English)
+    "pregnant", "pregnancy", "antenatal", "anc", "prenatal",
     "trimester", "weeks pregnant", "due date", "edd", "lmp",
-    "morning sickness", "nausea", "okusesema", "swollen", "oedema",
+    "morning sickness", "nausea", "swollen", "oedema",
     "pre-eclampsia", "eclampsia", "high blood pressure", "bp",
     "gestational diabetes", "ultrasound", "scan",
     # Danger signs in pregnancy
-    "bleeding", "omusaayi", "vaginal bleeding", "headache", "blurred vision",
+    "bleeding", "vaginal bleeding", "headache", "blurred vision",
     "fits", "convulsions", "fever in pregnancy", "water breaking",
     "reduced movement", "baby not moving", "premature",
     # Labour & delivery
     "labour", "labor", "contractions", "delivery", "birth",
-    "okuzaala", "midwife", "birth plan", "c-section", "cesarean",
+    "midwife", "birth plan", "c-section", "cesarean",
     # Postnatal
-    "postnatal", "postpartum", "pnc", "breastfeeding", "okuyonsa",
-    "newborn", "omwana", "cord care", "umbilical", "jaundice",
+    "postnatal", "postpartum", "pnc", "breastfeeding",
+    "newborn", "cord care", "umbilical", "jaundice",
     "kangaroo care", "immunization", "vaccination", "bcg", "opv",
     "exclusive breastfeeding", "colostrum", "mastitis",
     # Family planning
     "family planning", "contraception", "spacing", "iud", "implant",
     "depo", "injectable", "pills", "condom",
+    # Luganda
+    "olubuto", "embuto", "okuzaala", "okuyonsa", "omusaayi",
+    "omwana", "amata", "okuwuna", "okusesema", "obuzito",
+    "okugezesa",  # immunization
+    # Runyankole
+    "enda", "okuzaara", "okugonza", "okuhara", "eshagama",
+    # Swahili
+    "mimba", "kuzaa", "kunyonyesha", "uzazi", "mtoto",
+    "maziwa", "chanjo", "kuharibika",
 }
 
 _COMMUNITY_KEYWORDS: set[str] = {
-    # General symptoms
+    # General symptoms (English)
     "headache", "stomach", "pain", "injury", "wound", "burn",
     "skin rash", "itching", "allergy", "diabetes", "hypertension",
     "hiv", "aids", "tb", "tuberculosis", "cholera", "typhoid",
@@ -68,20 +85,60 @@ _COMMUNITY_KEYWORDS: set[str] = {
     # Self-care
     "diet", "nutrition", "exercise", "water", "hygiene", "sanitation",
     "mosquito net", "hand washing", "first aid",
+    # Luganda
+    "ddwaliro", "omusawo", "eddagala", "obulamu", "okulumwa",
+    "omutwe", "sukaari", "pulesa", "akaloosa", "ekyambu",
+    "nfudde", "emmere", "amazzi",
+    # Runyankole
+    "irwariro", "obuhaise", "obulwaire", "okurwara", "okubabara",
+    "shukaari", "puresa",
+    # Swahili
+    "hospitali", "daktari", "dawa", "afya", "maumivu",
+    "kichwa", "kisukari", "shinikizo", "upele", "lishe",
 }
 
 # Red-flag symptom patterns that always trigger REFER NOW
+# Includes English, Luganda (lg), Runyankole (nyn), and Swahili (sw)
 _RED_FLAG_PATTERNS: list[tuple[str, str]] = [
-    (r"convuls|fits|seizure", "Convulsions / seizures"),
-    (r"unconscious|not responsive|lethargic", "Unconscious / unresponsive"),
-    (r"severe bleed|heavy bleed|omusaayi mungi", "Severe bleeding"),
-    (r"chest indraw", "Chest indrawing (severe pneumonia)"),
-    (r"not able to (drink|eat|breastfeed)", "Unable to drink or eat"),
-    (r"stiff neck", "Stiff neck (possible meningitis)"),
-    (r"severe dehydrat", "Severe dehydration"),
-    (r"high fever.*(child|baby|omwana)", "High fever in child"),
-    (r"cord.*(red|swollen|pus|smell)", "Infected umbilical cord"),
-    (r"baby.*(not breath|blue|cold|floppy)", "Newborn not breathing / cold"),
+    # Convulsions / seizures
+    (r"convuls|fits|seizure|okusaamusaamu|okutuuka|okushandaga|degedege|kifafa",
+     "Convulsions / seizures"),
+    # Unconscious / unresponsive
+    (r"unconscious|not responsive|lethargic|okuzimbulukuka|okuzirikira|kupoteza fahamu|fahamu",
+     "Unconscious / unresponsive"),
+    # Severe bleeding
+    (r"severe bleed|heavy bleed|omusaayi mungi|okubaaga nnyo|okuteera ennyo|kutoka damu nyingi",
+     "Severe bleeding"),
+    # Chest indrawing (severe pneumonia)
+    (r"chest indraw|ekifuba kyeyongera|kifua kinaingia",
+     "Chest indrawing (severe pneumonia)"),
+    # Unable to drink or eat
+    (r"not able to (drink|eat|breastfeed)|tayinza ku(nywa|lya|yonsa)|tarikubashor[ai].*ku(rya|nywera)|hawezi ku(nywa|la|nyonyesha)",
+     "Unable to drink or eat"),
+    # Stiff neck
+    (r"stiff neck|ensingo enkakanyavu|shingo ngumu",
+     "Stiff neck (possible meningitis)"),
+    # Severe dehydration
+    (r"severe dehydrat|amazzi gaggwaawo|okunyweerwa|upungufu mkubwa wa maji",
+     "Severe dehydration"),
+    # High fever in child
+    (r"high fever.*(child|baby|omwana|mtoto)|omusujja.*(mungi|munene).*omwana|homa kali.*mtoto",
+     "High fever in child"),
+    # Infected umbilical cord
+    (r"cord.*(red|swollen|pus|smell)|olukoba.*(mubisi|bivunda)|kitovu.*(uvimbe|usaha|harufu)",
+     "Infected umbilical cord"),
+    # Newborn not breathing
+    (r"baby.*(not breath|blue|cold|floppy)|omwana.*(tassa|buludde|muyiiye)|mtoto.*(hapumui|baridi|bluu)",
+     "Newborn not breathing / cold"),
+    # Vaginal bleeding in pregnancy (all languages)
+    (r"(vaginal|olubuto|enda|mimba).*(bleed|omusaayi|eshagama|damu)|omusaayi.*(olubuto|embuto)|damu.*mimba",
+     "Vaginal bleeding in pregnancy"),
+    # Severe abdominal pain
+    (r"severe.*(abdom|stomach)|olubuto.*(bulumi|lumwa) nnyo|tumbo.*maumivu makali|eibara.*rikubabaza ennyo",
+     "Severe abdominal pain"),
+    # Suicide / self-harm (all languages)
+    (r"suicide|kill myself|want to die|okwett[ai]|njagala okufa|kujiua|kutaka kufa",
+     "Suicide / self-harm crisis"),
 ]
 
 
@@ -90,10 +147,20 @@ def classify(query: str, current_mode: Mode | None = None) -> RouteDecision:
     q = query.lower().strip()
     tokens = set(re.findall(r"[a-z']+", q))
 
-    # ── Check for red flags first ──────────────────────────────────────
+    # ── Check for red flags first (with negation awareness) ─────────────
+    _negation_re = re.compile(
+        r"\b(no|not|never|without|hasn't|don't|does not|didn't"
+        r"|tewali|talina|hakuna|hana|si)\b", re.I,
+    )
     detected_red_flags: list[str] = []
     for pattern, label in _RED_FLAG_PATTERNS:
-        if re.search(pattern, q, re.IGNORECASE):
+        match = re.search(pattern, q, re.IGNORECASE)
+        if match:
+            # Check for negation within 4 words before the match
+            prefix = q[:match.start()].strip()
+            last_words = " ".join(prefix.split()[-4:]) if prefix else ""
+            if _negation_re.search(last_words):
+                continue  # Negated — skip this red flag
             detected_red_flags.append(label)
 
     severity_hint = Severity.RED if detected_red_flags else None

@@ -1,4 +1,4 @@
-# Musawo AI — 3-Minute Demo Script
+# Musawo AI — 3-Minute Demo Script `v2.3`
 
 > **Category**: Biology & Physical Health
 > **Tagline**: "Because every village health worker deserves a smart assistant."
@@ -130,18 +130,24 @@ cd frontend && INTERNAL_API_URL=http://localhost:8888 npx next dev --port 3200
 
 **[Show briefly — can use CLAUDE.md:]**
 
-- **3-tier LLM**: Groq (free, 500 tok/s) → Claude → Passage-based
+- **3-tier LLM**: Groq (free, 500 tok/s) -> Claude -> Passage-based
 - **10-turn conversation memory**: Deep clinical discussions
-- **Agentic triage**: Multi-step Assess→Classify→Treat/Refer
-- **92 clinical entries** from actual Uganda Clinical Guidelines 2016
+- **Agentic triage**: Multi-step Assess->Classify->Treat/Refer
+- **203 clinical entries** across 20 knowledge base files (immunization, FP, HIV/TB, WASH, first aid, mental health, GBV + more)
+- **10 inline SVG diagrams**: Auto-detected from content (danger signs, ORS prep, RDT, fever assessment, etc.)
+- **Voice interaction**: Floating modal with waveform + 5 voice personas (gender/language matching)
+- **Accessibility**: TTS toggle, 3-level font size, high contrast mode, localized danger signs (4 languages)
+- **Multi-session sidebar**: Search, export, session switching, auto-titling
+- **4-language starter prompts**: English, Luganda, Runyankole, Swahili
 - **OWASP LLM Top 10**: Injection guards, PII redaction, grounding
-- **PWA + Service Worker**: Works without internet
-- **Twilio SMS**: Feature phone VHTs can text health questions
-- **87 pytest + 25 vitest**: Tested guardrails, triage agent, API
+- **Installable PWA**: Service Worker + IndexedDB + background sync + skeleton loading
+- **Twilio SMS + USSD**: Feature phone VHTs can text or dial health questions
+- **Prometheus metrics**: Query volume, triage severity, latency histograms — fully wired
+- **172 tests**: 149 pytest + 23 vitest — guardrails, triage agent, API, retriever, LLM, service, store
 
 > "We forked our production URA Chatbot — the security, guardrails, and
 > RAG pipeline are battle-tested. We added Groq for free LLM access,
-> agentic triage, and the Grok-inspired chat UX."
+> agentic triage, inline health diagrams, and Grok-inspired chat UX."
 
 ---
 
@@ -184,6 +190,48 @@ curl -X POST localhost:8888/v1/ussd/callback -d "text=1*1"
 - "Where is the nearest health centre?" → GPS-sorted facility list with map
 - "What are the symptoms of diabetes?" → UCG 2016 Section 8.1.3
 
+### Inline Health Diagrams
+- "How do I prepare ORS?" -> Response + auto-detected ORS preparation diagram (4-step visual)
+- "What are the danger signs in children?" -> Response + danger signs diagram (6 icons)
+- "What vaccines does my baby need?" -> Response + immunization schedule timeline
+- The diagrams are inline SVGs — work fully offline, no network requests
+
+### Multi-Session Demo
+- Send a message -> session auto-created in sidebar
+- Click hamburger menu -> see conversation list with dates + mode badges
+- Click "New Chat" -> start fresh while preserving history
+- Switch back to old session -> full context restored
+
+### Voice Interaction (v2.3 — hackathon highlight)
+- Tap the mic button -> floating voice modal opens with green pulsing orb
+- Speak -> real-time waveform animation + live transcription
+- Tap green "Send" to approve, or red "Cancel" to discard
+- Open Voice Settings (speaker icon in header) -> select voice persona
+- Pick "Swahili Male" -> preview plays sample -> close -> TTS uses selected voice
+- On any Musawo message, tap the speaker icon -> reads response aloud
+
+### Accessibility Settings (v2.3)
+- Open Settings (gear icon) -> toggle "Voice Output (TTS)" off -> no more auto-speak
+- Change Font Size to "Large" -> all chat text scales up
+- Enable "High Contrast" -> background goes pure black, text/borders brighten
+- Version number displayed at bottom of settings
+
+### Conversation Export (v2.3)
+- Hover a session in sidebar -> click download icon -> .txt file downloads
+- File includes timestamps, roles, full content
+
+### New Malaria RDT Diagram (v2.3)
+- Type: "How do I use an RDT to test for malaria?"
+- Response includes auto-detected `malaria_rdt` diagram
+- Shows 4-step process: Clean Finger -> Prick & Collect -> Add Buffer -> Wait 15 min
+- Bottom shows result interpretation: 1 line = Negative, 2 lines = Positive
+
 ### Collapse + Clear Chat
-- Long response → click "▲ Collapse" to minimize
-- Trash icon → "Clear all messages?" → fresh start
+- Long response -> click "Collapse" to minimize
+- Trash icon -> "Clear all messages?" -> fresh start
+
+### 4-Language Support
+- Switch locale to "LG" -> Luganda starter prompts appear
+- Switch to "NY" -> Runyankole prompts
+- Switch to "SW" -> Swahili prompts
+- Send in Luganda -> response comes back in Luganda with English medical terms

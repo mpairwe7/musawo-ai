@@ -25,9 +25,25 @@ const URGENT_PHRASES = [
 ];
 
 let currentUtterance: SpeechSynthesisUtterance | null = null;
+let cachedVoices: SpeechSynthesisVoice[] = [];
 
 export function isTTSAvailable(): boolean {
   return typeof window !== "undefined" && "speechSynthesis" in window;
+}
+
+// Pre-load voices (async on Chrome/Edge, sync on Firefox/Safari)
+function ensureVoices(): SpeechSynthesisVoice[] {
+  if (cachedVoices.length > 0) return cachedVoices;
+  if (!isTTSAvailable()) return [];
+  cachedVoices = window.speechSynthesis.getVoices();
+  return cachedVoices;
+}
+
+// Listen for async voice loading (Chrome fires this after page load)
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  window.speechSynthesis.addEventListener?.("voiceschanged", () => {
+    cachedVoices = window.speechSynthesis.getVoices();
+  });
 }
 
 export function stopSpeaking(): void {
@@ -35,44 +51,128 @@ export function stopSpeaking(): void {
     window.speechSynthesis.cancel();
     currentUtterance = null;
   }
+  // Also stop Sunbird audio if playing
+  if (typeof sunbirdAudio !== "undefined" && sunbirdAudio) {
+    sunbirdAudio.pause();
+    sunbirdAudio = null;
+  }
 }
 
 export function isSpeaking(): boolean {
-  return isTTSAvailable() && window.speechSynthesis.speaking;
+  const browserSpeaking = isTTSAvailable() && window.speechSynthesis.speaking;
+  const sunbirdPlaying = typeof sunbirdAudio !== "undefined" && sunbirdAudio !== null && !sunbirdAudio.paused;
+  return browserSpeaking || sunbirdPlaying;
+}
+
+// ── Sunbird TTS for local languages ──────────────────────────────────
+
+let sunbirdAudio: HTMLAudioElement | null = null;
+
+/**
+ * Try Sunbird TTS for local languages (Luganda, Runyankole, Swahili).
+ * Returns true if Sunbird handled it, false to fall back to browser TTS.
+ */
+async function trySunbirdTTS(
+  text: string,
+  locale: string,
+  onEnd?: () => void,
+): Promise<boolean> {
+  // Sunbird TTS supports Luganda, Runyankole, Swahili native voices
+  if (!["lg", "nyn", "sw"].includes(locale)) return false;
+  if (text.length > 2000) return false;
+
+  try {
+    const resp = await fetch("/api/v1/voice/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text.slice(0, 2000), locale }),
+    });
+    if (!resp.ok) return false;
+    const data = await resp.json();
+    if (!data.audio_url) return false;
+
+    // Play the audio from Sunbird's signed URL
+    if (sunbirdAudio) { sunbirdAudio.pause(); sunbirdAudio = null; }
+    sunbirdAudio = new Audio(data.audio_url);
+    sunbirdAudio.onended = () => { sunbirdAudio = null; onEnd?.(); };
+    sunbirdAudio.onerror = () => { sunbirdAudio = null; onEnd?.(); };
+    await sunbirdAudio.play();
+    return true;
+  } catch {
+    return false; // Fall back to browser TTS
+  }
 }
 
 /**
  * Speak text aloud. If urgent, uses higher pitch and rate.
+ * For local languages, tries Sunbird AI native voices first.
  */
 export function speak(
   text: string,
   locale: string = "en",
-  options: { urgent?: boolean; onEnd?: () => void } = {}
+  options: { urgent?: boolean; onEnd?: () => void; gender?: "female" | "male"; langCode?: string } = {}
+): void {
+  // Primary: Sunbird TTS for local languages (native speakers)
+  // Fallback: browser speechSynthesis
+  if (["lg", "nyn", "sw"].includes(locale)) {
+    trySunbirdTTS(text, locale, options.onEnd).then((handled) => {
+      if (!handled) {
+        console.warn("Sunbird TTS unavailable, falling back to browser");
+        speakBrowser(text, locale, options);
+      }
+    });
+    return;
+  }
+  speakBrowser(text, locale, options);
+}
+
+function speakBrowser(
+  text: string,
+  locale: string = "en",
+  options: { urgent?: boolean; onEnd?: () => void; gender?: "female" | "male"; langCode?: string } = {}
 ): void {
   if (!isTTSAvailable()) return;
 
   // Stop any current speech
   stopSpeaking();
 
+  // Chrome bug: speechSynthesis can get stuck. Resume it.
+  if (window.speechSynthesis.paused) {
+    window.speechSynthesis.resume();
+  }
+
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = LANG_MAP[locale] || "en-UG";
+  utterance.lang = options.langCode || LANG_MAP[locale] || "en-US";
 
   if (options.urgent) {
-    utterance.rate = 0.95; // Slightly slower for clarity
-    utterance.pitch = 1.2; // Slightly higher for urgency
-    utterance.volume = 1.0; // Full volume
+    utterance.rate = 0.95;
+    utterance.pitch = 1.2;
+    utterance.volume = 1.0;
   } else {
     utterance.rate = 0.9;
     utterance.pitch = 1.0;
     utterance.volume = 0.9;
   }
 
-  // Try to find a voice for the locale
-  const voices = window.speechSynthesis.getVoices();
-  const langCode = LANG_MAP[locale] || "en";
-  const matchedVoice = voices.find(
-    (v) => v.lang.startsWith(langCode.split("-")[0])
-  );
+  // Find best voice for locale + gender preference
+  const voices = ensureVoices();
+  const langCode = (options.langCode || LANG_MAP[locale] || "en").split("-")[0];
+  const genderHint = options.gender;
+
+  // Filter by language first
+  const langVoices = voices.filter((v) => v.lang.startsWith(langCode));
+  const enVoices = voices.filter((v) => v.lang.startsWith("en"));
+  const pool = langVoices.length > 0 ? langVoices : enVoices;
+
+  // Try to match gender preference via voice name heuristics
+  let matchedVoice: SpeechSynthesisVoice | undefined;
+  if (genderHint && pool.length > 1) {
+    const genderWord = genderHint === "female" ? /female|woman|fiona|samantha|karen|zira|victoria/i : /male|man|daniel|david|james|george|mark/i;
+    matchedVoice = pool.find((v) => genderWord.test(v.name) && !v.localService) || pool.find((v) => genderWord.test(v.name));
+  }
+  if (!matchedVoice) {
+    matchedVoice = pool.find((v) => !v.localService) || pool[0];
+  }
   if (matchedVoice) {
     utterance.voice = matchedVoice;
   }
@@ -80,6 +180,11 @@ export function speak(
   if (options.onEnd) {
     utterance.onend = options.onEnd;
   }
+
+  // Chrome long-text bug workaround: chunk text > 200 chars
+  utterance.onerror = () => {
+    currentUtterance = null;
+  };
 
   currentUtterance = utterance;
   window.speechSynthesis.speak(utterance);

@@ -81,6 +81,22 @@
       "guideline": "Essential Maternal Guidelines",
       "severity": "green",
       "topic": "Family Planning"
+    },
+    {
+      "text": "POSTPARTUM FAMILY PLANNING — DETAILED GUIDANCE FOR VHTs: Spacing pregnancies at least 2 years apart reduces maternal and infant mortality. VHTs should counsel every postpartum mother about family planning options. LACTATIONAL AMENORRHOEA METHOD (LAM): Effective for the first 6 months IF all 3 conditions are met: (1) Exclusively breastfeeding (no other food/water). (2) Baby is less than 6 months old. (3) Menstruation has not returned. If ANY condition is not met, LAM is no longer reliable — switch to another method. TIMING FOR EACH METHOD: Condoms: Can use immediately after delivery. Progestogen-only pills (POP): Start at 6 weeks postpartum (safe during breastfeeding). Combined oral pills: NOT recommended during breastfeeding in first 6 months (reduces milk supply). Can start at 6 months if not breastfeeding, or 6 months if breastfeeding. Injectable (Depo-Provera): Start at 6 weeks postpartum (safe during breastfeeding). Implants (Jadelle, Implanon): Can be inserted immediately after delivery or at any time postpartum (safe during breastfeeding). IUD (copper): Can be inserted within 48 hours of delivery OR after 4 weeks postpartum. NOT between 48 hours and 4 weeks (risk of expulsion). Female sterilisation: Can be done within 7 days of delivery or after 6 weeks. VHT COUNSELLING TIPS: (1) Discuss family planning BEFORE delivery (at ANC visits). (2) Respect the woman's choice — present all options. (3) Involve the partner if the woman agrees. (4) Address myths: contraceptives do NOT cause infertility, do NOT accumulate in the body. (5) Refer to the health facility for method provision.",
+      "section": "Postpartum Family Planning",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines / WHO MEC 2015",
+      "severity": "green",
+      "topic": "Postpartum Family Planning"
+    },
+    {
+      "text": "KANGAROO MOTHER CARE (KMC) — COMPREHENSIVE GUIDE: KMC is continuous skin-to-skin contact between the mother (or caregiver) and a low birth weight or premature baby. It is one of the most effective interventions for reducing neonatal mortality. WHO recommends KMC for ALL babies weighing less than 2.5 kg at birth. TECHNIQUE: (1) Dress the baby in only a nappy (diaper) and a cap/hat. (2) Place the baby upright on the mother's bare chest, between the breasts. (3) The baby's head should be turned to one side, slightly extended to keep the airway open. (4) The baby's arms and legs should be flexed (frog position). (5) Secure the baby with a cloth wrapper or binder tied firmly around both mother and baby. (6) Mother wears a front-opening shirt or blouse over the wrapper. DURATION: (1) Start as soon as possible after birth — ideally within hours. (2) Continue for as many hours as possible — aim for at least 8 hours per day, ideally 18-24 hours. (3) When mother needs a break (bathing, toilet), father or another family member should continue KMC. (4) Continue until the baby weighs 2.5 kg, maintains temperature on their own, feeds well, and is growing steadily. FEEDING DURING KMC: Breastfeed in the KMC position — baby can feed without being removed. If baby cannot suckle, express breast milk and feed with a cup every 2 hours. BENEFITS: (1) Maintains body temperature better than an incubator. (2) Stabilises heart rate and breathing. (3) Promotes weight gain. (4) Improves breastfeeding success. (5) Reduces infections. (6) Reduces hospital stay. (7) Strengthens bonding. (8) Reduces neonatal mortality by up to 40%. MONITORING: Check temperature every 4 hours (underarm — should be 36.5-37.5°C). Weigh daily. Count breathing rate. Monitor feeding. REFER IF: Temperature remains below 36.5°C, baby has apnoea (stops breathing), poor feeding, any danger signs.",
+      "section": "Kangaroo Mother Care",
+      "mode": "maternal",
+      "guideline": "Essential Maternal Guidelines / WHO KMC Guidelines 2022",
+      "severity": "green",
+      "topic": "Kangaroo Mother Care"
     }
   ]
 }

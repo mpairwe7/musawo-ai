@@ -28,6 +28,7 @@ from app.models import (
     Severity,
     TriageResult,
 )
+from app.i18n import t
 
 logger = logging.getLogger("musawo.triage_agent")
 
@@ -56,39 +57,133 @@ class TriageState:
     follow_up_hours: int = 0
     questions_asked: int = 0
     max_questions: int = 5  # Don't ask more than 5 follow-ups
+    locale: str = "en"  # User's language
+    # Clinical extensions
+    dehydration_level: str = "unknown"  # none / some / severe / unknown
+    muac_mm: int | None = None  # Mid-upper arm circumference in mm
+    nutrition_status: str = "unknown"  # normal / MAM / SAM / unknown
 
 
 # ── Danger sign patterns (hard-coded, no LLM needed) ──────────────────
 
 GENERAL_DANGER_SIGNS = {
-    "unable to drink or breastfeed": r"(not|unable|can.?t)\s*(drink|breastfeed|eat|feed|suckle)",
-    "vomiting everything": r"vomit(s|ing)?\s*(everything|all)",
-    "convulsions": r"convuls|fits|seizure|jerking",
-    "lethargic or unconscious": r"(lethargic|unconscious|drowsy|very\s*sleepy|not\s*responsive|cannot\s*wake)",
-    "chest indrawing": r"chest\s*(indraw|in-draw|retract)",
-    "severe bleeding": r"(severe|heavy|lot\s*of)\s*bleed",
-    "high fever in infant": r"(high|very)\s*fever.*(baby|infant|newborn|child)",
-    "stiff neck": r"stiff\s*neck",
+    # English + Luganda + Runyankole + Swahili patterns
+    "unable to drink or breastfeed": (
+        r"(not|unable|can.?t)\s*(drink|breastfeed|eat|feed|suckle)"
+        r"|tayinza\s*ku(nywa|lya|yonsa)"        # Luganda
+        r"|tarikubashor[ai]\s*ku(rya|nywera|gonza)"  # Runyankole
+        r"|hawezi\s*ku(nywa|la|nyonyesha)"       # Swahili
+    ),
+    "vomiting everything": (
+        r"vomit(s|ing)?\s*(everything|all)"
+        r"|asesema\s*byo?nna|okusesema\s*byonna"  # Luganda
+        r"|ashuuha\s*byo?na|okushuuha\s*byoona"   # Runyankole
+        r"|kutapika\s*kila\s*kitu"                  # Swahili
+    ),
+    "convulsions": (
+        r"convuls|fits|seizure|jerking"
+        r"|okusaamusaamu|okutuuka"    # Luganda
+        r"|okushandaga"                # Runyankole
+        r"|degedege|kifafa"            # Swahili
+    ),
+    "lethargic or unconscious": (
+        r"(lethargic|unconscious|drowsy|very\s*sleepy|not\s*responsive|cannot\s*wake)"
+        r"|okuzimbulukuka|tazuukuka"   # Luganda
+        r"|okuzirikira|tarikuzuukuka"  # Runyankole
+        r"|kupoteza\s*fahamu"          # Swahili
+    ),
+    "chest indrawing": (
+        r"chest\s*(indraw|in-draw|retract)"
+        r"|ekifuba\s*kyeyongera"       # Luganda
+        r"|kifua\s*kinaingia"          # Swahili
+    ),
+    "severe bleeding": (
+        r"(severe|heavy|lot\s*of)\s*bleed"
+        r"|omusaayi\s*mungi|okubaaga\s*nnyo"  # Luganda
+        r"|okuteera\s*ennyo"                    # Runyankole
+        r"|kutoka\s*damu\s*nyingi"              # Swahili
+    ),
+    "high fever in infant": (
+        r"(high|very)\s*fever.*(baby|infant|newborn|child)"
+        r"|omusujja\s*mu(ngi|nene).*omwana"  # Luganda
+        r"|homa\s*kali.*mtoto"                # Swahili
+    ),
+    "stiff neck": (
+        r"stiff\s*neck"
+        r"|ensingo\s*enkakanyavu"   # Luganda
+        r"|shingo\s*ngumu"          # Swahili
+    ),
     "bulging fontanelle": r"bulg(ing|ed)\s*fontanel",
-    "severe malnutrition": r"(severe|very)\s*(maln|wast|thin|swollen\s*feet)",
+    "severe malnutrition": (
+        r"(severe|very)\s*(maln|wast|thin|swollen\s*feet)"
+        r"|utapiamlo\s*mkubwa"     # Swahili
+    ),
 }
 
 # ── Symptom classification rules (iCCM decision tree) ─────────────────
 
 MALARIA_INDICATORS = {
-    "fever", "hot body", "omusujja", "chills", "rigors", "sweating",
+    "fever", "hot body", "chills", "rigors", "sweating",
     "headache", "body pain", "joint pain", "vomiting",
+    # Luganda
+    "omusujja", "musujja", "omutwe", "okusesema", "okunyiinya",
+    # Runyankole
+    "omushuija", "okushuuha",
+    # Swahili
+    "homa", "kutapika", "kichwa", "kutetemeka",
 }
 
 PNEUMONIA_INDICATORS = {
     "cough", "difficult breathing", "fast breathing", "noisy breathing",
-    "chest pain", "wheeze", "stridor", "okukola",
+    "chest pain", "wheeze", "stridor",
+    # Luganda
+    "okufuuwa", "okukola", "okufuba", "okussa", "ekifuba",
+    # Runyankole
+    "okukora", "okuhuuha",
+    # Swahili
+    "kikohozi", "kupumua", "kifua",
 }
 
 DIARRHOEA_INDICATORS = {
     "diarrhoea", "diarrhea", "loose stool", "watery stool", "blood in stool",
-    "ekiddukaano", "vomiting", "dehydration", "sunken eyes",
+    "vomiting", "dehydration", "sunken eyes",
+    # Luganda
+    "ekiddukaano", "okugenda", "amazzi", "amaaso",
+    # Runyankole
+    "okushaarira",
+    # Swahili
+    "kuharisha", "kutapika", "maji",
 }
+
+MEASLES_INDICATORS = {
+    "measles", "rash", "red eyes", "runny nose", "koplik",
+    "kawumpuli", "akaloosa",  # Luganda
+    "kahumpuli",  # Runyankole
+    "surua", "upele",  # Swahili
+}
+
+MALNUTRITION_INDICATORS = {
+    "malnutrition", "wasting", "thin", "swollen feet", "oedema",
+    "muac", "not gaining weight", "kwashiorkor", "marasmus",
+    "stunting", "underweight", "not growing",
+    # Swahili
+    "utapiamlo", "kukonda",
+}
+
+# ── Dehydration assessment rules (iCCM: Plan A/B/C) ─────────────────
+
+SEVERE_DEHYDRATION_SIGNS = {
+    "lethargic", "unconscious", "sunken eyes", "not able to drink",
+    "skin pinch very slow", "very slow", "cannot drink",
+}
+SOME_DEHYDRATION_SIGNS = {
+    "restless", "irritable", "thirsty", "drinks eagerly",
+    "skin pinch slow", "sunken", "dry mouth",
+}
+
+# ── MUAC thresholds (mm) for children 6-59 months ────────────────────
+MUAC_SAM = 115   # < 115mm = Severe Acute Malnutrition → REFER
+MUAC_MAM = 125   # 115-124mm = Moderate Acute Malnutrition → supplementary feeding
 
 # ── Breathing rate thresholds (iCCM protocol) ─────────────────────────
 
@@ -102,10 +197,11 @@ FAST_BREATHING_THRESHOLD = {
 class TriageAgent:
     """Stateful agent that guides VHTs through iCCM assessment."""
 
-    def __init__(self):
+    def __init__(self, retriever=None):
         from threading import Lock
         self._sessions: dict[str, TriageState] = {}
         self._lock = Lock()
+        self._retriever = retriever  # Optional: HybridRetriever for evidence-backed responses
 
     def get_or_create_state(self, session_id: str) -> TriageState:
         with self._lock:
@@ -113,7 +209,7 @@ class TriageAgent:
                 self._sessions[session_id] = TriageState()
             return self._sessions[session_id]
 
-    def process(self, session_id: str, user_input: str) -> dict[str, Any]:
+    def process(self, session_id: str, user_input: str, locale: str = "en") -> dict[str, Any]:
         """Process user input and return agent response with next action.
 
         Returns dict with:
@@ -124,6 +220,7 @@ class TriageAgent:
         - assessment_complete: bool
         """
         state = self.get_or_create_state(session_id)
+        state.locale = locale
         user_lower = user_input.lower().strip()
 
         # ── Always check for danger signs at every step ───────────
@@ -158,17 +255,130 @@ class TriageAgent:
 
         return self._respond(state, "How can I help with this patient?")
 
+    # Negation patterns: "no convulsions", "not vomiting", "hakuna", "tewali", etc.
+    _NEGATION_RE = re.compile(
+        r"\b(no|not|never|without|hasn.?t|hasn.?t had|don.?t have|does not|didn.?t"
+        r"|tewali|talina|si|hakuna|hana|bwatali|tatina)\b",
+        re.I,
+    )
+
     def _check_danger_signs(self, text: str, state: TriageState) -> list[str]:
-        """Check for danger signs in user input. Returns newly found signs."""
+        """Check for danger signs in user input. Returns newly found signs.
+
+        Skips matches that are immediately preceded by a negation word
+        (e.g. "no convulsions", "not vomiting", "hakuna degedege").
+        """
         newly_found = []
         for sign_name, pattern in GENERAL_DANGER_SIGNS.items():
-            if re.search(pattern, text, re.I) and sign_name not in state.danger_signs_found:
-                state.danger_signs_found.append(sign_name)
-                newly_found.append(sign_name)
+            match = re.search(pattern, text, re.I)
+            if not match or sign_name in state.danger_signs_found:
+                continue
+            # Check for negation within 4 words before the match
+            prefix = text[:match.start()].strip()
+            last_words = prefix.split()[-4:] if prefix else []
+            prefix_text = " ".join(last_words)
+            if self._NEGATION_RE.search(prefix_text):
+                continue  # Negated — skip this match
+            state.danger_signs_found.append(sign_name)
+            newly_found.append(sign_name)
         return newly_found
 
+    # Patterns that indicate an informational/protocol question (not a patient case)
+    _INFO_QUERY_RE = re.compile(
+        r"(what is|what are|how (to|do|much|many|should)|dosage|dose|"
+        r"when (to|should)|explain|tell me about|difference between|"
+        r"how (is|can) .* (prepared|given|used|administered)|"
+        r"protocol for|steps to|side effect|schedule|"
+        # Luganda
+        r"kiki|ki ekikolwa|ntya|bwe bagiwa|"
+        # Swahili
+        r"nini|vipi|kiasi gani|jinsi ya)",
+        re.I,
+    )
+
+    def _handle_info_query(self, state: TriageState, text: str) -> dict | None:
+        """Detect and answer informational/protocol questions directly.
+
+        Returns a direct answer using the retriever if the query is factual
+        (e.g. dosage, protocol, preparation steps). Returns None if it's
+        a patient case that needs the triage flow.
+        """
+        if not self._INFO_QUERY_RE.search(text):
+            return None
+        if not self._retriever:
+            return None
+
+        loc = state.locale
+        try:
+            # Extract clinical terms from the question for focused retrieval
+            from app.service import _enrich_query_for_retrieval
+            # Build a focused search: strip question words, keep clinical terms
+            clinical_terms = re.findall(
+                r"\b(ors|zinc|malaria|pneumonia|diarrhoea|diarrhea|fever|cough|rdt|"
+                r"amoxicillin|act|paracetamol|vitamin|dehydration|breastfeed|immuniz|"
+                r"vaccin|dosage|dose|treatment|muac|breathing|convuls|measles|"
+                r"omusujja|ekiddukaano|okufuuwa|homa|kuharisha|kikohozi)\b",
+                text, re.I,
+            )
+            search_q = " ".join(clinical_terms) if clinical_terms else text
+            search_q = _enrich_query_for_retrieval(search_q, loc)
+            hits = self._retriever.search(query=search_q, top_k=3, mode_filter=None)
+            if not hits or max(h.score for h in hits) < 0.1:
+                return None
+
+            # Build a direct answer from passages
+            response_parts = []
+            for i, hit in enumerate(hits[:3]):
+                source = hit.metadata.get("source", "MoH")
+                section = hit.metadata.get("section", "")
+                label = f"[{i+1}] {source}"
+                if section:
+                    label += f" — {section}"
+
+                # Format the passage text as bullets
+                sentences = re.split(r'(?<=[.!:])\s+(?=[A-Z(])', hit.text)
+                bullets = []
+                for sent in sentences[:6]:
+                    sent = sent.strip()
+                    if not sent:
+                        continue
+                    for term in ["REFER", "IMMEDIATELY", "DANGER", "DO NOT", "MUST"]:
+                        sent = sent.replace(term, f"**{term}**")
+                    bullets.append(f"- {sent}")
+                if bullets:
+                    response_parts.append(f"**{label}**\n\n" + "\n".join(bullets))
+
+            if not response_parts:
+                return None
+
+            answer = "## " + t("triage_manage_home", loc).split(".")[0] + "\n\n"
+            answer += "\n\n".join(response_parts)
+            answer += "\n\n---\n*" + t("disclaimer", loc) + "*"
+
+            # Mark this as a completed informational query (no triage needed)
+            state.phase = TriagePhase.FOLLOW_UP
+            return {
+                "response": answer,
+                "phase": state.phase.value,
+                "triage": None,
+                "follow_up_question": None,
+                "assessment_complete": True,
+            }
+        except Exception as e:
+            logger.warning("Info query retrieval failed: %s", e)
+            return None
+
     def _handle_initial(self, state: TriageState, text: str) -> dict:
-        """Phase 1: Get main complaint and patient age."""
+        """Phase 1: Get main complaint and patient age.
+
+        If the query is an informational question (dosage, protocol, how-to),
+        answer it directly from the knowledge base instead of starting triage.
+        """
+        # Check if this is an informational question first
+        info_response = self._handle_info_query(state, text)
+        if info_response:
+            return info_response
+
         state.main_complaint = text
         state.symptoms_reported.append(text)
 
@@ -186,23 +396,39 @@ class TriageAgent:
             elif "day" in unit:
                 state.patient_age_months = 0
 
+        # Fast-track: if query already has age + enough symptoms to classify,
+        # skip danger check and go straight to classification.
+        # This handles queries like "2 year old with fever and rash" in one turn.
+        if state.patient_age_months is not None and self._has_enough_info(state):
+            # Also extract any vital signs or MUAC from the initial query
+            rr_match = re.search(r"(\d+)\s*(?:breath|per minute|/min)", text, re.I)
+            if rr_match:
+                state.vital_signs["respiratory_rate"] = int(rr_match.group(1))
+            rdt_match = re.search(r"rdt\s*(positive|negative|\+|-)", text, re.I)
+            if rdt_match:
+                state.vital_signs["rdt_result"] = "positive" if rdt_match.group(1) in ("positive", "+") else "negative"
+            muac_match = re.search(r"muac\s*(?:is\s*)?(\d+)\s*(mm|cm)?", text, re.I)
+            if muac_match:
+                val = int(muac_match.group(1))
+                unit_m = (muac_match.group(2) or "mm").lower()
+                state.muac_mm = val * 10 if unit_m == "cm" else val
+                state.nutrition_status = "SAM" if state.muac_mm < MUAC_SAM else ("MAM" if state.muac_mm < MUAC_MAM else "normal")
+
+            state.phase = TriagePhase.CLASSIFY
+            return self._handle_classify(state)
+
         state.phase = TriagePhase.DANGER_CHECK
+        loc = state.locale
 
         questions = []
         if state.patient_age_months is None:
-            questions.append("How old is the patient? (months or years)")
+            questions.append(t("triage_ask_age", loc))
 
-        questions.append(
-            "I need to check for danger signs first. "
-            "Can the child drink or breastfeed? "
-            "Has the child had convulsions? "
-            "Is the child lethargic or unconscious?"
-        )
+        questions.append(t("triage_check_danger", loc))
 
         return self._respond(
             state,
-            f"I understand — the patient has: **{state.main_complaint}**.\n\n"
-            f"Let me assess step by step.\n\n"
+            f"**{state.main_complaint}**\n\n"
             + "\n".join(questions),
             follow_up=True,
         )
@@ -252,6 +478,30 @@ class TriageAgent:
         if rdt_match:
             state.vital_signs["rdt_result"] = "positive" if rdt_match.group(1) in ("positive", "+") else "negative"
 
+        # Extract MUAC if mentioned (e.g., "MUAC 110mm", "MUAC is 12cm")
+        muac_match = re.search(r"muac\s*(?:is\s*)?(\d+)\s*(mm|cm)?", text, re.I)
+        if muac_match:
+            val = int(muac_match.group(1))
+            unit = (muac_match.group(2) or "mm").lower()
+            state.muac_mm = val * 10 if unit == "cm" else val
+            if state.muac_mm < MUAC_SAM:
+                state.nutrition_status = "SAM"
+            elif state.muac_mm < MUAC_MAM:
+                state.nutrition_status = "MAM"
+            else:
+                state.nutrition_status = "normal"
+
+        # Assess dehydration level from text
+        all_text_lower = " ".join(state.symptoms_reported).lower()
+        severe_hits = len(SEVERE_DEHYDRATION_SIGNS & set(re.findall(r"\w+", all_text_lower)))
+        some_hits = len(SOME_DEHYDRATION_SIGNS & set(re.findall(r"\w+", all_text_lower)))
+        if severe_hits >= 2:
+            state.dehydration_level = "severe"
+        elif some_hits >= 2:
+            state.dehydration_level = "some"
+        elif "no dehydration" in all_text_lower or "well hydrated" in all_text_lower:
+            state.dehydration_level = "none"
+
         # If we have enough info or hit max questions → classify
         if state.questions_asked >= state.max_questions or self._has_enough_info(state):
             state.phase = TriagePhase.CLASSIFY
@@ -262,13 +512,18 @@ class TriageAgent:
     def _has_enough_info(self, state: TriageState) -> bool:
         """Check if we have enough symptoms to classify."""
         all_text = " ".join(state.symptoms_reported).lower()
-        malaria_score = len(MALARIA_INDICATORS & set(re.findall(r"\w+", all_text)))
-        pneumonia_score = len(PNEUMONIA_INDICATORS & set(re.findall(r"\w+", all_text)))
-        diarrhoea_score = len(DIARRHOEA_INDICATORS & set(re.findall(r"\w+", all_text)))
-        return max(malaria_score, pneumonia_score, diarrhoea_score) >= 2
+        tokens = set(re.findall(r"\w+", all_text))
+        scores = [
+            len(MALARIA_INDICATORS & tokens),
+            len(PNEUMONIA_INDICATORS & tokens),
+            len(DIARRHOEA_INDICATORS & tokens),
+            len(MEASLES_INDICATORS & tokens),
+            len(MALNUTRITION_INDICATORS & tokens),
+        ]
+        return max(scores) >= 2 or state.muac_mm is not None
 
     def _handle_classify(self, state: TriageState) -> dict:
-        """Phase 4: Classify based on gathered symptoms."""
+        """Phase 4: Classify based on gathered symptoms (iCCM protocol)."""
         all_text = " ".join(state.symptoms_reported).lower()
         tokens = set(re.findall(r"\w+", all_text))
 
@@ -276,6 +531,8 @@ class TriageAgent:
         malaria_score = len(MALARIA_INDICATORS & tokens)
         pneumonia_score = len(PNEUMONIA_INDICATORS & tokens)
         diarrhoea_score = len(DIARRHOEA_INDICATORS & tokens)
+        measles_score = len(MEASLES_INDICATORS & tokens)
+        malnutrition_score = len(MALNUTRITION_INDICATORS & tokens)
 
         classifications = []
         if malaria_score >= 2:
@@ -284,6 +541,12 @@ class TriageAgent:
             classifications.append("possible_pneumonia")
         if diarrhoea_score >= 2:
             classifications.append("diarrhoea")
+        if measles_score >= 2:
+            classifications.append("possible_measles")
+        if malnutrition_score >= 2 or state.nutrition_status == "SAM":
+            classifications.append("severe_malnutrition")
+        elif state.nutrition_status == "MAM":
+            classifications.append("moderate_malnutrition")
 
         if not classifications:
             classifications.append("unclassified")
@@ -353,9 +616,52 @@ class TriageAgent:
                     treatments.append("BLOOD IN STOOL → REFER to health facility.")
                     severity = Severity.RED
                     state.referred = True
+                # Dehydration severity grading (iCCM Plan A/B/C)
+                if state.dehydration_level == "severe":
+                    treatments.append("SEVERE DEHYDRATION (Plan C): REFER IMMEDIATELY. Give ORS on the way.")
+                    severity = Severity.RED
+                    state.referred = True
+                elif state.dehydration_level == "some":
+                    treatments.append("SOME DEHYDRATION (Plan B): Give ORS — 75ml/kg over 4 hours. Reassess after 4 hours.")
+                    severity = max(severity, Severity.YELLOW, key=lambda s: ["GREEN","YELLOW","RED"].index(s.value))
                 else:
+                    treatments.append("NO/MILD DEHYDRATION (Plan A): Give ORS after each loose stool. Continue feeding.")
+                if not severity == Severity.RED:
                     severity = Severity.YELLOW
                 state.follow_up_hours = 72
+
+            elif classification == "possible_measles":
+                treatments.append("POSSIBLE MEASLES: Give Vitamin A — 100,000 IU (age 6-11 months) or 200,000 IU (age 12-59 months). Single dose.")
+                treatments.append("Give Paracetamol for fever. Keep child hydrated.")
+                treatments.append("MEASLES with eye/mouth complications → REFER to health facility.")
+                if not severity == Severity.RED:
+                    severity = Severity.YELLOW
+                state.follow_up_hours = 48
+
+            elif classification == "severe_malnutrition":
+                muac_text = f" (MUAC: {state.muac_mm}mm)" if state.muac_mm else ""
+                treatments.append(f"SEVERE ACUTE MALNUTRITION (SAM){muac_text}: REFER IMMEDIATELY for therapeutic feeding.")
+                treatments.append("Give sugar-water on the way to prevent hypoglycaemia.")
+                treatments.append("Keep the child warm. Continue breastfeeding.")
+                severity = Severity.RED
+                state.referred = True
+                state.follow_up_hours = 24
+
+            elif classification == "moderate_malnutrition":
+                muac_text = f" (MUAC: {state.muac_mm}mm)" if state.muac_mm else ""
+                treatments.append(f"MODERATE ACUTE MALNUTRITION (MAM){muac_text}: Supplementary feeding program.")
+                treatments.append("Feed 5-6 times daily. Add oil/groundnut paste to porridge.")
+                treatments.append("Give deworming (Mebendazole) if not given in last 6 months.")
+                if not severity == Severity.RED:
+                    severity = Severity.YELLOW
+                state.follow_up_hours = 336  # 14 days
+
+        # Comorbidity warning: if multiple conditions, flag interaction
+        if len([c for c in state.classifications if c != "unclassified"]) >= 2:
+            conditions = ", ".join(c.replace("_", " ").title() for c in state.classifications)
+            treatments.insert(0, f"⚠ MULTIPLE CONDITIONS: {conditions}. Treat the most urgent first. If in doubt → REFER.")
+            if severity != Severity.RED:
+                severity = Severity.YELLOW
 
         # Build triage result
         triage = TriageResult(
@@ -367,11 +673,13 @@ class TriageAgent:
         )
 
         # Build response
-        header = "**ASSESSMENT COMPLETE**\n\n"
+        loc = state.locale
         if severity == Severity.RED:
-            header = "**REFER NOW — DANGER SIGNS DETECTED**\n\n"
+            header = f"**{t('triage_refer_now', loc)}**\n\n"
         elif severity == Severity.YELLOW:
-            header = "**CLASSIFICATION COMPLETE — TREAT AND MONITOR**\n\n"
+            header = f"**{t('triage_monitor', loc)}**\n\n"
+        else:
+            header = f"**{t('triage_manage_home', loc)}**\n\n"
 
         classification_text = ", ".join(
             c.replace("_", " ").title() for c in state.classifications
@@ -386,6 +694,29 @@ class TriageAgent:
 
         if state.follow_up_hours:
             response += f"\n\n**Follow up:** Reassess in {state.follow_up_hours} hours."
+
+        # Retrieve supporting evidence from knowledge base
+        if self._retriever and state.classifications:
+            try:
+                query_terms = " ".join(
+                    c.replace("_", " ") for c in state.classifications if c != "unclassified"
+                )
+                if state.danger_signs_found:
+                    query_terms += " danger signs " + " ".join(state.danger_signs_found[:2])
+                hits = self._retriever.search(query=query_terms, top_k=2, mode_filter="vht")
+                if hits:
+                    response += "\n\n**Evidence (MoH Guidelines):**"
+                    for i, hit in enumerate(hits[:2]):
+                        source = hit.metadata.get("source", "MoH")
+                        section = hit.metadata.get("section", "")
+                        label = f"[{i+1}] {source}"
+                        if section:
+                            label += f" — {section}"
+                        # Truncate passage to key sentences
+                        snippet = hit.text[:200].rsplit(".", 1)[0] + "."
+                        response += f"\n- **{label}**: {snippet}"
+            except Exception:
+                pass  # Don't fail treatment response if retrieval fails
 
         state.phase = TriagePhase.FOLLOW_UP
 
@@ -482,15 +813,13 @@ class TriageAgent:
         state.phase = TriagePhase.TREAT_REFER
         state.referred = True
 
+        loc = state.locale
         return {
             "response": (
-                f"**DANGER SIGNS DETECTED — REFER IMMEDIATELY**\n\n"
-                f"The following danger signs were found:\n{sign_list}\n\n"
+                f"{t('triage_danger_detected', loc)}\n\n"
+                f"{sign_list}\n\n"
                 f"**Pre-referral treatment:**\n{pre_referral_text}\n\n"
-                f"**Write a referral note** with: patient name, age, symptoms, "
-                f"danger signs, treatment given, time of referral.\n\n"
-                f"**Call the health facility** to alert them: **0800 100 263**\n\n"
-                f"Transport the patient IMMEDIATELY."
+                f"{t('escalation_message', loc)}"
             ),
             "phase": state.phase.value,
             "triage": triage,

@@ -16,7 +16,7 @@ export function registerSW() {
       });
       console.log("SW registered:", reg.scope);
 
-      // Listen for updates
+      // Listen for updates — dispatch event so UI can show update prompt
       reg.addEventListener("updatefound", () => {
         const newWorker = reg.installing;
         if (!newWorker) return;
@@ -25,8 +25,7 @@ export function registerSW() {
             newWorker.state === "activated" &&
             navigator.serviceWorker.controller
           ) {
-            // New version available — notify user
-            console.log("New Musawo version available");
+            window.dispatchEvent(new CustomEvent("musawo-sw-update"));
           }
         });
       });

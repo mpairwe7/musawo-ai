@@ -20,16 +20,48 @@ const MILESTONES: {
   { week: 40, label: "Expected Due Date", label_lg: "Enaku z'okuzaala", action: "Stay close to facility" },
 ];
 
-const DANGER_SIGNS = [
-  "Severe headache that won't go away",
-  "Blurred vision or seeing spots",
-  "Vaginal bleeding",
-  "Severe abdominal pain",
-  "High fever",
-  "Swollen face, hands, or feet",
-  "Baby not moving",
-  "Water breaking before labour",
-];
+const DANGER_SIGNS: Record<string, string[]> = {
+  en: [
+    "Severe headache that won't go away",
+    "Blurred vision or seeing spots",
+    "Vaginal bleeding",
+    "Severe abdominal pain",
+    "High fever",
+    "Swollen face, hands, or feet",
+    "Baby not moving",
+    "Water breaking before labour",
+  ],
+  lg: [
+    "Okulumwa omutwe ennyo okutakoma",
+    "Okulaba obubi oba okulaba ebisibe",
+    "Okuvaamu omusaayi",
+    "Okulumwa olubuto ennyo",
+    "Omusujja ogw'amaanyi",
+    "Okuzimba mu maaso, mu ngalo oba mu bigere",
+    "Omwana takyesenyezaenyeza",
+    "Amazzi okuvaamu nga tonnaba kuzaala",
+  ],
+  nyn: [
+    "Okurwara omutwe kubi obutahwa",
+    "Okureeba obubbi",
+    "Okwehwa omusaayi omu nda",
+    "Okurwara eiru rikuru",
+    "Omushuija omukuru",
+    "Okubyimba omu maiso, mu ngaro noona omu bigere",
+    "Omwana tatakweshongora",
+    "Amazzi kuturuka nga otakaba kuzaara",
+  ],
+  sw: [
+    "Maumivu makali ya kichwa yasiyopungua",
+    "Kuona vibaya au madoa",
+    "Kutoka damu ukeni",
+    "Maumivu makali ya tumbo",
+    "Homa kali sana",
+    "Kuvimba uso, mikono au miguu",
+    "Mtoto hasogei",
+    "Maji kutoka kabla ya uchungu",
+  ],
+};
 
 export default memo(function MaternalTracker() {
   const mode = useChatStore((s) => s.mode);
@@ -111,7 +143,7 @@ export default memo(function MaternalTracker() {
             : "Danger Signs — Go to Facility Immediately!"}
         </summary>
         <ul>
-          {DANGER_SIGNS.map((sign, i) => (
+          {(DANGER_SIGNS[locale] || DANGER_SIGNS.en).map((sign, i) => (
             <li key={i}>{sign}</li>
           ))}
         </ul>

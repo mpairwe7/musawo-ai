@@ -1,0 +1,126 @@
+{
+  "source": "Uganda MoH Emergency Care Guidelines / WHO First Aid",
+  "version": "2024",
+  "entries": [
+    {
+      "text": "BURNS — FIRST AID: Immediately cool the burn under cool running water for at least 20 minutes. This is the single most effective first aid measure and works even if started up to 3 hours after the injury. Do NOT apply toothpaste, butter, cooking oil, cow dung, ash, herbs, or any traditional remedy — these trap heat, increase infection risk, and make clinical assessment harder at the facility. After cooling, cover the burn loosely with a clean cloth or cling wrap to protect the wound and reduce pain. Assess severity: a burn that is larger than the person's palm, involves the face, hands, feet, groin, or joints, appears white or charred, or goes all the way around a limb is serious. REFER to the nearest health centre (HC III or higher) if the burn is severe, affects a child under 5, or shows signs of infection such as increasing redness, swelling, pus, or fever after 48 hours. Give ORS or clean water to drink to replace fluid lost through the burn surface.",
+      "section": "Burns",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "yellow",
+      "topic": "Burns"
+    },
+    {
+      "text": "SNAKEBITE — FIRST AID: Keep the person as calm and still as possible — movement increases venom absorption into the bloodstream. Immediately immobilize the bitten limb with a splint or by binding it to the body, keeping it at or below heart level. Do NOT cut the wound, attempt to suck out venom, apply a tourniquet tightly, apply ice, or use traditional herbal remedies — these cause additional tissue damage and delay treatment. For neurotoxic snakes common in Uganda (black mamba, green mamba, spitting cobra, forest cobra), apply a pressure immobilization bandage: wrap a firm crepe or cloth bandage from the fingers or toes of the bitten limb all the way up to the armpit or groin, snug but not cutting off circulation. Remove rings, watches, and tight clothing before swelling starts. REFER IMMEDIATELY to the nearest facility with antivenom (HC IV, district hospital, or regional referral hospital). Time is critical — antivenom is most effective within 4 hours of the bite. Note the snake's appearance if safely possible, and record the time of the bite.",
+      "section": "Snakebite",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "red",
+      "topic": "Snakebite"
+    },
+    {
+      "text": "DROWNING — FIRST AID: Remove the person from the water as quickly and safely as possible without putting yourself at risk. Once on land, immediately check if the person is breathing by looking at the chest for movement and feeling for breath on your cheek for up to 10 seconds. If not breathing, begin CPR immediately: give 5 initial rescue breaths (mouth-to-mouth, pinching the nose), then alternate 30 chest compressions with 2 rescue breaths. Push hard and fast on the centre of the chest at a rate of 100-120 compressions per minute, pressing down at least 5 cm for adults or one-third of chest depth for children. Do NOT attempt to drain water from the lungs by turning the person upside down — this delays CPR and does not help. If the person is breathing, place them in the recovery position (on their side with mouth angled downward) to prevent choking on vomited water. REFER ALL drowning victims to a health facility, even if they appear recovered — delayed complications including secondary drowning can occur hours later.",
+      "section": "Drowning",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "red",
+      "topic": "Drowning"
+    },
+    {
+      "text": "CHOKING — FIRST AID FOR ADULTS AND CHILDREN OVER 1 YEAR: If the person can cough forcefully, encourage them to keep coughing to dislodge the object. If they cannot breathe, speak, or cough, stand behind them and deliver up to 5 sharp back blows between the shoulder blades using the heel of your hand. If back blows fail, perform abdominal thrusts (Heimlich manoeuvre): place your fist just above the navel, grasp it with your other hand, and pull sharply inward and upward up to 5 times. Alternate between 5 back blows and 5 abdominal thrusts until the object is expelled or the person becomes unconscious. If they become unconscious, lower them to the ground and begin CPR — chest compressions may dislodge the object. FOR INFANTS UNDER 1 YEAR: Lay the infant face down along your forearm with the head lower than the body, and give 5 firm back blows between the shoulder blades. If unsuccessful, turn the infant face up and give 5 chest thrusts using two fingers on the breastbone just below the nipple line. Do NOT perform abdominal thrusts on infants or use a finger sweep unless you can clearly see the object. REFER to a health facility if the object cannot be removed or if the person has breathing difficulty after the object is expelled.",
+      "section": "Choking",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "red",
+      "topic": "Choking"
+    },
+    {
+      "text": "BLEEDING CONTROL — FIRST AID: Apply firm direct pressure to the wound using a clean cloth, towel, or clothing pad. Maintain continuous pressure for at least 15 minutes without lifting the cloth to check — if blood soaks through, add another layer on top without removing the first. Elevate the injured limb above the level of the heart to reduce blood flow to the area. If bleeding is from an arm or leg and cannot be controlled with direct pressure and elevation, apply a tourniquet as a last resort: tie a strong strip of cloth 5-7 cm wide above the wound (between the wound and the heart), tighten until bleeding stops, and note the time applied. Signs of shock from blood loss include rapid weak pulse, pale or cold clammy skin, confusion, thirst, and rapid breathing — lay the person flat, raise their legs, and keep them warm. REFER IMMEDIATELY to the nearest health facility (HC III or hospital) for any wound that will not stop bleeding, any deep wound, or any person showing signs of shock. Do not remove objects embedded in a wound — stabilize them in place and transport.",
+      "section": "Bleeding Control",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "red",
+      "topic": "Bleeding"
+    },
+    {
+      "text": "FRACTURES AND SPRAINS — FIRST AID: If you suspect a broken bone or severe sprain, immobilize the injured area immediately. Do NOT attempt to straighten, push back, or realign a broken bone — this can cause further damage to blood vessels and nerves. Splint the limb in the position you find it using whatever rigid material is available: straight sticks, rolled newspapers, cardboard, or a rolled-up blanket. Tie the splint above and below the fracture site using cloth strips, ensuring the ties are firm but not so tight that they cut off circulation (check that fingers or toes remain pink and warm). For an arm injury, also support with a sling made from cloth tied around the neck. Apply a cold compress wrapped in cloth to reduce swelling if available. Signs of a fracture include severe pain, swelling, deformity, inability to move the limb, or a grinding sensation. REFER to a health facility (HC IV or hospital with X-ray capability) for proper assessment and treatment. Do not allow the person to eat or drink in case surgery is needed.",
+      "section": "Fractures and Sprains",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "yellow",
+      "topic": "Fractures"
+    },
+    {
+      "text": "HEAD INJURY — FIRST AID: Any significant blow to the head must be taken seriously. Keep the person awake, still, and under close observation for at least 24 hours after the injury. Signs of concussion include headache, dizziness, confusion, nausea, and brief loss of consciousness. REFER URGENTLY to a hospital if any of the following danger signs appear: repeated vomiting, worsening or severe headache, increasing confusion or drowsiness, unequal pupil size (one pupil larger than the other), seizures or convulsions, clear fluid or blood draining from the nose or ears, weakness or numbness on one side of the body, or loss of consciousness lasting more than 1 minute. While transporting, keep the head and neck aligned and still, and if unconscious but breathing, place in the recovery position. Do NOT give any sedating medication, and do not allow the person to sleep for the first few hours without being woken regularly to check responsiveness. For any child under 2 years with a head injury, REFER immediately regardless of symptoms.",
+      "section": "Head Injury",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "red",
+      "topic": "Head Injury"
+    },
+    {
+      "text": "POISONING — FIRST AID: If a person has swallowed a harmful substance, do NOT induce vomiting — especially if the substance is a corrosive (acid, alkali, bleach, battery fluid), petroleum product (paraffin/kerosene, petrol, turpentine), or if the person is drowsy or unconscious, as vomiting can cause additional burning of the oesophagus or aspiration into the lungs. If the poison is on the skin, remove contaminated clothing and wash the skin thoroughly with large amounts of clean water for 15-20 minutes. If in the eyes, rinse with clean running water for at least 20 minutes. Bring the container, label, or a sample of the substance to the health facility so clinicians can identify the poison and give the correct treatment. REFER IMMEDIATELY to the nearest health facility (HC III or hospital). Contact the Uganda National Drug Authority or the nearest hospital pharmacy for poison guidance. Keep the person on their side in the recovery position if unconscious but breathing. Common poisoning sources in rural Uganda include pesticides (organophosphates), paraffin ingestion by children, and traditional herbal preparations.",
+      "section": "Poisoning",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "red",
+      "topic": "Poisoning"
+    },
+    {
+      "text": "HEATSTROKE AND DEHYDRATION — FIRST AID: Move the person to a shaded or cool area immediately and lay them down. Remove excess clothing and cool the body rapidly by pouring cool water over them, fanning them, or placing wet cloths on the neck, armpits, and groin where large blood vessels are close to the skin. Signs of heatstroke include very hot and dry skin (no sweating), body temperature above 40 degrees Celsius, confusion, rapid strong pulse, headache, nausea, and possible unconsciousness — this is a medical emergency requiring urgent referral. For heat exhaustion and dehydration (heavy sweating, weakness, dizziness, nausea, headache), give ORS solution or clean water with a pinch of salt and sugar if the person is conscious and able to swallow. Give fluids in small frequent sips. Do NOT give large amounts of plain water rapidly as this can worsen electrolyte imbalance. REFER to a health facility if symptoms do not improve within 30 minutes, if the person has altered consciousness, or if body temperature remains above 39 degrees Celsius despite cooling measures.",
+      "section": "Heatstroke and Dehydration",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "yellow",
+      "topic": "Heatstroke"
+    },
+    {
+      "text": "ELECTRIC SHOCK — FIRST AID: Do NOT touch the person while they are still in contact with the electrical source — you will also be electrocuted. First disconnect the power at the mains, switch, or plug. If you cannot switch off the power, use a dry non-conducting object such as a dry wooden stick, plastic chair, rubber mat, or thick folded dry cloth to push the person away from the electrical source. Do NOT use anything wet or metallic. Once the person is free from the electrical source, check for breathing and pulse. If the person is not breathing or has no pulse, begin CPR immediately: 30 chest compressions followed by 2 rescue breaths, continuing until help arrives. Even if the person appears well after an electric shock, REFER to a health facility — electrical current can cause internal injuries, cardiac arrhythmias, and burns that are not visible on the surface. Look for and treat both an entry wound and an exit wound. Cover any burns with a clean dry cloth. For lightning strike victims, it is safe to touch them immediately as they do not carry residual charge.",
+      "section": "Electric Shock",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "red",
+      "topic": "Electric Shock"
+    },
+    {
+      "text": "DOG AND ANIMAL BITES — FIRST AID: Immediately wash the wound thoroughly with soap and running water for at least 15 minutes — this is the single most important step to reduce rabies virus transmission and has been shown to reduce risk by up to 90%. After washing, apply an antiseptic such as povidone-iodine or alcohol if available. Do NOT suture or close the wound tightly, as this can trap the rabies virus. REFER to the nearest health facility within 24 hours for rabies post-exposure prophylaxis (PEP) vaccination — rabies is nearly 100% fatal once symptoms appear, but is completely preventable with timely vaccination. The PEP regimen in Uganda is typically 4 doses of rabies vaccine given on days 0, 3, 7, and 28. If the bite is deep, on the face, head, neck, or hands, or from a confirmed rabid animal, rabies immunoglobulin (RIG) is also needed and should be infiltrated around the wound. Try to identify or safely confine the animal for observation for 10 days if possible, but do NOT delay seeking care to catch the animal. Report the bite to the local veterinary officer for community rabies surveillance.",
+      "section": "Dog and Animal Bites",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "red",
+      "topic": "Animal Bites"
+    },
+    {
+      "text": "ALLERGIC REACTIONS AND ANAPHYLAXIS — FIRST AID: Anaphylaxis is a severe, life-threatening allergic reaction that can develop within minutes. Recognize the signs: widespread skin rash or hives, swelling of the face, lips, tongue, or throat, difficulty breathing or wheezing, dizziness or fainting, rapid weak pulse, abdominal pain, and nausea or vomiting. Common triggers in rural Uganda include insect stings (bees, wasps), medication reactions (penicillin, sulfa drugs), food allergies, and latex. If the person is having difficulty breathing, help them sit upright to ease breathing. If they feel faint or dizzy, lay them flat with legs raised. Do NOT give anything by mouth if they are having difficulty swallowing or breathing. REFER IMMEDIATELY to the nearest health facility (HC III or higher) — anaphylaxis requires adrenaline injection which is only available at health facilities. If the person has a known allergy and carries an adrenaline auto-injector, help them use it immediately in the outer thigh. Remove the trigger if possible (e.g., scrape out a bee sting with a flat edge — do not squeeze it). Monitor breathing continuously during transport and be prepared to start CPR if breathing stops.",
+      "section": "Allergic Reactions and Anaphylaxis",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "red",
+      "topic": "Anaphylaxis"
+    },
+    {
+      "text": "SEIZURES AND CONVULSIONS — FIRST AID: During a seizure, the most important action is to protect the person from injury. Clear the area around them of hard or sharp objects such as stones, furniture, or cooking fires. Do NOT restrain the person or hold them down — this can cause injury to both of you. Do NOT put anything in their mouth, including fingers, sticks, spoons, or cloth — people do not swallow their tongue during seizures, and forcing objects into the mouth can break teeth or cause choking. Gently turn the person onto their side (recovery position) to keep the airway clear and allow saliva to drain. Time the seizure if possible. Most seizures stop on their own within 1-3 minutes. REFER to a health facility if the seizure lasts longer than 5 minutes, if a second seizure follows without the person regaining consciousness, if the person is injured during the seizure, if this is a first-time seizure, or if the person has a high fever (febrile convulsion in children). After the seizure, stay with the person, keep them on their side, speak reassuringly, and do not give food or water until they are fully alert.",
+      "section": "Seizures and Convulsions",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "yellow",
+      "topic": "Seizures"
+    },
+    {
+      "text": "FAINTING — FIRST AID: Fainting (syncope) is a brief loss of consciousness caused by temporary reduced blood flow to the brain. Common causes include standing for long periods in heat, dehydration, hunger, emotional distress, or sudden position changes. If a person feels faint (dizzy, lightheaded, pale, sweating, blurred vision), help them lie down immediately with their legs raised about 30 cm above heart level to restore blood flow to the brain. Loosen any tight clothing around the neck, chest, and waist. Ensure fresh air by fanning or moving to a ventilated area. If the person has already fainted, place them on their back, raise their legs, and check that they are breathing. The person should regain consciousness within 1-2 minutes. When they wake, keep them lying down for several more minutes before slowly helping them sit up. Give clean water or ORS to drink once fully conscious. Do NOT splash water on their face, slap them, or try to force them to stand immediately. REFER to a health facility if fainting recurs, lasts more than 2 minutes, or if the person has chest pain, palpitations, headache, or is pregnant.",
+      "section": "Fainting",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "green",
+      "topic": "Fainting"
+    },
+    {
+      "text": "WOUND CARE — FIRST AID: For minor cuts, scrapes, and abrasions, begin by washing your own hands with soap and water if possible. Clean the wound gently but thoroughly by rinsing with clean water — pour clean water directly over the wound to flush out dirt, debris, and bacteria. If available, use soap to clean around (not directly inside) the wound. Remove any visible debris such as small stones or thorns with clean tweezers. Apply a thin layer of antibiotic ointment (such as povidone-iodine or gentian violet, commonly available at Ugandan health facilities and drug shops) if available. Cover the wound with a clean bandage, cloth, or dressing to protect it from contamination. Change the dressing daily or whenever it becomes wet or dirty. Consider tetanus risk: REFER to a health facility for tetanus toxoid vaccination if the person has not been vaccinated or boosted within the last 5 years, especially for deep puncture wounds, wounds contaminated with soil or animal waste, or wounds from rusty objects. Watch for signs of infection over the next days: increasing redness, warmth, swelling, pus, red streaks spreading from the wound, or fever — any of these require prompt medical attention.",
+      "section": "Wound Care",
+      "mode": "community",
+      "guideline": "First Aid",
+      "severity": "green",
+      "topic": "Wound Care"
+    }
+  ]
+}

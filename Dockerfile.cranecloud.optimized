@@ -1,0 +1,253 @@
+# ============================================================================
+# Musawo AI — Optimized Crane Cloud Dockerfile (v2.6)
+# Target image size: < 1.2 GB (from 5.5 GB)
+# 3-stage multi-stage build + slim runtime + layer caching
+# supervisord → nginx(:8080) + uvicorn(:8081) + node(:3000)
+# ============================================================================
+
+# ── Stage 1: Frontend Builder (Node 20 Alpine) ─────────────────────
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app/frontend
+
+# Layer cache: dependencies first
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm ci --legacy-peer-deps --no-audit --progress=false 2>/dev/null \
+    || npm install --omit=dev
+
+COPY frontend/ .
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+ENV NEXT_PUBLIC_API_URL=""
+RUN npm run build \
+    && mkdir -p /srv/nextjs/_next/static \
+    && cp -r .next/static/* /srv/nextjs/_next/static/ \
+    && cp -r public/* /srv/nextjs/ 2>/dev/null || true \
+    && mkdir -p .next/standalone/.next \
+    && cp -r .next/static .next/standalone/.next/static \
+    && cp -r public .next/standalone/public 2>/dev/null || true
+
+# ── Stage 2: Backend Builder (Python slim) ─────────────────────────
+FROM python:3.11-slim-bookworm AS backend-builder
+WORKDIR /build
+
+# Build deps only needed during pip install
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential gcc && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:${PATH}"
+
+COPY backend/requirements.txt ./
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    # Aggressive cleanup: remove test dirs, pycache, dist-info, docs
+    find /opt/venv -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null; \
+    find /opt/venv -name "*.pyc" -delete 2>/dev/null; \
+    find /opt/venv -type d -name "tests" -exec rm -rf {} + 2>/dev/null; \
+    find /opt/venv -name "*.dist-info" -type d -exec rm -rf {} + 2>/dev/null; \
+    find /opt/venv -type d -name "docs" -exec rm -rf {} + 2>/dev/null; \
+    find /opt/venv -name "*.pyi" -delete 2>/dev/null; \
+    true
+
+# ── Stage 3: Production Runtime (slim, NOT distroless) ─────────────
+FROM python:3.11-slim-bookworm
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
+LABEL org.opencontainers.image.title="Musawo AI"
+LABEL org.opencontainers.image.description="Community Health Navigator for Rural Uganda"
+LABEL org.opencontainers.image.version="2.6.0"
+LABEL org.opencontainers.image.vendor="OptiscanAI"
+LABEL org.opencontainers.image.source="https://github.com/mpairweLandwind/FinalYearProject"
+LABEL org.opencontainers.image.licenses="MIT"
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/opt/venv/bin:${PATH}"
+
+# Runtime deps — minimal install
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl ca-certificates gnupg \
+    nginx supervisor \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+       | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" \
+       > /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends nodejs \
+    && apt-get purge -y gnupg \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Copy built artifacts
+COPY --from=backend-builder /opt/venv /opt/venv
+COPY --from=frontend-builder /srv/nextjs /srv/nextjs
+COPY --from=frontend-builder /app/frontend/.next/standalone /app/frontend/.next/standalone
+
+WORKDIR /app
+
+# Backend code + knowledge base (baked in — Crane Cloud has no volumes)
+COPY backend/app/ ./backend/app/
+COPY knowledge-base/ ./knowledge-base/
+
+# Non-root user
+RUN groupadd -r musawo && useradd -r -g musawo -d /app -s /sbin/nologin musawo \
+    && mkdir -p logs cache /tmp/musawo_audit \
+    && chown -R musawo:musawo /app /srv/nextjs /tmp/musawo_audit \
+    && chown -R musawo:musawo /var/log/nginx /var/lib/nginx /run \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
+
+# Nginx — optimized for low-resource Crane Cloud
+RUN cat > /etc/nginx/sites-available/default <<'NGINX'
+server {
+    listen 8080;
+    server_name _;
+    client_max_body_size 10M;
+
+    # Gzip compression for text assets
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 4;
+    gzip_min_length 256;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript image/svg+xml;
+
+    # Static assets — long cache, immutable
+    location /_next/static/ { root /srv/nextjs; expires 365d; access_log off; add_header Cache-Control "public, immutable"; }
+    location ~* \.(png|ico|svg|webmanifest|js)$ { root /srv/nextjs; try_files $uri @nextjs; expires 30d; access_log off; }
+
+    # Backend API routes
+    location /health { proxy_pass http://127.0.0.1:8081/health; proxy_http_version 1.1; }
+    location /ready { proxy_pass http://127.0.0.1:8081/ready; proxy_http_version 1.1; }
+    location /docs { proxy_pass http://127.0.0.1:8081/docs; proxy_http_version 1.1; }
+    location /openapi.json { proxy_pass http://127.0.0.1:8081/openapi.json; proxy_http_version 1.1; }
+    location /metrics { proxy_pass http://127.0.0.1:8081/metrics; proxy_http_version 1.1; }
+
+    # Frontend uses /api/* prefix — strip and forward to backend
+    location /api/v1/voice/ {
+        proxy_pass http://127.0.0.1:8081/v1/voice/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 300s;
+    }
+    location /api/ {
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass http://127.0.0.1:8081;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Connection '';
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_read_timeout 300s;
+    }
+
+    # API + SSE — unbuffered for streaming (direct paths, no /api prefix)
+    location /v1/ {
+        proxy_pass http://127.0.0.1:8081/v1/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Connection '';
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_read_timeout 300s;
+    }
+
+    # Voice WebSocket (direct path)
+    location /v1/voice/ {
+        proxy_pass http://127.0.0.1:8081/v1/voice/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 300s;
+    }
+
+    # Next.js frontend
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+    }
+    location @nextjs {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+    }
+}
+NGINX
+
+# Supervisord — process manager
+RUN cat > /etc/supervisor/conf.d/musawo.conf <<'SUPER'
+[supervisord]
+nodaemon=true
+logfile=/tmp/supervisord.log
+pidfile=/tmp/supervisord.pid
+user=root
+
+[program:backend]
+; Crane Cloud RENU CoreDNS resolves internal services but not external hosts.
+; Pin Cloudflare-fronted Groq + Anthropic IPs in /etc/hosts so LLM calls work.
+; Refresh via `dig api.groq.com` if Cloudflare reshuffles.
+command=sh -c "grep -q api.groq.com /etc/hosts || { echo '172.64.149.20 api.groq.com'; echo '104.18.38.236 api.groq.com'; echo '160.79.104.10 api.anthropic.com'; } >> /etc/hosts; exec /opt/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8081 --workers 2"
+directory=/app/backend
+environment=HOME="/app",PORT="8081",LOG_LEVEL="info",LLM_BACKEND="passages",KNOWLEDGE_BASE_DIR="/app/knowledge-base",BM25_STATE_PATH="/app/knowledge-base/bm25_state.json"
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+autorestart=true
+startretries=3
+startsecs=5
+stopwaitsecs=10
+stopsignal=TERM
+
+[program:frontend]
+command=node server.js
+directory=/app/frontend/.next/standalone
+environment=PORT="3000",HOSTNAME="127.0.0.1"
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+autorestart=true
+startretries=3
+startsecs=3
+stopwaitsecs=5
+stopsignal=TERM
+
+[program:nginx]
+command=nginx -g "daemon off;"
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+autorestart=true
+startretries=3
+startsecs=1
+stopwaitsecs=5
+stopsignal=QUIT
+SUPER
+
+ENV PORT=8081 \
+    LLM_BACKEND=passages \
+    LOG_LEVEL=info \
+    NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1
+
+EXPOSE 8080
+
+STOPSIGNAL SIGTERM
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -sf http://localhost:8080/health || exit 1
+
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/musawo.conf"]

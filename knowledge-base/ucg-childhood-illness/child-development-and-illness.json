@@ -42,6 +42,30 @@
       "guideline": "UCG 2016 Section 1.1.5",
       "severity": "red",
       "topic": "Febrile Convulsions"
+    },
+    {
+      "text": "MUAC MALNUTRITION SCREENING — FOR VHTs AND COMMUNITY HEALTH WORKERS: Mid-Upper Arm Circumference (MUAC) is a simple, fast way to screen children aged 6-59 months for acute malnutrition. No scale needed — just a MUAC tape. HOW TO MEASURE: (1) Use the left arm. (2) Find the midpoint: bend the arm, measure from shoulder tip to elbow tip, mark the midpoint. (3) Straighten the arm, wrap the MUAC tape around the midpoint. (4) Read the colour and measurement where the tape meets. INTERPRETATION: GREEN (≥13.5 cm): Normal nutritional status. Child is well nourished. Continue exclusive breastfeeding (if under 6 months) or good complementary feeding. YELLOW (12.5-13.4 cm): Moderate Acute Malnutrition (MAM). Refer to the health facility for supplementary feeding programme. Counsel the mother on improved feeding (more meals, more variety, add animal-source foods). Follow up in 2 weeks. RED (<12.5 cm): Severe Acute Malnutrition (SAM). REFER IMMEDIATELY to the health facility. SAM is life-threatening. The child needs therapeutic feeding (RUTF/Plumpy'Nut). Also check for bilateral pitting oedema (press both feet for 3 seconds — if a dent remains, this is oedema and classified as SAM regardless of MUAC). Screen EVERY child 6-59 months at EVERY home visit. VHTs should carry MUAC tapes and record results on the Village Health Register.",
+      "section": "MUAC Screening",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 19.2 / IMAM Guidelines Uganda",
+      "severity": "yellow",
+      "topic": "Malnutrition Screening"
+    },
+    {
+      "text": "DEWORMING SCHEDULE FOR CHILDREN (UCG / MIYCAN): Intestinal worms (roundworm, hookworm, whipworm) are very common in Uganda and cause malnutrition, anaemia, poor growth, and reduced school performance. DEWORMING SCHEDULE: First dose at 12 months of age, then every 6 months until 14 years. MEDICATION: Mebendazole 500 mg — single dose, chewable tablet. Can be crushed and mixed with food for young children. OR Albendazole: 12-23 months: 200 mg single dose. 24 months and older: 400 mg single dose. WHEN TO GIVE: (1) At every Child Health Day (integrated with immunisation and vitamin A). (2) At routine health facility visits every 6 months. (3) VHTs can give deworming during community health days if trained and supplied. PREGNANT WOMEN: Give Mebendazole 500 mg single dose in the 2nd trimester (after 1st trimester — not in the first 3 months). SIDE EFFECTS: Mild — occasional stomach pain, nausea, diarrhoea. These pass quickly. PREVENTION: Use a latrine, wash hands with soap after using the toilet and before eating, wear shoes, drink clean water, wash fruits and vegetables before eating.",
+      "section": "Deworming Schedule",
+      "mode": "vht",
+      "guideline": "UCG 2016 Section 19 / MIYCAN 2021",
+      "severity": "green",
+      "topic": "Deworming"
+    },
+    {
+      "text": "VITAMIN A SUPPLEMENTATION SCHEDULE FOR CHILDREN (UNEPI / MIYCAN): Vitamin A deficiency increases the risk of severe infections, blindness, and death in children. Uganda provides free Vitamin A supplements through the routine immunisation programme and Child Health Days. SCHEDULE: 6 months: 100,000 IU (blue capsule / half of red capsule) — given with Measles-Rubella vaccine at 9 months visit or at 6-month visit. 12 months: 200,000 IU (red capsule). Every 6 months thereafter: 200,000 IU until the child is 5 years old. HOW TO GIVE: Cut the tip of the capsule, squeeze the liquid directly into the child's mouth. Do NOT give the capsule shell to the child. TIMING: Integrate with routine immunisation visits, deworming, and growth monitoring. VHTs should remind caregivers about Vitamin A during home visits and during Child Health Days. FOOD SOURCES OF VITAMIN A: Orange-fleshed sweet potatoes, dark green leafy vegetables (dodo, nakati), mangoes, pawpaw, carrots, pumpkin, liver, eggs, milk. DANGER SIGNS OF VITAMIN A DEFICIENCY: Night blindness (child cannot see well in dim light), dry eyes, frequent severe infections. If these signs are present, refer to the health facility. NOTE: Do NOT give extra doses outside the schedule — Vitamin A toxicity can occur with overdose.",
+      "section": "Vitamin A Supplementation",
+      "mode": "vht",
+      "guideline": "UNEPI Schedule / MIYCAN 2021 / UCG 2016 Ch.19",
+      "severity": "green",
+      "topic": "Vitamin A"
     }
   ]
 }

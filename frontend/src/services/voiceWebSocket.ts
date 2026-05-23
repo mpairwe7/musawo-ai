@@ -106,27 +106,64 @@ export type VoiceWSListener = (event: VoiceWSEvent) => void;
 
 /**
  * WebSocket client for streaming voice chat.
- * Handles reconnection, audio streaming, and event dispatch.
+ * Handles reconnection with jitter, connection state tracking,
+ * error event emission, and audio streaming.
  */
+export type ConnectionState = "disconnected" | "connecting" | "connected" | "reconnecting";
+
 export class VoiceWebSocket {
   private ws: WebSocket | null = null;
   private listeners: VoiceWSListener[] = [];
   private audioListeners: ((data: ArrayBuffer) => void)[] = [];
   private reconnectAttempts = 0;
   private maxReconnects = 5;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private heartbeatTimer: ReturnType<typeof setInterval> | null = null;
+  private lastPong = 0;
   private url: string;
+  private _state: ConnectionState = "disconnected";
+  private _intentionalClose = false;
+  private lastConfig: VoiceWSConfig = {};
 
   constructor(url: string) {
     this.url = url;
   }
 
+  get state(): ConnectionState {
+    return this._state;
+  }
+
+  private setState(state: ConnectionState): void {
+    this._state = state;
+    this.listeners.forEach((l) => l({ type: "connection_state", state }));
+  }
+
   connect(config: VoiceWSConfig = {}): void {
+    // Prevent duplicate connections
+    if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
+      return;
+    }
+
+    this._intentionalClose = false;
+    this.lastConfig = config;
+    this.setState(this.reconnectAttempts > 0 ? "reconnecting" : "connecting");
+
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const wsUrl = this.url.startsWith("ws") ? this.url : `${protocol}//${window.location.host}${this.url}`;
-    this.ws = new WebSocket(wsUrl);
+
+    try {
+      this.ws = new WebSocket(wsUrl);
+    } catch (err) {
+      this.setState("disconnected");
+      this.listeners.forEach((l) => l({ type: "error", error: String(err) }));
+      this.scheduleReconnect();
+      return;
+    }
 
     this.ws.onopen = () => {
       this.reconnectAttempts = 0;
+      this.lastPong = Date.now();
+      this.setState("connected");
       this.ws?.send(
         JSON.stringify({
           type: "session_start",
@@ -135,6 +172,7 @@ export class VoiceWebSocket {
           tts_enabled: config.ttsEnabled ?? true,
         })
       );
+      this.startHeartbeat();
     };
 
     this.ws.onmessage = (e) => {
@@ -143,18 +181,85 @@ export class VoiceWebSocket {
       } else {
         try {
           const event = JSON.parse(e.data) as VoiceWSEvent;
+          // Track pong responses for heartbeat
+          if (event.type === "pong") {
+            this.lastPong = Date.now();
+          }
           this.listeners.forEach((l) => l(event));
-        } catch {}
+        } catch {
+          // Non-JSON text frame — ignore
+        }
       }
     };
 
-    this.ws.onclose = () => {
-      if (this.reconnectAttempts < this.maxReconnects) {
-        const delay = Math.min(1000 * 2 ** this.reconnectAttempts, 30000);
-        this.reconnectAttempts++;
-        setTimeout(() => this.connect(config), delay);
-      }
+    this.ws.onerror = () => {
+      this.listeners.forEach((l) => l({ type: "error", error: "WebSocket connection error" }));
     };
+
+    this.ws.onclose = (ev) => {
+      this.ws = null;
+
+      if (this._intentionalClose) {
+        this.setState("disconnected");
+        return;
+      }
+
+      this.listeners.forEach((l) => l({
+        type: "close",
+        code: ev.code,
+        reason: ev.reason,
+        wasClean: ev.wasClean,
+      }));
+
+      this.scheduleReconnect();
+    };
+  }
+
+  private scheduleReconnect(): void {
+    if (this._intentionalClose || this.reconnectAttempts >= this.maxReconnects) {
+      this.setState("disconnected");
+      this.listeners.forEach((l) => l({ type: "reconnect_exhausted", attempts: this.reconnectAttempts }));
+      return;
+    }
+
+    // Exponential backoff with full jitter
+    const baseDelay = Math.min(1000 * 2 ** this.reconnectAttempts, 30000);
+    const delay = Math.random() * baseDelay;
+    this.reconnectAttempts++;
+
+    this.setState("reconnecting");
+    this.listeners.forEach((l) => l({
+      type: "reconnecting",
+      attempt: this.reconnectAttempts,
+      maxAttempts: this.maxReconnects,
+      delay: Math.round(delay),
+    }));
+
+    this.reconnectTimer = setTimeout(() => {
+      this.reconnectTimer = null;
+      this.connect(this.lastConfig);
+    }, delay);
+  }
+
+  private startHeartbeat(): void {
+    this.stopHeartbeat();
+    this.heartbeatTimer = setInterval(() => {
+      if (this.ws?.readyState === WebSocket.OPEN) {
+        this.ws.send(JSON.stringify({ type: "ping" }));
+        // If no pong received in 30s, connection is dead — reconnect
+        if (Date.now() - this.lastPong > 30000) {
+          this.listeners.forEach((l) => l({ type: "error", error: "Heartbeat timeout" }));
+          this.ws?.close();
+        }
+      }
+    }, 15000);
+  }
+
+  private stopHeartbeat(): void {
+    if (this.heartbeatTimer) {
+      clearInterval(this.heartbeatTimer);
+      this.heartbeatTimer = null;
+    }
   }
 
   sendAudio(pcm16: ArrayBuffer): void {
@@ -164,14 +269,27 @@ export class VoiceWebSocket {
   }
 
   bargeIn(): void {
-    this.ws?.send(JSON.stringify({ type: "barge_in" }));
+    if (this.ws?.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({ type: "barge_in" }));
+    }
   }
 
   disconnect(): void {
-    this.maxReconnects = 0;
-    this.ws?.send(JSON.stringify({ type: "session_end" }));
-    this.ws?.close();
-    this.ws = null;
+    this._intentionalClose = true;
+    this.stopHeartbeat();
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    if (this.ws) {
+      if (this.ws.readyState === WebSocket.OPEN) {
+        this.ws.send(JSON.stringify({ type: "session_end" }));
+      }
+      this.ws.close();
+      this.ws = null;
+    }
+    this.reconnectAttempts = 0;
+    this.setState("disconnected");
   }
 
   onEvent(listener: VoiceWSListener): () => void {

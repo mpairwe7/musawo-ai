@@ -58,7 +58,7 @@ export default memo(function ModeSelector() {
             style={{ "--mode-color": m.color } as React.CSSProperties}
             onClick={() => startTransition(() => setMode(m.id))}
           >
-            <Icon width={24} height={24} />
+            <Icon width={18} height={18} />
             <span className="mode-label">
               {locale === "lg" ? m.label_lg : m.label}
             </span>

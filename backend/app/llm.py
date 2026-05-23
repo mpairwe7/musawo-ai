@@ -17,6 +17,43 @@ from typing import Any, Generator
 
 logger = logging.getLogger("musawo.llm")
 
+# ── Token estimation (lightweight, no external deps) ──────────────────────
+
+def estimate_tokens(text: str) -> int:
+    """Estimate token count using the ~4 chars per token heuristic.
+
+    More accurate than word count, sufficient for budget enforcement.
+    For exact counting, use tiktoken (but it's heavy for deployment).
+    """
+    return max(len(text) // 4, 1)
+
+
+def truncate_history_to_budget(
+    messages: list[dict],
+    max_tokens: int,
+    system_tokens: int = 0,
+    passage_tokens: int = 0,
+) -> list[dict]:
+    """Truncate conversation history to fit within token budget.
+
+    Keeps the most recent messages, dropping oldest first.
+    Reserves space for system prompt, passages, and generation.
+    """
+    available = max_tokens - system_tokens - passage_tokens - 500  # Reserve 500 for response
+    if available <= 0:
+        return []
+
+    result = []
+    total = 0
+    for msg in reversed(messages):
+        msg_tokens = estimate_tokens(msg.get("content", ""))
+        if total + msg_tokens > available:
+            break
+        result.insert(0, msg)
+        total += msg_tokens
+    return result
+
+
 # ── Config ─────────────────────────────────────────────────────────────────
 
 LLM_BACKEND = os.getenv("LLM_BACKEND", "groq")  # "groq" | "claude" | "local" | "passages"
@@ -59,6 +96,10 @@ RESPONSE FORMAT (you MUST follow this structure):
   4. **Sources** — Cite [1], [2] from passages
 - Keep language simple — many users have limited literacy.
 - Be concise but complete. Avoid long paragraphs — prefer bullet points.
+- When clinically helpful, include a diagram reference using ::diagram[key] syntax.
+  Available diagrams: danger_signs, ors_preparation, handwashing, breathing_count,
+  breastfeeding, immunization_schedule, dehydration_check, birth_preparedness,
+  malaria_rdt, fever_assessment. Use at most ONE per response, and only when relevant.
 
 CRITICAL RULES:
 1. ONLY answer from the provided context passages. If the context does not cover
@@ -73,6 +114,12 @@ CRITICAL RULES:
    with local explanation in parentheses.
 7. Be warm, respectful, and culturally sensitive.
 8. End with: *This is health guidance only — not a medical diagnosis.*
+9. When the context contains step-by-step procedures, numbered steps, or
+   treatment instructions, reproduce them fully — do NOT summarize procedures
+   into vague advice.
+10. Always include phone numbers, clinic URLs, and dosage information exactly
+    as they appear in the context.
+11. For emergencies, always include the health hotline: 0800 100 263.
 
 LANGUAGES: English, Luganda, Runyankole, Swahili.
 """
@@ -160,6 +207,63 @@ SYSTEM_PROMPTS = {
     "community": _COMMUNITY_SYSTEM,
 }
 
+# ── Locale-specific prompt additions ──────────────────────────────────────
+# Injected into the user message when locale is not English, giving the LLM
+# explicit instructions and local terminology examples.
+
+_LOCALE_INSTRUCTIONS: dict[str, str] = {
+    "lg": """LANGUAGE INSTRUCTION: The user is writing in Luganda. You MUST respond entirely in Luganda.
+Use simple, clear Luganda that a village community member can understand.
+Use English medical terms in parentheses for clarity, e.g., "omusujja (fever)".
+Common Luganda health terms to use:
+- omusujja = fever, omutwe = headache, ekiddukaano = diarrhoea
+- okufuuwa = cough, okusesema = vomiting, okulumwa = pain
+- olubuto = pregnancy, okuzaala = delivery, omwana = child
+- eddagala = medicine, ddwaliro = hospital/clinic, omusawo = doctor
+- obubonero = signs/symptoms, okuyonsa = breastfeeding
+- amazzi = water/fluids, omusaayi = blood, sukaari = diabetes
+- "Genda mu ddwaliro amangu" = Go to the hospital immediately
+- "Yita ku simu 0800 100 263" = Call 0800 100 263
+Keep section headers in Luganda: ## Okulambulula (Assessment), ## Okuyamba (Guidance), ## Lwe Wetaaga Okugenda mu Ddwaliro (When to Refer).""",
+
+    "nyn": """LANGUAGE INSTRUCTION: The user is writing in Runyankole. You MUST respond entirely in Runyankole.
+Use simple, clear Runyankole that a community member can understand.
+Use English medical terms in parentheses for clarity, e.g., "omushuija (fever)".
+Common Runyankole health terms to use:
+- omushuija = fever, omutwe = headache, okushaarira = diarrhoea
+- okukora = cough, okushuuha = vomiting, okubabara = pain
+- enda = pregnancy, okuzaara = delivery, omwana = child
+- eddagara = medicine, irwariro = hospital/clinic, omusawo = doctor
+- obubonero = signs/symptoms, okugonza = breastfeeding
+- amazi = water/fluids, eshagama = blood, shukaari = diabetes
+- "Genda omu rwariro hati" = Go to the hospital now
+- "Koroha 0800 100 263" = Call 0800 100 263
+Keep section headers in Runyankole: ## Okwebaza (Assessment), ## Okuyamba (Guidance), ## Norikwetaaga Okugenda Omu Rwariro (When to Refer).""",
+
+    "sw": """LANGUAGE INSTRUCTION: The user is writing in Swahili. You MUST respond entirely in Swahili.
+Use simple, clear Swahili that a community member can understand.
+Use English medical terms in parentheses for clarity, e.g., "homa (fever)".
+Common Swahili health terms to use:
+- homa = fever, kichwa = headache, kuharisha = diarrhoea
+- kikohozi = cough, kutapika = vomiting, maumivu = pain
+- mimba = pregnancy, kuzaa = delivery, mtoto = child
+- dawa = medicine, hospitali = hospital, daktari = doctor
+- dalili = symptoms, kunyonyesha = breastfeeding
+- maji = water/fluids, damu = blood, kisukari = diabetes
+- "Nenda hospitali haraka" = Go to the hospital immediately
+- "Piga simu 0800 100 263" = Call 0800 100 263
+Keep section headers in Swahili: ## Tathmini (Assessment), ## Mwongozo (Guidance), ## Wakati wa Kwenda Hospitali (When to Refer).""",
+}
+
+
+def _get_system_prompt(mode: str, locale: str) -> str:
+    """Get mode system prompt with locale-specific additions."""
+    base = SYSTEM_PROMPTS.get(mode, _COMMUNITY_SYSTEM)
+    locale_addition = _LOCALE_INSTRUCTIONS.get(locale, "")
+    if locale_addition:
+        return f"{base}\n\n{locale_addition}"
+    return base
+
 
 # ── Passage formatting ─────────────────────────────────────────────────────
 
@@ -209,16 +313,27 @@ def generate_groq(
 ) -> dict[str, Any]:
     """Generate via Groq (llama-3.3-70b or qwen3-32b). Free tier, ~500 tok/s."""
     client = _get_groq_client()
-    system_prompt = SYSTEM_PROMPTS.get(mode, _COMMUNITY_SYSTEM)
+    system_prompt = _get_system_prompt(mode, locale)
     context = format_passages(passages)
 
     messages: list[dict] = [{"role": "system", "content": system_prompt}]
+
+    # Token budget enforcement — prevent context overflow
+    sys_tokens = estimate_tokens(system_prompt)
+    ctx_tokens = estimate_tokens(context)
+    user_msg = f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly to the patient/VHT. Do NOT show your thinking process."
     if history:
-        for turn in history[-10:]:
+        budgeted = truncate_history_to_budget(
+            history[-10:],
+            max_tokens=8192,  # Groq context window
+            system_tokens=sys_tokens,
+            passage_tokens=ctx_tokens + estimate_tokens(query),
+        )
+        for turn in budgeted:
             messages.append(turn)
     messages.append({
         "role": "user",
-        "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly to the patient/VHT. Do NOT show your thinking process.",
+        "content": user_msg,
     })
 
     try:
@@ -264,7 +379,7 @@ def stream_groq(
 ) -> Generator[dict[str, Any], None, None]:
     """Streaming generation via Groq API."""
     client = _get_groq_client()
-    system_prompt = SYSTEM_PROMPTS.get(mode, _COMMUNITY_SYSTEM)
+    system_prompt = _get_system_prompt(mode, locale)
     context = format_passages(passages)
 
     messages: list[dict] = [{"role": "system", "content": system_prompt}]
@@ -327,7 +442,7 @@ def generate_claude(
 ) -> dict[str, Any]:
     """Synchronous Claude API generation with prompt caching."""
     client = _get_claude_client()
-    system_prompt = SYSTEM_PROMPTS.get(mode, _COMMUNITY_SYSTEM)
+    system_prompt = _get_system_prompt(mode, locale)
     context = format_passages(passages)
 
     # Build messages
@@ -405,7 +520,7 @@ def stream_claude(
 ) -> Generator[dict[str, Any], None, None]:
     """Streaming Claude API generation for SSE."""
     client = _get_claude_client()
-    system_prompt = SYSTEM_PROMPTS.get(mode, _COMMUNITY_SYSTEM)
+    system_prompt = _get_system_prompt(mode, locale)
     context = format_passages(passages)
 
     messages: list[dict] = []
@@ -445,29 +560,113 @@ def stream_claude(
 
 
 # ── Local model backend (offline fallback) ─────────────────────────────────
+#
+# Smart fallback chain for local inference:
+# 1. GGUF via llama-cpp-python (4-6GB RAM, fastest CPU inference)
+# 2. Quantized via BitsAndBytes (8-bit/4-bit, needs GPU)
+# 3. Full-precision via transformers (16GB+ VRAM or 32GB RAM)
+#
+# Recommended models (Apache 2.0, production-ready):
+# - GGUF: Qwen/Qwen3-8B-GGUF (Q5_K_M variant, ~5GB)
+# - HF: Qwen/Qwen3-8B with 4-bit BnB quantization (~4GB VRAM)
 
 _local_model = None
 _local_tokenizer = None
+_local_backend = None  # "gguf" | "bnb4" | "bnb8" | "transformers"
+
+# GGUF model path (set via env for llama.cpp backend)
+GGUF_MODEL_PATH = os.getenv("GGUF_MODEL_PATH", "")
+LOCAL_GPU_LAYERS = int(os.getenv("LOCAL_GPU_LAYERS", "0"))  # For GGUF: layers on GPU
+
+# LoRA adapter path — fine-tuned Luganda adapter merged at load time
+LORA_ADAPTER_PATH = os.getenv("LORA_ADAPTER_PATH", "") or None
 
 
 def _load_local_model():
-    """Thread-safe lazy load of local Qwen3-8B model."""
-    global _local_model, _local_tokenizer
+    """Smart local model loading: tries GGUF → 4-bit → 8-bit → full precision."""
+    global _local_model, _local_tokenizer, _local_backend
     if _local_model is not None:
         return
 
-    import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    # Strategy 1: GGUF via llama-cpp-python (best for CPU, lowest memory)
+    if GGUF_MODEL_PATH:
+        try:
+            from llama_cpp import Llama
+            logger.info("Loading GGUF model: %s (gpu_layers=%d)", GGUF_MODEL_PATH, LOCAL_GPU_LAYERS)
+            _local_model = Llama(
+                model_path=GGUF_MODEL_PATH,
+                n_ctx=LOCAL_CONTEXT_WINDOW,
+                n_gpu_layers=LOCAL_GPU_LAYERS,
+                verbose=False,
+            )
+            _local_backend = "gguf"
+            logger.info("Local model ready (backend=gguf, ctx=%d)", LOCAL_CONTEXT_WINDOW)
+            return
+        except ImportError:
+            logger.info("llama-cpp-python not installed, trying transformers")
+        except Exception as e:
+            logger.warning("GGUF loading failed: %s", e)
 
-    logger.info("Loading local model: %s", LOCAL_MODEL)
-    _local_tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL)
-    _local_model = AutoModelForCausalLM.from_pretrained(
-        LOCAL_MODEL,
-        torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-        device_map=LOCAL_DEVICE,
-        trust_remote_code=False,  # OWASP LLM03
-    )
-    logger.info("Local model loaded on %s", LOCAL_DEVICE)
+    # Strategy 2: 4-bit quantized via BitsAndBytes (GPU, ~4GB VRAM)
+    try:
+        import torch
+        if torch.cuda.is_available():
+            try:
+                from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+                logger.info("Loading 4-bit quantized: %s", LOCAL_MODEL)
+                bnb_config = BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_compute_dtype=torch.float16,
+                    bnb_4bit_quant_type="nf4",
+                )
+                _local_tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL)
+                _local_model = AutoModelForCausalLM.from_pretrained(
+                    LOCAL_MODEL,
+                    quantization_config=bnb_config,
+                    device_map="auto",
+                    trust_remote_code=False,
+                )
+                _local_backend = "bnb4"
+                logger.info("Local model ready (backend=bnb4, device=cuda)")
+                return
+            except ImportError:
+                logger.info("bitsandbytes not installed, trying full precision")
+            except Exception as e:
+                logger.warning("4-bit loading failed: %s", e)
+    except ImportError:
+        pass
+
+    # Strategy 3: Full-precision via transformers (fallback, needs most memory)
+    try:
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
+        logger.info("Loading full-precision model: %s", LOCAL_MODEL)
+        _local_tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL)
+        _local_model = AutoModelForCausalLM.from_pretrained(
+            LOCAL_MODEL,
+            torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
+            device_map=LOCAL_DEVICE,
+            trust_remote_code=False,
+        )
+        _local_backend = "transformers"
+        logger.info("Local model ready (backend=transformers, device=%s)", LOCAL_DEVICE)
+    except Exception as e:
+        logger.error("All local model loading failed: %s", e)
+        raise
+
+    # Load fine-tuned LoRA adapter if configured
+    if _local_backend in ("bnb4", "transformers") and LORA_ADAPTER_PATH and os.path.isdir(LORA_ADAPTER_PATH):
+        try:
+            from peft import PeftModel
+            logger.info("Loading LoRA adapter from %s", LORA_ADAPTER_PATH)
+            _local_model = PeftModel.from_pretrained(_local_model, LORA_ADAPTER_PATH)
+            _local_model = _local_model.merge_and_unload()
+            logger.info("LoRA adapter merged successfully")
+        except ImportError:
+            logger.warning("peft not installed; skipping LoRA adapter")
+        except Exception:
+            logger.exception("Failed to load LoRA adapter from %s", LORA_ADAPTER_PATH)
 
 
 def generate_local(
@@ -476,12 +675,32 @@ def generate_local(
     mode: str,
     locale: str = "en",
 ) -> dict[str, Any]:
-    """Generate using local Qwen3-8B model (offline mode)."""
+    """Generate using local model (GGUF, quantized, or full precision)."""
     _load_local_model()
 
-    system_prompt = SYSTEM_PROMPTS.get(mode, _COMMUNITY_SYSTEM)
+    system_prompt = _get_system_prompt(mode, locale)
     context = format_passages(passages)
 
+    # GGUF backend (llama.cpp) — uses chat completion API
+    if _local_backend == "gguf":
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": f"Context:\n{context}\n\nQuestion ({locale}): {query}"},
+        ]
+        result = _local_model.create_chat_completion(  # type: ignore
+            messages=messages,
+            max_tokens=LOCAL_MAX_TOKENS,
+            temperature=LOCAL_TEMPERATURE,
+            top_p=0.9,
+        )
+        answer = result["choices"][0]["message"]["content"]  # type: ignore
+        usage = result.get("usage", {})
+        # Strip Qwen3 thinking blocks if present
+        import re as _re
+        answer = _re.sub(r"<think>.*?</think>", "", answer, flags=_re.DOTALL).strip()
+        return {"text": answer, "usage": usage}
+
+    # Transformers backend (full or quantized)
     prompt = f"{system_prompt}\n\nContext:\n{context}\n\nQuestion ({locale}): {query}\n\nAnswer:"
 
     inputs = _local_tokenizer(  # type: ignore[misc]
@@ -503,8 +722,18 @@ def generate_local(
         outputs[0][inputs["input_ids"].shape[1]:],
         skip_special_tokens=True,
     )
+    # Strip thinking blocks
+    import re as _re
+    answer = _re.sub(r"<think>.*?</think>", "", answer, flags=_re.DOTALL).strip()
 
-    return {"text": answer, "usage": {"input_tokens": inputs["input_ids"].shape[1], "output_tokens": len(outputs[0]) - inputs["input_ids"].shape[1]}}
+    return {
+        "text": answer,
+        "usage": {
+            "input_tokens": inputs["input_ids"].shape[1],
+            "output_tokens": len(outputs[0]) - inputs["input_ids"].shape[1],
+            "backend": _local_backend,
+        },
+    }
 
 
 # ── Passage-based response (no LLM needed — instant, zero-cost) ────────────
@@ -522,36 +751,81 @@ def generate_from_passages(
     offline, with zero API cost. Perfect for demo or low-resource
     deployments.
     """
+    # Locale-aware template strings
+    _templates = {
+        "lg": {
+            "no_info": "Sirina bukimu bumala okukuddamu ekibuuzo kino. Genda mu ddwaliro erisinga okuba okumpi oba yita ku simu 0800 100 263.",
+            "header": "## Okuyamba\n\nOkusinziira ku biragiro by'obulamu eby'ofiisi bya Uganda:\n\n",
+            "refer_header": "## Lwe Wetaaga Okugenda mu Ddwaliro\n\n",
+            "refer_body": "- Obubonero bwe bweyongera oba tokakaanya, **genda mu ddwaliro amangu ddala**\n",
+            "hotline": "- Esimu y'amangu: **0800 100 263** (ya bwereere, essaawa zonna)\n\n",
+            "disclaimer": "---\n*Buno bubaka bw'obuyambi bw'obulamu kyokka — si bulamu bwa musawo. Ennyiriri: Biragiro by'Obulamu bya Gavumenti ya Uganda.*",
+        },
+        "nyn": {
+            "no_info": "Tinyine buhangwa buhikire okukusubiza ekibuuzo kino. Genda omu rwariro erisinga okuba hakuuhi nari koroha 0800 100 263.",
+            "header": "## Okuyamba\n\nOkurugirira ahamateeka g'obuhaise ga Uganda:\n\n",
+            "refer_header": "## Norikwetaaga Okugenda Omu Rwariro\n\n",
+            "refer_body": "- Obubonero nibweyongera nari otarikumanya, **genda omu rwariro hati nyowe**\n",
+            "hotline": "- Esimu y'amaani: **0800 100 263** (ya bure, obudde bwona)\n\n",
+            "disclaimer": "---\n*Obu ni buhangwa bw'obuhaise obukuru — tiburikuba obutibu. Entururo: Amateeka g'obuhaise ga Gavumenti ya Uganda.*",
+        },
+        "sw": {
+            "no_info": "Sina taarifa za kutosha kujibu swali hili kwa uhakika. Tafadhali nenda hospitali ya karibu au piga simu 0800 100 263.",
+            "header": "## Mwongozo\n\nKulingana na miongozo rasmi ya afya ya Uganda:\n\n",
+            "refer_header": "## Wakati wa Kwenda Hospitali\n\n",
+            "refer_body": "- Dalili zikizidi au huna uhakika, **nenda hospitali haraka**\n",
+            "hotline": "- Simu ya dharura: **0800 100 263** (bila malipo, masaa 24)\n\n",
+            "disclaimer": "---\n*Hii ni mwongozo wa afya tu — si uchunguzi wa daktari. Chanzo: Miongozo rasmi ya Wizara ya Afya ya Uganda.*",
+        },
+        "en": {
+            "no_info": "I don't have enough information to answer this question. Please visit the nearest health facility or call 0800 100 263.",
+            "header": "## Guidance\n\nBased on the official Uganda health guidelines:\n\n",
+            "refer_header": "## When to Refer\n\n",
+            "refer_body": "- If symptoms worsen or you are unsure, **visit the nearest health facility immediately**\n",
+            "hotline": "- Emergency hotline: **0800 100 263** (toll-free, 24/7)\n\n",
+            "disclaimer": "---\n*This is health guidance only — not a medical diagnosis. Source: Uganda Ministry of Health official guidelines.*",
+        },
+    }
+    t = _templates.get(locale, _templates["en"])
+
     if not passages:
         return {
-            "text": (
-                "I don't have enough information to answer this question. "
-                "Please visit the nearest health facility or call 0800 100 263."
-            ),
+            "text": t["no_info"],
             "usage": {"input_tokens": 0, "output_tokens": 0},
         }
 
-    # Build response from top passages
-    parts = []
+    # Build structured response from passages
+    response = t["header"]
+
     for i, p in enumerate(passages[:3]):
         text = p.get("text", "").strip()
         source = p.get("source", "MoH Guidelines")
         section = p.get("section", "")
-        if text:
-            header = f"**[{i+1}] {source}"
-            if section:
-                header += f" — {section}"
-            header += "**"
-            parts.append(f"{header}\n\n{text}")
+        if not text:
+            continue
 
-    response = "\n\n---\n\n".join(parts)
+        source_label = f"**[{i+1}] {source}"
+        if section:
+            source_label += f" — {section}"
+        source_label += "**\n\n"
 
-    # Add disclaimer
-    response += (
-        "\n\n---\n*This is health guidance based on official Uganda Ministry of Health "
-        "guidelines — not a medical diagnosis. If symptoms worsen, visit the nearest "
-        "health facility or call 0800 100 263 (toll-free).*"
-    )
+        import re as _re
+        sentences = _re.split(r'(?<=[.!:])\s+(?=[A-Z(])', text)
+        formatted_lines = []
+        for sent in sentences[:8]:
+            sent = sent.strip()
+            if not sent:
+                continue
+            for term in ["REFER", "IMMEDIATELY", "DANGER", "DO NOT", "MUST"]:
+                sent = sent.replace(term, f"**{term}**")
+            formatted_lines.append(f"- {sent}")
+
+        response += source_label + "\n".join(formatted_lines) + "\n\n"
+
+    response += t["refer_header"]
+    response += t["refer_body"]
+    response += t["hotline"]
+    response += t["disclaimer"]
 
     return {
         "text": response,

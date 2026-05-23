@@ -33,6 +33,30 @@
       "guideline": "Emergency First Aid",
       "severity": "red",
       "topic": "Allergic Reaction"
+    },
+    {
+      "text": "CORD PROLAPSE — OBSTETRIC EMERGENCY: Cord prolapse occurs when the umbilical cord comes out through the cervix ahead of or alongside the baby after the membranes have ruptured. This is a LIFE-THREATENING EMERGENCY for the baby because the cord gets compressed, cutting off the baby's blood and oxygen supply. RECOGNITION: (1) You can see or feel the cord at the vagina after the waters break. (2) The cord may be pulsating. (3) Sudden severe fetal heart rate changes (if monitoring available). IMMEDIATE ACTIONS: (1) Call for help and arrange URGENT transport to a facility with surgical capacity (CEmONC — Caesarean section needed). (2) KNEE-CHEST POSITION: Help the mother get on her knees with her chest down and buttocks elevated — this uses gravity to take pressure off the cord. Alternatively: Trendelenburg position (lie flat with legs elevated higher than head). (3) If the cord is visible, gently push it back and hold it with a warm, wet, clean cloth — do NOT compress it. (4) Do NOT try to push the cord back in forcefully. (5) Keep the cord moist with warm saline or clean warm water on a cloth. (6) REFER IMMEDIATELY — the baby needs emergency delivery (usually Caesarean section) within minutes. (7) Do NOT let the mother push or bear down. (8) Give nothing by mouth (prepare for possible surgery). Every minute counts — delay leads to brain damage or death of the baby.",
+      "section": "Cord Prolapse",
+      "mode": "maternal",
+      "guideline": "Emergency Obstetric Care / WHO EmOC Guidelines",
+      "severity": "red",
+      "topic": "Cord Prolapse"
+    },
+    {
+      "text": "RETAINED PLACENTA — OBSTETRIC EMERGENCY: The placenta should deliver within 30 minutes after the baby is born. If it has not delivered after 30-60 minutes, it is retained. This is dangerous because it can cause severe bleeding (postpartum haemorrhage) and infection. SIGNS: (1) Placenta not delivered within 30-60 minutes of delivery. (2) The cord may appear to be lengthening but placenta does not come out. (3) Bleeding may be heavy or may be hidden (trapped behind the placenta). (4) The uterus may feel soft (not contracted). IMMEDIATE ACTIONS: (1) DO NOT PULL ON THE CORD — this can cause the uterus to turn inside out (uterine inversion), which is life-threatening. (2) Encourage the mother to breastfeed immediately — this stimulates uterine contractions. (3) Encourage the mother to empty her bladder (a full bladder can prevent placental delivery). (4) If trained: controlled cord traction with counter-pressure on the uterus (Brandt-Andrews technique) — ONLY if trained. (5) Give Oxytocin 10 IU IM if not already given (only if trained and available). (6) Monitor for signs of shock: fast pulse, low blood pressure, pale, sweaty, confused. (7) REFER IMMEDIATELY to a facility that can perform manual removal of the placenta under anaesthesia. (8) Start IV fluids during transport if trained. Do NOT attempt manual removal at community level — this requires anaesthesia and sterile conditions.",
+      "section": "Retained Placenta",
+      "mode": "maternal",
+      "guideline": "Emergency Obstetric Care / WHO EmOC Guidelines",
+      "severity": "red",
+      "topic": "Retained Placenta"
+    },
+    {
+      "text": "SHOULDER DYSTOCIA — OBSTETRIC EMERGENCY: Shoulder dystocia occurs when the baby's head has delivered but the shoulders are stuck behind the mother's pubic bone. This is an EMERGENCY — the baby can die within minutes from compression of the cord and lack of oxygen. RECOGNITION: (1) The baby's head delivers but then retracts tightly against the perineum ('turtle sign'). (2) The head has delivered but no further progress despite maternal pushing. (3) The baby's face may become congested (blue/purple). IMMEDIATE ACTIONS — CALL FOR HELP: (1) Tell the mother to STOP PUSHING. (2) McROBERTS MANOEUVRE (first-line): Lay mother flat on her back. Two helpers each take one of her legs and push her knees sharply up toward her chest (hyperflexing the hips). This flattens the pelvis and usually frees the shoulder. (3) Apply SUPRAPUBIC PRESSURE: An assistant pushes downward and laterally just above the pubic bone (NOT on the top of the uterus — fundal pressure can worsen the impaction). (4) If the baby delivers — immediate newborn care and resuscitation if needed. (5) Do NOT pull on the baby's head — this can cause nerve damage (brachial plexus injury). (6) Do NOT apply fundal pressure (pushing on top of the uterus). (7) REFER IMMEDIATELY if McRoberts and suprapubic pressure do not work — the mother needs emergency intervention at a CEmONC facility. (8) After delivery, check for PPH and perineal tears. Document the event for the facility team.",
+      "section": "Shoulder Dystocia",
+      "mode": "maternal",
+      "guideline": "Emergency Obstetric Care / WHO EmOC Guidelines",
+      "severity": "red",
+      "topic": "Shoulder Dystocia"
     }
   ]
 }

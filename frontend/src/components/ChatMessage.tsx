@@ -1,7 +1,9 @@
 "use client";
 
-import { memo, useEffect, useRef, useState } from "react";
+import { lazy, memo, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  useChatStore,
+  VOICE_PERSONAS,
   type ChatTurn,
   type Citation,
   type TriageResult,
@@ -11,33 +13,114 @@ import {
   PhoneIcon,
   ThumbsUpIcon,
   ThumbsDownIcon,
+  VolumeIcon,
+  VolumeOffIcon,
 } from "./Icons";
 import {
+  speak,
   speakRedFlagAlert,
   speakTriageSummary,
   isTTSAvailable,
+  isSpeaking,
+  stopSpeaking,
 } from "@/lib/voiceOutput";
+import { t } from "@/lib/i18n";
+
+// Lazy-load diagrams — only loaded when a response includes diagram content
+const HealthDiagram = lazy(() => import("./HealthDiagrams"));
 
 interface ChatMessageProps {
   turn: ChatTurn;
   onFeedback?: (turnId: string, rating: number) => void;
 }
 
-// ── Markdown renderer (handles headers, lists, bold, code, paragraphs) ────
+// ── Section type detection for semantic styling ────
+const SECTION_TYPES: Record<string, string> = {
+  assessment: "section-assessment",
+  guidance: "section-guidance",
+  "when to refer": "section-refer",
+  "sources": "section-sources",
+  "treatment": "section-guidance",
+  "prevention": "section-guidance",
+  "danger signs": "section-refer",
+  "follow-up": "section-followup",
+  "referral": "section-refer",
+  "home management": "section-guidance",
+  "important": "section-refer",
+  "warning": "section-refer",
+  "note": "section-note",
+  "confidence": "section-confidence",
+};
+
+function getSectionClass(title: string): string {
+  const lower = title.toLowerCase();
+  for (const [key, cls] of Object.entries(SECTION_TYPES)) {
+    if (lower.includes(key)) return cls;
+  }
+  return "section-default";
+}
+
+// ── Allowed image hosts (must match CSP img-src) ────
+const ALLOWED_IMG_HOSTS = [
+  "musawo.ai",
+  "localhost",
+  "tile.openstreetmap.org",
+];
+
+function isAllowedImageSrc(src: string): boolean {
+  if (src.startsWith("/") || src.startsWith("data:") || src.startsWith("blob:")) return true;
+  try {
+    const url = new URL(src);
+    return ALLOWED_IMG_HOSTS.some((h) => url.hostname === h || url.hostname.endsWith(`.${h}`));
+  } catch {
+    return false;
+  }
+}
+
+// ── Markdown renderer (Grok-inspired clean typography + clinical structure) ──
 function renderMarkdown(text: string): string {
   // Escape HTML
   let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
-  // Headers: ## Header → <h3>, ### Header → <h4>
-  html = html.replace(/^### (.+)$/gm, '<h4 class="md-h4">$1</h4>');
-  html = html.replace(/^## (.+)$/gm, '<h3 class="md-h3">$1</h3>');
+  // Inline diagrams: ::diagram[key] → SVG placeholder rendered by React
+  // (actual SVGs injected post-render via HealthDiagram component below)
+  html = html.replace(
+    /::diagram\[([a-z_-]+)\]/gi,
+    '<div class="diagram-slot" data-diagram="$1"></div>'
+  );
+
+  // Markdown images: ![alt](src) → <figure> with caption
+  html = html.replace(
+    /!\[([^\]]*)\]\(([^)]+)\)/g,
+    (_m, alt: string, src: string) => {
+      if (!isAllowedImageSrc(src)) {
+        return `<span class="img-blocked" title="Image blocked by security policy">[Image: ${alt || "blocked"}]</span>`;
+      }
+      const caption = alt ? `<figcaption class="md-figcaption">${alt}</figcaption>` : "";
+      return `<figure class="md-figure"><img class="md-img" src="${src}" alt="${alt}" loading="lazy" />${caption}</figure>`;
+    }
+  );
+
+  // Headers: ## Header → semantic section dividers
+  html = html.replace(/^### (.+)$/gm, (_m, title: string) => {
+    const cls = getSectionClass(title);
+    return `<h4 class="md-h4 ${cls}">${title}</h4>`;
+  });
+  html = html.replace(/^## (.+)$/gm, (_m, title: string) => {
+    const cls = getSectionClass(title);
+    return `<h3 class="md-h3 ${cls}">${title}</h3>`;
+  });
 
   // Bold and italic
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
 
-  // Inline code
+  // Inline code (dosages, measurements)
   html = html.replace(/`(.+?)`/g, '<code class="inline-code">$1</code>');
+
+  // Phone numbers → clickable links
+  html = html.replace(/\b(0800\s?\d{3}\s?\d{3})\b/g, '<a href="tel:$1" class="phone-link">$1</a>');
+  html = html.replace(/\b(\+256\s?\d{3}\s?\d{6})\b/g, '<a href="tel:$1" class="phone-link">$1</a>');
 
   // Horizontal rule
   html = html.replace(/^---$/gm, '<hr class="content-hr" />');
@@ -62,6 +145,12 @@ function renderMarkdown(text: string): string {
   // Clean empty paragraphs
   html = html.replace(/<p class="md-p"><\/p>/g, "");
   html = html.replace(/<p class="md-p"><br \/><\/p>/g, "");
+
+  // Highlight REFER NOW as callout
+  html = html.replace(
+    /<strong>REFER NOW<\/strong>/g,
+    '<span class="refer-now-badge">REFER NOW</span>'
+  );
 
   return html;
 }
@@ -91,9 +180,10 @@ function SeverityBadge({ severity }: { severity: string }) {
 
 function TriageCard({ triage }: { triage: TriageResult }) {
   const spokenRef = useRef(false);
+  const ttsOn = useChatStore((s) => s.ttsEnabled);
 
   useEffect(() => {
-    if (spokenRef.current || !isTTSAvailable()) return;
+    if (spokenRef.current || !ttsOn || !isTTSAvailable()) return;
     spokenRef.current = true;
     if (triage.severity === "red" && triage.red_flags.length > 0) {
       speakRedFlagAlert(triage.red_flags.map((rf) => rf.symptom));
@@ -166,6 +256,39 @@ function CitationList({ citations }: { citations: Citation[] }) {
   );
 }
 
+// ── Auto-detect relevant diagrams from response content ─────────────
+const DIAGRAM_TRIGGERS: Record<string, string[]> = {
+  danger_signs: ["danger sign", "convulsion", "unable to drink", "chest indrawing", "unconscious", "vomiting everything"],
+  ors_preparation: ["ors", "oral rehydration", "mix.*sachet", "rehydration salt"],
+  handwashing: ["handwashing", "wash.*hand", "hand hygiene", "soap.*water.*20"],
+  breathing_count: ["breathing rate", "count.*breath", "fast breathing", "breaths per minute"],
+  breastfeeding: ["breastfeed", "latch", "breast.*position", "exclusive.*feeding"],
+  malaria_rdt: ["rdt", "rapid diagnostic", "malaria test", "blood smear"],
+  fever_assessment: ["high fever", "fever.*child", "temperature.*38", "febrile"],
+  immunization_schedule: ["immuniz", "vaccin", "bcg", "pentavalent", "opv", "unepi"],
+  dehydration_check: ["dehydrat", "skin pinch", "sunken eyes", "some dehydration", "severe dehydration"],
+  birth_preparedness: ["birth.*plan", "birth.*prepar", "before.*36.*week", "delivery.*plan"],
+};
+
+function detectDiagrams(content: string): string[] {
+  const lower = content.toLowerCase();
+  const detected: string[] = [];
+  for (const [key, triggers] of Object.entries(DIAGRAM_TRIGGERS)) {
+    if (triggers.some((t) => new RegExp(t, "i").test(lower))) {
+      detected.push(key);
+    }
+  }
+  // Max 2 auto-detected diagrams per message to avoid clutter
+  return detected.slice(0, 2);
+}
+
+// Also detect explicit ::diagram[key] in content
+function extractExplicitDiagrams(content: string): string[] {
+  const matches = content.match(/::diagram\[([a-z_-]+)\]/gi);
+  if (!matches) return [];
+  return matches.map((m) => m.replace(/::diagram\[|\]/g, ""));
+}
+
 // ── Main Message Component ────────────────────────────────────────────
 
 export default memo(
@@ -173,11 +296,47 @@ export default memo(
     const isAssistant = turn.role === "assistant";
     const [collapsed, setCollapsed] = useState(false);
     const [voted, setVoted] = useState<number | null>(null);
+    const locale = useChatStore((s) => s.locale);
+
+    // Detect diagrams to show
+    const diagrams = useMemo(() => {
+      if (!isAssistant || !turn.content) return [];
+      const explicit = extractExplicitDiagrams(turn.content);
+      if (explicit.length > 0) return explicit;
+      return detectDiagrams(turn.content);
+    }, [isAssistant, turn.content]);
+
+    const [speaking, setSpeaking] = useState(false);
+    const ttsEnabled = useChatStore((s) => s.ttsEnabled);
 
     const handleVote = (rating: number) => {
       setVoted(rating);
       onFeedback?.(turn.id, rating);
     };
+
+    const handleTTS = useCallback(() => {
+      if (speaking || isSpeaking()) {
+        stopSpeaking();
+        setSpeaking(false);
+      } else {
+        setSpeaking(true);
+        const cleanText = turn.content
+          .replace(/^##+ .+$/gm, "")
+          .replace(/\*\*(.+?)\*\*/g, "$1")
+          .replace(/\*(.+?)\*/g, "$1")
+          .replace(/`(.+?)`/g, "$1")
+          .replace(/::diagram\[[^\]]+\]/g, "")
+          .replace(/---/g, "")
+          .trim();
+        const persona = VOICE_PERSONAS.find((p) => p.id === useChatStore.getState().selectedVoice);
+        speak(cleanText, persona?.langCode?.split("-")[0] || "en", {
+          urgent: turn.escalationRequired,
+          onEnd: () => setSpeaking(false),
+          gender: persona?.gender,
+          langCode: persona?.langCode,
+        });
+      }
+    }, [speaking, turn.content, turn.escalationRequired]);
 
     return (
       <div className={`bubble ${turn.role} ${collapsed ? "collapsed" : ""}`} role="article">
@@ -222,22 +381,35 @@ export default memo(
         )}
 
         {/* Content */}
-        {!collapsed && (
+        {!collapsed && turn.content ? (
           <div
             className="bubble-content"
             dangerouslySetInnerHTML={{ __html: renderMarkdown(turn.content) }}
           />
-        )}
+        ) : !collapsed && isAssistant && !turn.content ? (
+          <div className="bubble-content" style={{ color: "var(--text-3)", fontStyle: "italic" }}>
+            Loading response...
+          </div>
+        ) : null}
         {collapsed && (
           <div className="bubble-content collapsed-preview">
             {turn.content.slice(0, 120)}...
           </div>
         )}
 
+        {/* Health diagrams (auto-detected or explicit ::diagram[key]) */}
+        {!collapsed && diagrams.length > 0 && (
+          <Suspense fallback={null}>
+            {diagrams.map((key) => (
+              <HealthDiagram key={key} diagramKey={key} />
+            ))}
+          </Suspense>
+        )}
+
         {/* Grounding warning */}
         {turn.groundingWarning && (
           <p className="grounding-warning">
-            ⚠ This response may not be fully supported by official guidelines.
+            ⚠ {t("grounding_warning", locale)}
           </p>
         )}
 
@@ -250,26 +422,38 @@ export default memo(
             <span className="bubble-time">
               {new Date(turn.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             </span>
-            {onFeedback && (
-              <div className="feedback-row">
+            <div className="feedback-row">
+              {ttsEnabled && isTTSAvailable() && turn.content && (
                 <button
-                  className={`feedback-btn ${voted === 1 ? "voted" : ""}`}
-                  onClick={() => handleVote(1)}
-                  aria-label="Helpful"
-                  disabled={voted !== null}
+                  className={`feedback-btn tts-btn ${speaking ? "tts-active" : ""}`}
+                  onClick={handleTTS}
+                  aria-label={speaking ? "Stop reading" : "Read aloud"}
+                  type="button"
                 >
-                  <ThumbsUpIcon width={14} height={14} />
+                  {speaking ? <VolumeOffIcon width={14} height={14} /> : <VolumeIcon width={14} height={14} />}
                 </button>
-                <button
-                  className={`feedback-btn ${voted === -1 ? "voted-down" : ""}`}
-                  onClick={() => handleVote(-1)}
-                  aria-label="Not helpful"
-                  disabled={voted !== null}
-                >
-                  <ThumbsDownIcon width={14} height={14} />
-                </button>
-              </div>
-            )}
+              )}
+              {onFeedback && (
+                <>
+                  <button
+                    className={`feedback-btn ${voted === 1 ? "voted" : ""}`}
+                    onClick={() => handleVote(1)}
+                    aria-label="Helpful"
+                    disabled={voted !== null}
+                  >
+                    <ThumbsUpIcon width={14} height={14} />
+                  </button>
+                  <button
+                    className={`feedback-btn ${voted === -1 ? "voted-down" : ""}`}
+                    onClick={() => handleVote(-1)}
+                    aria-label="Not helpful"
+                    disabled={voted !== null}
+                  >
+                    <ThumbsDownIcon width={14} height={14} />
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         )}
       </div>

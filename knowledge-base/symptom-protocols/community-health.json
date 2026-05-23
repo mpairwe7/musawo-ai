@@ -65,6 +65,38 @@
       "guideline": "Uganda Clinical Guidelines",
       "severity": "yellow",
       "topic": "TB"
+    },
+    {
+      "text": "SKIN RASHES — COMMON TYPES AND MANAGEMENT: Skin problems are among the most common reasons for health visits in Uganda. SCABIES: Caused by tiny mites that burrow into the skin. Signs: intense itching (worse at night), small red bumps and lines between fingers, on wrists, elbows, armpits, waist, genitals. Often affects the whole family. TREATMENT: Apply Benzyl Benzoate 25% lotion (BBL) to the ENTIRE body from neck down (not the face, except in infants). Leave on for 24 hours, then wash off. Repeat after 7 days. Treat ALL family members at the same time. Wash all bedding and clothes in hot water. FUNGAL INFECTIONS (Ringworm/Tinea): Round, red, scaly patches with a clear center. Common on scalp in children (hair loss patch), body, feet (athlete's foot). TREATMENT: Apply antifungal cream (Clotrimazole or Whitfield's ointment) twice daily for 2-4 weeks. Keep skin clean and dry. For scalp ringworm — refer for oral antifungal. ALLERGIC RASH: Red, itchy rash that may have raised bumps (hives/urticaria). Common triggers: new soap, food, insect bites, medications. TREATMENT: Antihistamine (Chlorpheniramine or Cetirizine), avoid the trigger. WHEN TO REFER: Rash with fever and joint pain, rash that blisters or bleeds, rash that does not improve after 2 weeks of treatment, rash in an HIV-positive patient, widespread skin peeling, rash with eye involvement.",
+      "section": "Skin Rashes",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 14 / Community Health Guidance",
+      "severity": "yellow",
+      "topic": "Skin Conditions"
+    },
+    {
+      "text": "EYE INFECTIONS — CONJUNCTIVITIS AND RED EYE: Red eye is very common in Uganda, especially in children. Most cases are conjunctivitis (infection or irritation of the outer eye lining). TYPES: BACTERIAL CONJUNCTIVITIS: Red eye with yellow/green pus discharge, eyelids may stick together in the morning, usually starts in one eye then spreads to the other. VIRAL CONJUNCTIVITIS: Red, watery eyes, light sensitivity, often with cold symptoms. Usually clears in 7-10 days without treatment. ALLERGIC CONJUNCTIVITIS: Itchy, watery, both eyes, seasonal. NEWBORN CONJUNCTIVITIS (Ophthalmia neonatorum): Pus from eyes within first 28 days — this is an EMERGENCY, can cause blindness. REFER IMMEDIATELY. MANAGEMENT: (1) CLEANING: Wash hands before and after touching the eyes. Clean discharge from eyes with clean cotton wool soaked in clean water — wipe from inner corner outward. Use a new piece for each eye. (2) ANTIBIOTIC DROPS: Tetracycline eye ointment 1% — apply inside the lower eyelid 3 times daily for 7 days. Or Chloramphenicol eye drops 0.5% — 1 drop 4 times daily for 7 days. (3) PREVENTION: Do not share face towels, wash hands frequently, avoid touching eyes. WHEN TO REFER: Eye pain (not just irritation), vision changes or blurred vision, sensitivity to light, injury to the eye, pus in a newborn, no improvement after 5 days of antibiotic treatment, one-sided red eye with severe pain (possible glaucoma or iritis — urgent).",
+      "section": "Eye Infections",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 13.1 / Community Health Guidance",
+      "severity": "yellow",
+      "topic": "Eye Infections"
+    },
+    {
+      "text": "EAR PAIN AND DISCHARGE — OTITIS MEDIA: Ear infections (otitis media) are very common in children under 5 in Uganda. SIGNS: Ear pain (young children may pull or rub the ear, cry, be irritable), fever, discharge (pus) from the ear, not feeding well, difficulty sleeping, hearing difficulty. TYPES: ACUTE OTITIS MEDIA: Ear pain with fever, no discharge yet. The ear drum may be bulging. CHRONIC SUPPURATIVE OTITIS MEDIA: Ear discharge lasting more than 2 weeks. This can cause permanent hearing damage. MANAGEMENT AT COMMUNITY LEVEL: (1) Pain relief: Paracetamol by weight — 15 mg/kg every 6 hours as needed. (2) DRY EAR: Keep the ear dry — do NOT put water, oil, or any liquid into the ear. Do NOT use cotton buds (push infection deeper). (3) WICKING: If there is discharge, gently clean the outer ear with a dry wick (rolled clean tissue paper) — insert gently, let it absorb the discharge, replace until dry. Do this 3 times daily. (4) ANTIBIOTIC EAR DROPS: If available, Ciprofloxacin ear drops for chronic discharge (only on prescription). (5) Oral antibiotics: Amoxicillin 25-50 mg/kg/day in 3 doses for 5 days (for acute otitis media with fever). WHEN TO REFER: Ear pain with swelling behind the ear (possible mastoiditis — urgent), ear discharge for more than 2 weeks despite treatment, hearing loss, dizziness or balance problems, ear discharge after head injury (possible skull fracture — urgent), recurrent ear infections (more than 3 in 6 months).",
+      "section": "Ear Pain and Discharge",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 13.2 / WHO Primary Ear Care",
+      "severity": "yellow",
+      "topic": "Ear Infections"
+    },
+    {
+      "text": "URINARY SYMPTOMS — UTI MANAGEMENT: Urinary tract infections (UTIs) are common, especially in women and girls. They can become serious if not treated promptly. SYMPTOMS: Pain or burning during urination (dysuria), needing to urinate frequently (frequency), urgent need to urinate, lower abdominal or pelvic pain, cloudy or smelly urine, blood in urine, fever with chills (may indicate kidney infection). IN CHILDREN: Fever without obvious source, crying when urinating, foul-smelling urine, poor feeding, irritability. IN PREGNANT WOMEN: UTIs are more common and more dangerous — can cause preterm labour. All pregnant women should be screened at first ANC visit. MANAGEMENT: (1) Drink plenty of clean water (at least 8 cups per day) to flush out bacteria. (2) Do not hold urine — urinate when you feel the need. (3) Wipe from front to back after using the toilet (women). (4) ANTIBIOTICS — refer for urine test and treatment. Common treatment: Nitrofurantoin 100 mg twice daily for 5 days, or Amoxicillin-Clavulanate. Pregnant women: Nitrofurantoin or Amoxicillin (safe in pregnancy — avoid in third trimester for Nitrofurantoin). (5) Complete the full course of antibiotics even if symptoms improve. WHEN TO REFER: Fever with back pain (flank pain) — possible kidney infection (pyelonephritis), blood in urine, symptoms not improving after 3 days of antibiotics, UTI in a pregnant woman (always refer), recurrent UTIs (more than 3 per year), UTI in a male (uncommon — needs investigation), UTI in a child (needs investigation for abnormality). PREVENTION: Drink adequate water, urinate after sexual intercourse, avoid douching, good perineal hygiene, wear cotton underwear.",
+      "section": "Urinary Symptoms",
+      "mode": "community",
+      "guideline": "UCG 2016 Section 9 / Community Health Guidance",
+      "severity": "yellow",
+      "topic": "Urinary Tract Infections"
     }
   ]
 }

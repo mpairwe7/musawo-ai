@@ -75,14 +75,16 @@ class InputGuard:
     """Validates user input before processing."""
 
     @staticmethod
-    def check(text: str) -> GuardResult:
+    def check(text: str, locale: str = "en") -> GuardResult:
+        from app.i18n import t as _t
+
         if not text or not text.strip():
-            return GuardResult(allowed=False, reason="Empty input.")
+            return GuardResult(allowed=False, reason=_t("empty_input", locale))
 
         if len(text) > MAX_INPUT_LENGTH:
             return GuardResult(
                 allowed=False,
-                reason=f"Input exceeds {MAX_INPUT_LENGTH} characters.",
+                reason=_t("input_too_long", locale),
             )
 
         # Prompt injection
@@ -90,7 +92,7 @@ class InputGuard:
             if pat.search(text):
                 return GuardResult(
                     allowed=False,
-                    reason="Input blocked by safety filter.",
+                    reason=_t("input_blocked", locale),
                     flags=["prompt_injection"],
                 )
 
@@ -101,20 +103,12 @@ class InputGuard:
                 if "suicid" in text.lower() or "harm" in text.lower():
                     return GuardResult(
                         allowed=False,
-                        reason=(
-                            "If you or someone you know is in crisis, please call the "
-                            "Uganda National Mental Health Hotline: 0800 100 263 (toll-free) "
-                            "or visit the nearest health facility immediately."
-                        ),
+                        reason=_t("crisis_escalation", locale),
                         flags=["crisis_escalation"],
                     )
                 return GuardResult(
                     allowed=False,
-                    reason=(
-                        "I can only provide health guidance — I cannot prescribe, "
-                        "diagnose, or assist with harmful activities. Please consult "
-                        "a qualified health worker."
-                    ),
+                    reason=_t("input_blocked", locale),
                     flags=["harmful_intent"],
                 )
 
@@ -156,7 +150,7 @@ class OutputGuard:
         """Refuse to answer if retrieval confidence is too low."""
         if hits_count == 0:
             return True
-        if best_score is not None and best_score < ABSTENTION_THRESHOLD:
+        if best_score is not None and best_score <= ABSTENTION_THRESHOLD:
             return True
         return False
 
@@ -173,28 +167,26 @@ class OutputGuard:
         return False
 
     @staticmethod
-    def enforce_disclaimer(text: str) -> str:
+    def enforce_disclaimer(text: str, locale: str = "en") -> str:
         """Ensure every response includes the health disclaimer."""
-        disclaimer = (
-            "\n\n---\n*This is health guidance only — not a medical diagnosis. "
-            "If symptoms worsen or you are unsure, visit the nearest health "
-            "facility or call the toll-free health hotline: 0800 100 263.*"
-        )
-        if "not a medical diagnosis" not in text.lower():
-            text += disclaimer
+        from app.i18n import t as _t
+        # Check if any known disclaimer variant is already present
+        if any(marker in text.lower() for marker in [
+            "not a medical diagnosis", "si bulamu bwa musawo",
+            "tiburikuba obutibu", "si uchunguzi wa daktari",
+        ]):
+            return text
+        text += f"\n\n---\n*{_t('disclaimer', locale)}*"
         return text
 
     @staticmethod
     def check_grounding(
-        text: str, faithfulness: float | None
+        text: str, faithfulness: float | None, locale: str = "en"
     ) -> str:
         """Append low-grounding warning if needed."""
+        from app.i18n import t as _t
         if faithfulness is not None and faithfulness < GROUNDING_THRESHOLD:
-            text += (
-                "\n\n**Note:** This response may not be fully supported by "
-                "the official health guidelines. Please verify with a "
-                "qualified health worker."
-            )
+            text += f"\n\n**{_t('grounding_warning', locale)}**"
         return text
 
 
@@ -206,3 +198,61 @@ def scan_retrieved_text(text: str) -> tuple[str, bool]:
             text = pat.sub("[SCRUBBED]", text)
             scrubbed = True
     return text, scrubbed
+
+
+# ── Language validation ───────────────────────────────────────────────────
+
+# Common words per language for detection
+_LANG_MARKERS: dict[str, set[str]] = {
+    "lg": {"okukola", "okuva", "ddwaliro", "obulamu", "omwana", "omusujja",
+            "bwe", "nga", "nti", "era", "oba", "bulungi", "nnyo", "kino",
+            "amangu", "genda", "tusaba", "okuyamba", "obubonero"},
+    "nyn": {"omu", "aha", "nari", "hati", "okurwara", "obuhaise",
+            "irwariro", "omwana", "nibwe", "naiwe", "ebi", "obu"},
+    "sw": {"na", "ya", "wa", "kwa", "hospitali", "afya", "mtoto",
+            "dalili", "dawa", "mwongozo", "tafadhali", "haraka",
+            "kama", "hii", "kupumua", "kuharisha"},
+}
+
+
+def detect_response_language(text: str) -> str:
+    """Detect which language a response is primarily in.
+
+    Primary: Sunbird AI ML detection.
+    Fallback: word frequency heuristic.
+
+    Returns 'en', 'lg', 'nyn', or 'sw'.
+    """
+    # Primary: Sunbird AI
+    try:
+        from app.sunbird import is_available, detect_language
+        if is_available() and len(text.strip()) >= 10:
+            result = detect_language(text[:200])
+            if result and result.get("locale"):
+                return result["locale"]
+    except Exception:
+        pass
+
+    # Fallback: keyword heuristic
+    words = set(re.findall(r"[a-z']+", text.lower()))
+    scores = {}
+    for lang, markers in _LANG_MARKERS.items():
+        scores[lang] = len(words & markers)
+    best_lang = max(scores, key=scores.get)  # type: ignore
+    if scores[best_lang] >= 3:
+        return best_lang
+    return "en"
+
+
+def validate_response_language(text: str, expected_locale: str) -> tuple[str, bool]:
+    """Check if response matches expected locale. Returns (text, is_mismatch).
+
+    If expected locale is non-English but response is detected as English,
+    appends a note encouraging the user to ask in English for better results.
+    """
+    if expected_locale == "en":
+        return text, False
+
+    detected = detect_response_language(text)
+    is_mismatch = detected == "en" and expected_locale != "en"
+    return text, is_mismatch

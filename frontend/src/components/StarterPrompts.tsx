@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { useChatStore, type Mode } from "@/store/useChatStore";
 
-const PROMPTS: Record<Mode, { en: string[]; lg: string[] }> = {
+const PROMPTS: Record<Mode, Record<string, string[]>> = {
   vht: {
     en: [
       "A child has fever and fast breathing — how do I classify?",
@@ -16,6 +16,18 @@ const PROMPTS: Record<Mode, { en: string[]; lg: string[] }> = {
       "ORS ne Zinc zibawa zzitya omwana ow'emyaka 2 alina ekiddukaano?",
       "Omwana alina malaria — ddi lw'amutumira mu ddwaliro?",
       "Nkozesa ntya RDT okukebera malaria?",
+    ],
+    nyn: [
+      "Omwana aine omushuija n'okuhuuha bwangu — nkore nta?",
+      "ORS na Zinc bizibwa zita omwana ow'emyaka 2 aine okushaarira?",
+      "Omwana aine malaria — nikki mba nimutuma omu'irwariro?",
+      "Nkozesa nta RDT okukebera malaria?",
+    ],
+    sw: [
+      "Mtoto ana homa na kupumua haraka — niainishije vipi?",
+      "ORS na Zinc kwa mtoto wa miaka 2 mwenye kuharisha ni kiasi gani?",
+      "Mtoto ana malaria — ni lini nimpeleke hospitali?",
+      "Nitumie vipi RDT kupima malaria?",
     ],
   },
   maternal: {
@@ -31,6 +43,18 @@ const PROMPTS: Record<Mode, { en: string[]; lg: string[] }> = {
       "Omwana wange tayonsa bulungi — nkola ntya?",
       "Omwana omutto yeetaaga zimpi?",
     ],
+    nyn: [
+      "Ndi mu nda ya wiiki 28 — bubonero ki ebindi kureeba?",
+      "Ntegeka nta enteganyarizo y'okuzaara?",
+      "Omwana wangye tiyonka kyangu — nkore ki?",
+      "Omwana omuhya ayetaaga kuzipimwa ki?",
+    ],
+    sw: [
+      "Nina mimba ya wiki 28 — dalili gani za hatari niangalie?",
+      "Nipangeje vipi mpango wa kuzaa?",
+      "Mtoto wangu hanyonyi vizuri — nifanye nini?",
+      "Mtoto wangu mchanga anahitaji chanjo gani?",
+    ],
   },
   community: {
     en: [
@@ -45,6 +69,18 @@ const PROMPTS: Record<Mode, { en: string[]; lg: string[] }> = {
       "Bubonero ki ebw'obulwadde bwa sukaari?",
       "Eddwaliro erisinga okuba okumpi liri wa?",
     ],
+    nyn: [
+      "Ninumire omutwe era ninaine omushuija — nkore ki?",
+      "Nkingira nta malaria omu maka?",
+      "Bubonero ki bw'obulwaire bwa sukaari?",
+      "Irwariro erisinga okuba hakuuhi riri hahi?",
+    ],
+    sw: [
+      "Nina maumivu ya kichwa na homa — nifanye nini?",
+      "Ninazuiaje malaria nyumbani?",
+      "Dalili za kisukari ni zipi?",
+      "Hospitali ya karibu iko wapi?",
+    ],
   },
 };
 
@@ -56,14 +92,18 @@ export default memo(function StarterPrompts() {
 
   if (chat.length > 0) return null;
 
-  const lang = locale === "lg" ? "lg" : "en";
-  const prompts = PROMPTS[mode]?.[lang] || PROMPTS.community.en;
+  const prompts = PROMPTS[mode]?.[locale] || PROMPTS[mode]?.en || PROMPTS.community.en;
+
+  const LABEL: Record<string, string> = {
+    en: "Quick start:",
+    lg: "Tandika wano:",
+    nyn: "Tandiika hanu:",
+    sw: "Anza hapa:",
+  };
 
   return (
     <div className="starter-prompts">
-      <p className="starter-label">
-        {lang === "lg" ? "Tandika wano:" : "Quick start:"}
-      </p>
+      <p className="starter-label">{LABEL[locale] || LABEL.en}</p>
       <div className="starter-grid">
         {prompts.map((prompt, i) => (
           <button

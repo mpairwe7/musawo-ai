@@ -2,10 +2,6 @@
 const nextConfig = {
   output: "standalone",
 
-  experimental: {
-    turbopackRoot: ".",
-  },
-
   async headers() {
     const isDev = process.env.NODE_ENV !== "production";
     return [
@@ -30,11 +26,13 @@ const nextConfig = {
               // React dev needs unsafe-eval; production doesn't
               isDev
                 ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-                : "script-src 'self' 'unsafe-inline'",
+                : "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: blob: https://*.tile.openstreetmap.org",
-              "connect-src 'self' http://localhost:8000 http://localhost:8888 http://localhost:3200 ws://localhost:3200",
+              "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://upload.wikimedia.org",
+              isDev
+                ? "connect-src *"
+                : "connect-src 'self'",
               "frame-src 'self' https://www.openstreetmap.org https://www.google.com",
               "worker-src 'self'",
             ].join("; "),

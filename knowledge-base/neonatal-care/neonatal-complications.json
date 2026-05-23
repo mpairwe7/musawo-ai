@@ -33,6 +33,30 @@
       "guideline": "Essential Newborn Care",
       "severity": "red",
       "topic": "Neonatal Infection"
+    },
+    {
+      "text": "UMBILICAL CORD CARE — CLEAN AND DRY METHOD: Proper cord care prevents neonatal sepsis, a leading cause of newborn death. CORRECT CORD CARE: (1) Apply chlorhexidine 7.1% gel (4% chlorhexidine) to the cord stump once daily for the first 7 days. If chlorhexidine is not available, keep the cord clean and dry. (2) Do NOT apply anything else to the cord — no cow dung, ash, herbs, powder, cooking oil, or saliva. These cause infection. (3) Keep the cord stump exposed to air — fold the nappy below the cord. (4) If the cord gets soiled with urine or stool, clean gently with clean water and dry thoroughly. (5) Do NOT bandage or wrap the cord tightly. (6) The cord stump normally falls off in 7-10 days. (7) Do NOT pull off the cord — let it fall off naturally. DANGER SIGNS — REFER IMMEDIATELY: Redness spreading from the cord to the surrounding skin, pus or discharge from the cord base, foul smell from the cord, swelling around the cord, baby is irritable or feeding poorly, fever or body feels cold. These signs suggest cord infection (omphalitis) which can rapidly progress to sepsis and death.",
+      "section": "Cord Care",
+      "mode": "maternal",
+      "guideline": "Essential Newborn Care / WHO Cord Care Guidelines",
+      "severity": "yellow",
+      "topic": "Cord Care"
+    },
+    {
+      "text": "NEONATAL HYPOTHERMIA — KANGAROO MOTHER CARE: Hypothermia (body temperature below 36.5°C) is a major cause of newborn illness and death, especially in premature and low birth weight babies. RISK FACTORS: Born before 37 weeks, birth weight below 2.5 kg, delayed drying after birth, cold environment, bathing too early. SIGNS OF HYPOTHERMIA: Cold to touch (especially feet and abdomen), not feeding well, weak cry, lethargy, slow breathing, skin colour changes (pale, mottled, or bluish). KMC TECHNIQUE FOR WARMING: (1) Undress the baby to only a nappy and cap. (2) Place baby upright on mother's bare chest, between the breasts, skin-to-skin. (3) Turn baby's head to one side to keep the airway clear. (4) Cover baby's back with a blanket. (5) Wrap mother and baby together with a binder or cloth. (6) Continue KMC for as many hours as possible — ideally 24 hours a day. (7) Father or other family member can do KMC when mother needs a break. MONITORING: Check temperature every hour — use a thermometer under the armpit. Normal is 36.5-37.5°C. If temperature does not rise above 36.5°C after 1 hour of KMC, or if it falls below 35.5°C — REFER IMMEDIATELY. Additional warming: warm the room, avoid draughts, warm blankets, do NOT use hot water bottles (burn risk). REFER IF: Temperature stays below 36.5°C despite KMC, baby is lethargic or not feeding, breathing problems, any other danger signs.",
+      "section": "Neonatal Hypothermia",
+      "mode": "maternal",
+      "guideline": "Essential Newborn Care / WHO KMC Guidelines",
+      "severity": "yellow",
+      "topic": "Hypothermia"
+    },
+    {
+      "text": "FEEDING DIFFICULTY IN NEWBORNS: A newborn who cannot feed properly is at risk of hypothermia, hypoglycaemia, dehydration, and death. COMMON CAUSES: Prematurity (weak suck reflex), low birth weight, cleft lip/palate, illness (sepsis, respiratory distress), poor attachment to breast, flat or inverted nipples. ASSESSMENT: (1) Is the baby able to suck at all? (2) How long has the baby not fed? (3) Is the baby alert or lethargic? (4) Are there other danger signs? MANAGEMENT — CUP FEEDING: If the baby cannot breastfeed directly, use cup feeding (not a bottle — bottles cause nipple confusion and are hard to clean). TECHNIQUE: (1) Express breast milk into a clean cup. (2) Hold the baby upright or semi-upright. (3) Rest the cup gently on the baby's lower lip. (4) Tilt the cup so the milk just touches the baby's lip. (5) Let the baby lap the milk — do NOT pour into the mouth. (6) Feed slowly and patiently. HOW TO EXPRESS BREAST MILK: (1) Wash hands. (2) Massage breast gently toward the nipple. (3) Place thumb above and fingers below the areola. (4) Press back toward the chest wall, then compress and release rhythmically. (5) Collect into a clean cup. Express every 2-3 hours to maintain supply. REFER IF: Baby has not fed for more than 3 hours, very weak or no suck reflex, lethargic or difficult to wake, signs of dehydration (dry mouth, sunken fontanelle, fewer wet nappies), any other danger signs.",
+      "section": "Feeding Difficulty in Newborns",
+      "mode": "maternal",
+      "guideline": "Essential Newborn Care / WHO Infant Feeding Guidelines",
+      "severity": "yellow",
+      "topic": "Newborn Feeding"
     }
   ]
 }

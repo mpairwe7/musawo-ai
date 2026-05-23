@@ -33,6 +33,30 @@
       "guideline": "Uganda Mental Health Policy",
       "severity": "yellow",
       "topic": "Substance Abuse"
+    },
+    {
+      "text": "ANXIETY AND PANIC ATTACKS: Anxiety is excessive worry that interferes with daily life. A panic attack is sudden intense fear with physical symptoms. RECOGNISING ANXIETY: Constant worry, difficulty sleeping, irritability, muscle tension, difficulty concentrating, avoiding situations due to fear. RECOGNISING A PANIC ATTACK: Sudden onset of intense fear, racing heart, sweating, trembling, shortness of breath, chest pain, dizziness, feeling of choking, numbness or tingling, fear of dying. WHAT TO DO DURING A PANIC ATTACK: (1) Stay calm and stay with the person. (2) Speak in a reassuring, gentle voice. (3) Guide slow breathing: breathe in for 4 counts, hold for 4 counts, breathe out for 4 counts. Repeat 5-10 times. (4) Help them ground themselves: ask them to name 5 things they can see, 4 things they can touch, 3 things they can hear, 2 things they can smell, 1 thing they can taste. (5) Move to a quiet, safe place. A panic attack is NOT dangerous — it will pass in 10-20 minutes. WHEN TO REFER: Panic attacks happening frequently, anxiety so severe the person cannot work or care for family, using alcohol or drugs to manage anxiety, any thoughts of self-harm.",
+      "section": "Anxiety and Panic Attacks",
+      "mode": "community",
+      "guideline": "mhGAP / WHO Mental Health Guidelines",
+      "severity": "yellow",
+      "topic": "Anxiety"
+    },
+    {
+      "text": "SUBSTANCE ABUSE SCREENING AND INTERVENTION — CAGE QUESTIONNAIRE: VHTs can use the CAGE screening tool for harmful alcohol use. Ask the person: C — Have you ever felt you should CUT DOWN on your drinking? A — Have people ANNOYED you by criticizing your drinking? G — Have you ever felt GUILTY about your drinking? E — Have you ever had a drink first thing in the morning (EYE-OPENER) to steady your nerves or get rid of a hangover? SCORING: 2 or more YES answers = screen positive for harmful alcohol use. HARM REDUCTION APPROACH: (1) Do not judge or shame. (2) Express concern about their health, not their character. (3) Help them set small, achievable goals (e.g., reduce from daily to 3 days a week). (4) Identify triggers — when do they drink most? After work, stress, social pressure? (5) Encourage eating before/during drinking. (6) Advise against mixing alcohol with medications (especially ARVs, TB drugs, diabetes medication). (7) Encourage safe alternatives for stress: walking, talking to a friend, prayer, community activities. REFER TO HEALTH FACILITY IF: drinking daily, withdrawal symptoms (shaking, sweating, confusion when not drinking — this can be dangerous), neglecting family or work, physical health problems (stomach pain, yellow eyes, swollen legs), mental health problems (depression, suicidal thoughts). Alcohol withdrawal can cause seizures and death — NEVER advise sudden stopping in a heavy drinker without medical support.",
+      "section": "Substance Abuse Screening — CAGE",
+      "mode": "community",
+      "guideline": "mhGAP / Uganda Mental Health Policy",
+      "severity": "yellow",
+      "topic": "Substance Abuse Screening"
+    },
+    {
+      "text": "GENDER-BASED VIOLENCE (GBV) — PSYCHOSOCIAL SUPPORT FOR VHTs: GBV includes physical, sexual, emotional abuse, and denial of resources. It affects women, men, and children but disproportionately affects women and girls. WHAT VHTs SHOULD DO: (1) LISTEN and BELIEVE — do not question their story or ask 'why did you stay?' (2) Say: 'This is not your fault. You do not deserve this.' (3) Ensure SAFETY first: Is the person in immediate danger? If yes, help them identify a safe place (relative, neighbour, local leader). (4) SAFETY PLANNING: Help the survivor plan what to do if violence happens again — where to go, who to call, keeping important documents and some money hidden in a safe place, a packed bag ready. (5) Refer for MEDICAL CARE within 72 hours if sexual violence (PEP for HIV, emergency contraception, STI treatment, injuries). (6) Refer for PSYCHOSOCIAL SUPPORT: counselling services, women's shelters. (7) Inform about LEGAL OPTIONS: police report, local council involvement. DO NOT: Force the person to leave the relationship. Promise confidentiality you cannot keep (if a child is in danger, you must report). Confront the abuser. Blame the survivor. Make decisions for them. IMPORTANT NUMBERS: National GBV Hotline: 0800 199 199 (free). Police: 999. Child Helpline: 116 (free).",
+      "section": "GBV Psychosocial Support",
+      "mode": "community",
+      "guideline": "Uganda GBV Prevention Guidelines / WHO Clinical Response to GBV",
+      "severity": "red",
+      "topic": "Gender-Based Violence"
     }
   ]
 }

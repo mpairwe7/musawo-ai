@@ -8,7 +8,7 @@
  * - Images/icons: Cache-first
  */
 
-const CACHE_VERSION = "musawo-v1";
+const CACHE_VERSION = "musawo-v2";
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const API_CACHE = `${CACHE_VERSION}-api`;
 const KB_CACHE = `${CACHE_VERSION}-kb`;
@@ -16,6 +16,7 @@ const KB_CACHE = `${CACHE_VERSION}-kb`;
 // App shell resources to precache
 const APP_SHELL_URLS = [
   "/",
+  "/offline.html",
   "/manifest.json",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
@@ -122,8 +123,9 @@ async function cacheFirst(request, cacheName) {
     }
     return response;
   } catch {
-    // For navigation requests, return cached index
     if (request.mode === "navigate") {
+      const offline = await caches.match("/offline.html");
+      if (offline) return offline;
       const index = await caches.match("/");
       if (index) return index;
     }

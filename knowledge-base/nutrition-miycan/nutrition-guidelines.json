@@ -50,6 +50,30 @@
       "guideline": "MIYCAN 2021",
       "severity": "green",
       "topic": "Nutrition"
+    },
+    {
+      "text": "COMPLEMENTARY FEEDING 6-23 MONTHS — DETAILED GUIDANCE: From 6 months, breast milk alone is no longer enough. Introduce complementary foods while continuing breastfeeding up to 2 years and beyond. AGE-SPECIFIC GUIDANCE: 6-8 MONTHS: Start with soft, mashed foods. Give 2-3 meals per day plus 1-2 snacks. Start with 2-3 tablespoons and gradually increase to half a cup (125 ml) per meal. Good first foods: mashed sweet potato, mashed banana, thick porridge with groundnut paste, mashed beans, mashed pumpkin, egg yolk. TEXTURE: Thick, smooth — should not drip off the spoon. 9-11 MONTHS: Finely chopped, soft foods and finger foods. Give 3-4 meals plus 1-2 snacks. Half a cup (125 ml) per meal. Introduce small pieces the child can pick up: pieces of banana, cooked carrot, soft avocado, small pieces of chapati. Add animal-source foods: minced meat, flaked fish, whole egg. 12-23 MONTHS: Family foods chopped small. Give 3-4 meals plus 1-2 snacks. Three-quarters to one cup (175-250 ml) per meal. The child should eat from all food groups daily. FOOD GROUPS TO INCLUDE DAILY: (1) Staples: posho, matooke, sweet potato, rice. (2) Legumes: beans, groundnuts, peas, lentils. (3) Animal foods: egg, fish, meat, milk (at least one). (4) Vegetables: green leafy, orange/yellow. (5) Fruits. (6) Fats: small amount of cooking oil or groundnut paste added to food. IMPORTANT: Do not give tea, soda, or sugary drinks. Use iodized salt. Responsive feeding: sit with the child, encourage, do not force.",
+      "section": "Complementary Feeding 6-23 Months",
+      "mode": "maternal",
+      "guideline": "MIYCAN 2021 / WHO Complementary Feeding Guidelines",
+      "severity": "green",
+      "topic": "Complementary Feeding"
+    },
+    {
+      "text": "IRON DEFICIENCY ANAEMIA IN CHILDREN: Iron deficiency anaemia is the most common nutritional problem in Ugandan children, affecting nearly half of children under 5. It causes poor brain development, weakness, reduced immunity, and increased risk of severe malaria. SIGNS TO LOOK FOR: Pale palms, pale inner eyelids (conjunctivae), pale nail beds, tiredness and weakness, poor appetite, irritability, fast breathing on exertion, poor growth, eating soil or clay (pica), frequent infections. SCREENING: Check palms — compare to your own or to another child. Very pale palms indicate severe anaemia — REFER for blood test (haemoglobin). CAUSES IN UGANDA: Poor diet (not enough iron-rich foods), intestinal worms (hookworm especially), malaria, chronic infections. IRON-RICH LOCAL FOODS: (1) Animal sources (best absorbed): liver (especially), red meat, fish, chicken, eggs, mukene/silverfish. (2) Plant sources: dark green leafy vegetables (dodo, nakati, buga), beans, groundnuts, fortified porridge flour, millet. (3) IMPROVE absorption: eat iron-rich foods with Vitamin C sources (oranges, tomatoes, mango, lemon juice). (4) BLOCK absorption (avoid with meals): tea, coffee. SUPPLEMENTATION: Iron drops/syrup as prescribed by health worker. Preventive: elemental iron 2 mg/kg/day for children 6-23 months in malaria-endemic areas. TREATMENT: Refer for haemoglobin testing. Treat underlying cause (deworming, malaria treatment). Iron supplementation as prescribed. Follow up in 2 weeks.",
+      "section": "Iron Deficiency Anaemia in Children",
+      "mode": "vht",
+      "guideline": "UCG 2016 Ch.19 / MIYCAN 2021",
+      "severity": "yellow",
+      "topic": "Anaemia"
+    },
+    {
+      "text": "FATVAH BREASTFEEDING SUPPORT — FOR VHTs AND COMMUNITY HEALTH WORKERS: FATVAH is the Uganda MIYCAN framework for optimal infant and young child feeding. VHTs play a critical role in supporting breastfeeding at community level. EARLY INITIATION (within 1 hour): (1) Help the mother initiate breastfeeding within the FIRST HOUR of birth — before bathing, weighing, or other procedures. (2) The first milk (colostrum) is yellow and thick — it is the baby's first immunisation. Do NOT discard it. Common myths to address: 'colostrum is dirty' (FALSE — it is the most important milk), 'the baby needs water' (FALSE — breast milk is 80% water). EXCLUSIVE BREASTFEEDING (first 6 months): (1) Breast milk ONLY — no water, no porridge, no formula, no herbal drinks, no gripe water. (2) Breastfeed on demand, at least 8-12 times in 24 hours, day and night. (3) Night feeds are important — they boost milk supply. (4) Signs of enough milk: baby passes urine at least 6 times a day, baby is gaining weight, baby is active and alert. COUNSELLING TECHNIQUES FOR VHTs: (1) LISTEN to the mother's concerns. (2) PRAISE what she is doing well. (3) GIVE relevant information — one or two key messages at a time. (4) SUGGEST, do not command. (5) Use a doll or visual aid to demonstrate positioning and attachment. (6) Visit within 48 hours of birth, then at 1 week, 2 weeks, 6 weeks. COMMON PROBLEMS AND SOLUTIONS: 'Not enough milk' — reassure and encourage more frequent feeding (supply = demand). Sore nipples — improve attachment. Engorgement — feed more often, warm compress. Working mother — teach expression and cup feeding. HIV-positive mother — follow national PMTCT guidelines (exclusive breastfeeding with ART is recommended in Uganda).",
+      "section": "FATVAH Breastfeeding Support",
+      "mode": "maternal",
+      "guideline": "MIYCAN 2021 / WHO Breastfeeding Counselling",
+      "severity": "green",
+      "topic": "Breastfeeding Support"
     }
   ]
 }

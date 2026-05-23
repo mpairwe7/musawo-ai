@@ -1,0 +1,238 @@
+{
+  "source": "Uganda MoH Family Planning Guidelines / WHO Medical Eligibility Criteria",
+  "version": "2024",
+  "entries": [
+    {
+      "text": "COMBINED ORAL CONTRACEPTIVES (COCs): COCs contain two hormones — oestrogen and progestogen. They prevent pregnancy by stopping ovulation (release of an egg). Common brands available in Uganda include Microgynon and Lo-Femenal. Effectiveness: Over 99% effective when taken correctly — about 91% with typical use. How to take: One pill every day at the same time, for 21 days, then 7 pill-free days (or take the inactive/placebo pills). Start within the first 5 days of the menstrual period for immediate protection. Common side effects: nausea, headaches, breast tenderness, slight weight change, spotting between periods — these usually improve within 2-3 months. Benefits: regular and lighter periods, less menstrual pain, reduced risk of ovarian and endometrial cancer. COCs do NOT protect against HIV or STIs — use condoms as well for dual protection.",
+      "section": "Combined Oral Contraceptives",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "COCs"
+    },
+    {
+      "text": "WHO SHOULD NOT USE COMBINED ORAL CONTRACEPTIVES (COCs): COCs are NOT recommended for women who: (1) Are breastfeeding and less than 6 months postpartum. (2) Are aged 35 years or older and smoke more than 15 cigarettes per day. (3) Have high blood pressure (systolic >=140 or diastolic >=90 mmHg). (4) Have a history of blood clots (deep vein thrombosis or pulmonary embolism). (5) Have migraine with aura at any age. (6) Have current breast cancer. (7) Have active liver disease or liver tumour. (8) Have diabetes with complications (nephropathy, retinopathy, neuropathy). (9) Have heart disease or history of stroke. According to WHO Medical Eligibility Criteria, these are Category 4 (should not use) or Category 3 (risks generally outweigh benefits). Women with these conditions should be offered alternative methods such as progestin-only pills, implants, IUDs, or condoms. Always consult a trained health worker before starting any contraceptive method.",
+      "section": "COC Contraindications",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "yellow",
+      "topic": "COC Eligibility"
+    },
+    {
+      "text": "PROGESTIN-ONLY PILLS (POPs): POPs contain only one hormone — progestogen (no oestrogen). They are SAFE FOR BREASTFEEDING MOTHERS and can be started as early as 6 weeks postpartum. They are also suitable for women who cannot take oestrogen (those with high blood pressure, migraine with aura, smokers over 35). Effectiveness: Over 99% effective with perfect use, about 91% with typical use. How to take: One pill every day at the same time — there is NO pill-free week. Take continuously without a break. If a pill is taken more than 3 hours late, use backup contraception (condoms) for 2 days. Common side effects: irregular bleeding or spotting, amenorrhoea (no periods), headaches, breast tenderness. These side effects are generally mild and improve over time. POPs do NOT protect against HIV or STIs — advise dual protection with condoms.",
+      "section": "Progestin-Only Pills",
+      "mode": "maternal",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Progestin-Only Pills"
+    },
+    {
+      "text": "INJECTABLE CONTRACEPTIVE — DEPO-PROVERA (DMPA-IM): Depo-Provera (depot medroxyprogesterone acetate, intramuscular) is a progestogen-only injection given every 3 months (12 weeks) by a trained health worker. It is one of the most widely used contraceptive methods in Uganda. Effectiveness: Over 99% effective with correct use, about 94% with typical use. How it works: Prevents ovulation and thickens cervical mucus to block sperm. Safe during breastfeeding — can be started from 6 weeks postpartum. Common side effects: irregular bleeding in the first few months, amenorrhoea (no periods) after several injections, weight gain, headaches. Return to fertility may be delayed by 6-10 months after stopping. Important: The injection must be given on time. If more than 2 weeks late (past 14 weeks from last injection), a pregnancy test may be needed before the next dose. The injection does NOT protect against HIV or STIs.",
+      "section": "Injectable Contraceptives",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Depo-Provera"
+    },
+    {
+      "text": "SAYANA PRESS (DMPA-SC) — SELF-INJECTABLE CONTRACEPTIVE: Sayana Press is a subcutaneous form of Depo-Provera that women can learn to inject themselves at home. It is given every 3 months (13 weeks) in the upper thigh or abdomen using a small, pre-filled device (Uniject). Uganda's Ministry of Health supports self-injection as part of community-based family planning. Effectiveness: Same as DMPA-IM — over 99% with correct use. Benefits of self-injection: (1) Women do not need to visit the health facility every 3 months. (2) Increased privacy and convenience. (3) Reduces barriers for women in remote areas. (4) Village Health Teams (VHTs) can train women to self-inject. Training: A health worker demonstrates the first injection, then the woman can self-administer subsequent doses. Side effects are the same as Depo-Provera: irregular bleeding, amenorrhoea, weight changes. Women should be counselled to dispose of the used Uniject device safely at the health facility or in a sharps container.",
+      "section": "Injectable Contraceptives",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Sayana Press"
+    },
+    {
+      "text": "CONTRACEPTIVE IMPLANTS — JADELLE (5 YEARS): Jadelle consists of two small, flexible rods inserted under the skin of the upper arm. It releases levonorgestrel and provides contraceptive protection for up to 5 years. It is one of the most effective reversible methods available. Effectiveness: Over 99% effective. How it works: Prevents ovulation, thickens cervical mucus, and thins the uterine lining. Insertion: A trained health worker inserts both rods under local anaesthesia in a minor procedure taking about 5 minutes. Can be inserted from 6 weeks postpartum and is safe during breastfeeding. Removal: Must be done by a trained provider. Fertility returns quickly after removal — most women can conceive within 1-3 months. Common side effects: irregular bleeding or spotting (especially in the first 6-12 months), amenorrhoea, headaches, mood changes. Jadelle is available free of charge at government health facilities in Uganda (Health Centre III and above).",
+      "section": "Contraceptive Implants",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Jadelle Implant"
+    },
+    {
+      "text": "CONTRACEPTIVE IMPLANTS — IMPLANON NXT (3 YEARS): Implanon NXT is a single-rod implant inserted under the skin of the upper arm. It releases etonogestrel and provides contraceptive protection for up to 3 years. It has a pre-loaded applicator that makes insertion easier. Effectiveness: Over 99% effective — one of the most effective reversible methods. Insertion: Takes about 1 minute using the pre-loaded applicator. Performed by a trained health worker under local anaesthesia. The insertion site should be palpable (you can feel the rod under the skin). Can be inserted from 6 weeks postpartum and is safe while breastfeeding. Removal: Done by a trained provider through a small incision. Fertility returns rapidly — most women ovulate within 3 weeks of removal. Common side effects: unpredictable bleeding patterns (most common reason for discontinuation), headaches, acne, mood changes, weight change. Both Jadelle and Implanon NXT are available through Uganda's public health system. The choice between them depends on provider training, availability, and client preference.",
+      "section": "Contraceptive Implants",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Implanon NXT Implant"
+    },
+    {
+      "text": "IMPLANT INSERTION AND REMOVAL — WHAT TO EXPECT: Before insertion: The health worker will confirm you are not pregnant, counsel you on the method, and obtain informed consent. Insertion procedure: (1) The inner upper arm (non-dominant arm) is cleaned. (2) Local anaesthetic (lidocaine) is injected. (3) The implant is inserted just under the skin using an applicator. (4) A small bandage is placed over the site. After insertion: (1) Keep the bandage dry for 3-5 days. (2) Expect mild bruising or swelling — this is normal. (3) You can resume normal activities immediately. (4) You should be able to feel the implant under the skin. Removal: (1) A small incision is made under local anaesthesia. (2) The rod(s) are gently pulled out. (3) If you want to continue, a new implant can be inserted through the same incision. IMPORTANT: If you cannot feel the implant or it seems to have moved, return to the health facility. Never attempt to remove an implant yourself. If a provider has difficulty removing the implant, refer to a higher-level facility.",
+      "section": "Implant Procedures",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Implant Insertion Removal"
+    },
+    {
+      "text": "INTRAUTERINE DEVICE (IUD) — COPPER IUD: The Copper IUD (TCu-380A) is a small T-shaped plastic and copper device inserted into the uterus by a trained health worker. It provides highly effective, long-acting contraception for up to 12 years. Effectiveness: Over 99% effective — one of the most effective contraceptive methods available. How it works: The copper creates an environment that is toxic to sperm, preventing fertilisation. It also affects the uterine lining to prevent implantation. The Copper IUD contains NO hormones. When to insert: (1) Within 12 days of the start of the menstrual period. (2) Immediately after delivery (within 48 hours — postplacental insertion) or after 4-6 weeks postpartum. (3) Immediately after an uncomplicated abortion. (4) At any time if reasonably certain the woman is not pregnant. Benefits: Long-acting (up to 12 years), non-hormonal, does not affect breastfeeding, nothing to remember daily, rapid return to fertility after removal. Side effects: heavier or longer periods, more menstrual cramps (usually in first 3-6 months), spotting between periods. The IUD does NOT cause infertility, cancer, or birth defects.",
+      "section": "Intrauterine Devices",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Copper IUD"
+    },
+    {
+      "text": "IUD — WHO SHOULD NOT USE AND WHEN TO RETURN: The Copper IUD should NOT be used by women who: (1) Have a current pelvic inflammatory disease (PID) or purulent cervicitis. (2) Have unexplained vaginal bleeding (until evaluated). (3) Have cervical or endometrial cancer. (4) Have uterine abnormalities that distort the cavity (e.g., large fibroids). (5) Have current STI (gonorrhoea or chlamydia — treat first). WHEN TO RETURN TO THE CLINIC AFTER IUD INSERTION: (1) For a follow-up check after the first menstrual period or within 3-6 weeks. (2) If you cannot feel the IUD strings. (3) If you think the IUD has moved or come out. (4) If you develop a fever, unusual vaginal discharge, or lower abdominal pain. (5) If your period is very late or you think you may be pregnant. (6) If you want the IUD removed for any reason. A trained health worker can check the position and remove the IUD at any time. Fertility returns immediately after removal.",
+      "section": "IUD Eligibility and Follow-Up",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "yellow",
+      "topic": "IUD Eligibility"
+    },
+    {
+      "text": "CONDOMS — MALE AND FEMALE CONDOMS: Condoms are the ONLY contraceptive method that provides DUAL PROTECTION against both pregnancy and sexually transmitted infections (STIs) including HIV. MALE CONDOM: A thin sheath worn over the erect penis. Effectiveness: About 98% with perfect use, about 82% with typical use. How to use: (1) Check expiry date. (2) Open carefully — do not use teeth or sharp objects. (3) Squeeze the tip to remove air. (4) Roll onto the erect penis before any contact. (5) After ejaculation, hold the base and withdraw while still erect. (6) Tie and dispose safely — do not flush. Use a new condom for every act of intercourse. FEMALE CONDOM: A pouch with two flexible rings inserted into the vagina. Can be inserted up to 8 hours before sex. Effectiveness: About 95% with perfect use, about 79% with typical use. Advantages: The woman controls its use, can be used if the partner refuses male condoms. Both male and female condoms are available free of charge at health facilities, or can be purchased at pharmacies and shops across Uganda.",
+      "section": "Condoms",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Condoms"
+    },
+    {
+      "text": "EMERGENCY CONTRACEPTION — POSTINOR-2: Emergency contraception (EC) is used AFTER unprotected sex to prevent pregnancy. It is NOT intended for regular use. Postinor-2 (levonorgestrel 0.75 mg) is the most widely available EC in Uganda. How to use: Take the first tablet as soon as possible after unprotected sex — ideally within 72 hours (3 days). Take the second tablet 12 hours later. Alternatively, both tablets can be taken at once. Effectiveness: About 85% effective within 72 hours, 95% within 24 hours. Effectiveness decreases with delay. How it works: Prevents or delays ovulation. It does NOT cause an abortion and will NOT harm an existing pregnancy. When to use: (1) After unprotected sex (no method used). (2) Condom broke or slipped. (3) Missed 2 or more oral contraceptive pills. (4) Sexual assault. Side effects: nausea, vomiting, headache, irregular bleeding. If vomiting occurs within 2 hours of taking the pill, take another dose. IMPORTANT: EC should NOT be used as a regular method — counsel the woman to start a regular contraceptive method. EC is available over the counter at pharmacies in Uganda.",
+      "section": "Emergency Contraception",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Emergency Contraception"
+    },
+    {
+      "text": "NATURAL FAMILY PLANNING — LACTATIONAL AMENORRHEA METHOD (LAM): LAM uses breastfeeding as a natural contraceptive method. It is effective ONLY when ALL three conditions are met: (1) The baby is less than 6 months old. (2) The mother is exclusively breastfeeding (no supplementary foods or fluids, breastfeeding on demand, day and night, at least every 4 hours during the day and every 6 hours at night). (3) The mother's menstrual period has NOT returned. Effectiveness: About 98% effective when ALL three conditions are strictly met. If ANY one condition is no longer met — the baby is over 6 months, the mother starts giving other foods or fluids, or her period returns — she must start another method immediately. LAM encourages exclusive breastfeeding, which also benefits the baby's health and nutrition. Counsel all breastfeeding mothers about the three LAM criteria and help them plan the transition to another method before 6 months.",
+      "section": "Natural Family Planning",
+      "mode": "maternal",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "LAM Method"
+    },
+    {
+      "text": "NATURAL FAMILY PLANNING — STANDARD DAYS METHOD (SDM) AND FERTILITY AWARENESS: The Standard Days Method identifies the fertile window (days 8-19 of the menstrual cycle) when pregnancy is most likely. CycleBeads (a string of colour-coded beads) help women track their cycle. How to use: (1) The method works best for women with regular cycles between 26 and 32 days. (2) Avoid unprotected sex on days 8 through 19 of the cycle (the fertile window). (3) Move the ring on CycleBeads one bead each day to track the cycle. Effectiveness: About 95% with perfect use, about 88% with typical use. Limitations: Requires partner cooperation, does not protect against STIs, not suitable for women with irregular cycles. Other fertility awareness methods include: (1) Basal body temperature — temperature rises slightly after ovulation. (2) Cervical mucus method — mucus becomes clear and stretchy during fertile days. (3) Symptothermal method — combines temperature and mucus observations. These methods require careful daily tracking and training from a qualified provider. They are suitable for couples who, for personal or religious reasons, prefer not to use modern methods.",
+      "section": "Natural Family Planning",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Standard Days Method"
+    },
+    {
+      "text": "PERMANENT METHODS — TUBAL LIGATION (FEMALE STERILISATION): Tubal ligation is a surgical procedure that permanently blocks or cuts the fallopian tubes to prevent eggs from reaching the uterus. It is intended for women who are certain they do not want any more children. Effectiveness: Over 99% effective. The procedure is done under local or general anaesthesia at a hospital or Health Centre IV by a trained doctor. It is done through a mini-laparotomy (small abdominal incision). Can be done: (1) Interval — at any time if not pregnant. (2) Postpartum — within 7 days of delivery (easiest time because the uterus is still enlarged). (3) Post-abortion — immediately if no complications. Recovery: 1-2 days rest. No heavy lifting for 1 week. Resume sexual activity when comfortable. IMPORTANT: Tubal ligation is PERMANENT and very difficult to reverse. Counsel the client thoroughly. Ensure voluntary, informed consent with no coercion. The decision must be the woman's own choice. Tubal ligation does NOT affect hormones, periods, or sexual desire.",
+      "section": "Permanent Methods",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Tubal Ligation"
+    },
+    {
+      "text": "PERMANENT METHODS — VASECTOMY (MALE STERILISATION): Vasectomy is a minor surgical procedure that cuts or blocks the vas deferens (the tubes that carry sperm) to prevent sperm from reaching the semen. It is one of the safest and most effective contraceptive methods. Effectiveness: Over 99% effective after the sperm count reaches zero (usually after 3 months or 20 ejaculations). The procedure takes about 15-20 minutes under local anaesthesia. No-scalpel technique is preferred (smaller incision, less pain, faster recovery). Recovery: Resume light activities in 2-3 days. Avoid heavy lifting for 1 week. IMPORTANT: Vasectomy is NOT immediately effective. The couple must use another method (such as condoms) for 3 months after the procedure until a semen analysis confirms zero sperm count. Vasectomy does NOT affect sexual performance, desire, or masculinity. It does NOT cause weakness or illness. It is PERMANENT and very difficult to reverse — counsel thoroughly and ensure voluntary, informed consent.",
+      "section": "Permanent Methods",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Vasectomy"
+    },
+    {
+      "text": "POSTPARTUM FAMILY PLANNING — TIMING AFTER DELIVERY: To protect the health of both mother and baby, the World Health Organization recommends waiting at least 2 years after a live birth before becoming pregnant again (birth-to-pregnancy interval of at least 24 months). Short birth intervals increase the risk of: preterm birth, low birth weight, maternal anaemia, and maternal death. When to start contraception after delivery: (1) Implants and progestin-only pills: Can be started from 6 weeks postpartum (safe while breastfeeding). (2) Copper IUD: Can be inserted within 48 hours of delivery (postplacental) or after 4-6 weeks. (3) Depo-Provera/Sayana Press: From 6 weeks postpartum. (4) COCs: NOT recommended until 6 months postpartum if breastfeeding, or 3 weeks if not breastfeeding. (5) Condoms: Can be used as soon as the couple resumes sexual activity. (6) LAM: Effective from birth if exclusively breastfeeding (see LAM criteria). (7) Tubal ligation: Can be done within 7 days of delivery. Family planning counselling should begin during antenatal care and be reinforced at every postnatal visit.",
+      "section": "Postpartum Family Planning",
+      "mode": "maternal",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Postpartum FP Timing"
+    },
+    {
+      "text": "POSTPARTUM FAMILY PLANNING — BREASTFEEDING CONSIDERATIONS: Choosing a contraceptive method after delivery requires special attention if the mother is breastfeeding. SAFE during breastfeeding (progestogen-only methods and non-hormonal): (1) Copper IUD — no hormones, does not affect milk. (2) Implants (Jadelle, Implanon NXT) — progestogen only, minimal effect on breast milk. (3) Progestin-only pills — safe, start from 6 weeks postpartum. (4) Depo-Provera / Sayana Press — safe from 6 weeks postpartum. (5) Condoms — no effect on breastfeeding. (6) LAM — works because of breastfeeding. NOT RECOMMENDED while breastfeeding (before 6 months): Combined oral contraceptives (COCs) and other combined hormonal methods — the oestrogen component may reduce breast milk supply and affect milk quality. Key message: Breastfeeding mothers have many safe, effective contraceptive options. A trained health worker can help each mother choose the method that best suits her needs. Encourage exclusive breastfeeding for 6 months alongside the chosen contraceptive method.",
+      "section": "Postpartum Family Planning",
+      "mode": "maternal",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Breastfeeding and FP"
+    },
+    {
+      "text": "ADOLESCENT-FRIENDLY FAMILY PLANNING SERVICES: Adolescents and young people (aged 10-24 years) in Uganda have a right to access family planning information and services. Uganda's Adolescent Health Policy supports provision of youth-friendly services. Key principles: (1) Confidentiality — services should be private. Young people should not fear that their information will be shared with parents or others without consent. (2) Non-judgmental — health workers should provide services without stigma or moral judgment regardless of the young person's age, marital status, or sexual activity. (3) Accessible — services should be available at convenient times and locations, including through community health workers and outreach. (4) Informed choice — adolescents should receive comprehensive, accurate information about ALL available methods and be supported to make their own informed decision. Recommended methods for adolescents: All methods are medically safe for adolescents (WHO MEC). Long-acting reversible methods (implants, IUDs) are highly effective and appropriate. Condoms should always be encouraged for dual protection against STIs/HIV. Emergency contraception should be available without barriers. Address common concerns: Contraception does NOT cause infertility in young women. There is no minimum age for contraceptive use based on medical eligibility.",
+      "section": "Adolescent Family Planning",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Youth-Friendly FP"
+    },
+    {
+      "text": "MANAGING SIDE EFFECTS OF CONTRACEPTIVES: Side effects are a common reason women discontinue contraception. Proper counselling and management can help women continue their chosen method. IRREGULAR BLEEDING (most common side effect with implants, injectables, POPs, and IUDs): (1) Reassure the client that irregular bleeding is common in the first 3-6 months and usually improves. (2) Irregular bleeding is NOT harmful and does NOT mean the method is not working. (3) If bothersome, a short course of ibuprofen (400 mg three times daily for 5 days) or combined oral contraceptive pills for one cycle may help. (4) If heavy or prolonged bleeding persists beyond 6 months, evaluate for other causes and consider switching methods. HEADACHES: (1) Mild headaches are common — treat with paracetamol. (2) If a woman on COCs develops severe migraine or migraine with aura, STOP COCs and switch to a progestogen-only method. WEIGHT CHANGES: (1) Slight weight gain (1-2 kg) is common with injectables. (2) Counsel on healthy eating and physical activity. (3) Weight change alone is not a medical reason to stop a method. NAUSEA with COCs: Take the pill with food or at bedtime. Usually resolves within 3 months.",
+      "section": "Side Effects Management",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Side Effects Management"
+    },
+    {
+      "text": "DANGER SIGNS WHILE ON CONTRACEPTION — WHEN TO RETURN TO THE CLINIC IMMEDIATELY: Women using any contraceptive method should return to the health facility IMMEDIATELY if they experience any of the following: FOR ALL METHODS: (1) Suspected pregnancy (missed period with symptoms). (2) Severe lower abdominal pain (may indicate ectopic pregnancy, PID, or ovarian cyst). FOR COC USERS (remember ACHES): (A) Abdominal pain — severe. (C) Chest pain or shortness of breath. (H) Headaches — severe, sudden, or different from usual. (E) Eye problems — blurred vision, loss of vision, flashing lights. (S) Severe leg pain or swelling (possible blood clot). FOR IMPLANT USERS: Severe arm pain, heavy bleeding at insertion site, infection at insertion site (pus, redness, fever), inability to feel the implant. FOR IUD USERS: Cannot feel the strings, severe cramping or pain, heavy bleeding, fever or chills, foul-smelling discharge, pain during sex. FOR INJECTABLE USERS: Very heavy or prolonged bleeding, severe headache, yellowing of skin or eyes. These are URGENT — do not wait. Go to the nearest health facility day or night. Early treatment prevents serious complications.",
+      "section": "Danger Signs on Contraception",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "red",
+      "topic": "FP Danger Signs"
+    },
+    {
+      "text": "ADDITIONAL WARNING SIGNS REQUIRING CLINIC VISIT — NON-URGENT: Return to the health facility within a few days if you experience: (1) Persistent headaches that do not respond to paracetamol. (2) Mood changes — persistent low mood or depression lasting more than 2 weeks. (3) Breast lump or persistent breast pain. (4) Irregular bleeding that is bothersome and persists beyond 6 months. (5) Significant weight gain (more than 5 kg) that concerns you. (6) Skin changes — severe acne or new skin darkening (melasma) with COCs. (7) No menstrual period for more than 3 months when not expected (especially with POPs or implants — may need pregnancy test). (8) Persistent pain or discomfort at implant site. (9) Expulsion of IUD (IUD falls out — you may feel it or see it). (10) Change in health status — newly diagnosed high blood pressure, diabetes, or other condition that may affect method eligibility. Regular follow-up visits are recommended: 3 months after starting a new method, then annually. However, a woman can return at any time with questions or concerns.",
+      "section": "Non-Urgent Follow-Up Signs",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "yellow",
+      "topic": "FP Follow-Up Signs"
+    },
+    {
+      "text": "MYTHS AND MISCONCEPTIONS ABOUT FAMILY PLANNING IN UGANDA: Many myths about family planning prevent people from using effective methods. Here are common myths and the FACTS: MYTH: 'Contraceptives cause infertility.' FACT: Modern contraceptives do NOT cause infertility. Fertility returns after stopping any reversible method (pills, injectables, implants, IUDs). MYTH: 'The implant can move to other parts of the body (heart, brain).' FACT: The implant stays in the arm where it was inserted. It cannot travel through the body. MYTH: 'Family planning pills accumulate in the body and cause cancer.' FACT: Pills are processed by the body daily. COCs actually REDUCE the risk of ovarian and endometrial cancer. MYTH: 'IUDs cause infection and cancer.' FACT: When inserted correctly by a trained provider, IUDs are very safe and do not cause cancer. MYTH: 'Contraception is only a woman's responsibility.' FACT: Family planning is for both men and women — condoms, vasectomy, and supportive partnership are important. MYTH: 'Using contraception is against God's will.' FACT: Many religious leaders in Uganda support responsible parenthood and birth spacing for the health of mothers and children. MYTH: 'Young unmarried women should not use family planning.' FACT: All people, regardless of age or marital status, have a right to family planning information and services.",
+      "section": "Myths and Misconceptions",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "FP Myths Uganda"
+    },
+    {
+      "text": "MORE MYTHS AND MISCONCEPTIONS COMMON IN RURAL UGANDA: MYTH: 'The Depo injection makes women weak and unable to do farm work.' FACT: Depo-Provera does not cause weakness. Some women may experience temporary side effects like headaches, but these do not prevent normal activities. MYTH: 'A woman who uses family planning will give birth to disabled children.' FACT: There is no evidence that any modern contraceptive causes birth defects or disability. MYTH: 'Condoms have HIV in them.' FACT: Condoms are rigorously tested and are one of the best protections against HIV. MYTH: 'Family planning reduces a man's sexual power.' FACT: No contraceptive method affects a man's sexual performance. Vasectomy does not reduce libido, erection, or ejaculation. MYTH: 'If you use family planning for too long, you will never have children again.' FACT: Long-term use of reversible methods (even 10+ years) does not affect future fertility. MYTH: 'Traditional herbs are safer than modern contraceptives.' FACT: Traditional herbs for preventing pregnancy are not tested for safety or effectiveness and may be harmful. Modern methods are backed by decades of scientific research. Community dialogues, radio programmes, and VHT outreach can help dispel these myths.",
+      "section": "Myths and Misconceptions",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "FP Myths Rural"
+    },
+    {
+      "text": "MALE INVOLVEMENT IN FAMILY PLANNING: Family planning is most successful when both partners are involved. In Uganda, men often make household decisions about family size and health-seeking behaviour. Encouraging male involvement can increase contraceptive uptake and continuation. How men can be involved: (1) Attend family planning counselling sessions together as a couple. (2) Discuss the desired number and spacing of children openly. (3) Support the partner's choice of contraceptive method. (4) Use male methods — condoms for dual protection against pregnancy and STIs, or vasectomy for permanent contraception. (5) Accompany the partner to the health facility for family planning services. (6) Help remember appointments for injections or check-ups. (7) Share in childcare responsibilities. Barriers to male involvement: cultural norms that view family planning as a 'woman's issue,' fear of side effects, misconceptions about methods, concerns about masculinity. Strategies: (1) Engage community and religious leaders as family planning champions. (2) Use male-friendly health facility hours and spaces. (3) Train VHTs to counsel men and couples. (4) Use radio and community dialogues to reach men. (5) Provide accurate information to address fears and myths. Men who support family planning help build healthier families and communities.",
+      "section": "Male Involvement",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Male Involvement FP"
+    },
+    {
+      "text": "FAMILY PLANNING METHOD COMPARISON — QUICK REFERENCE FOR HEALTH WORKERS: SHORT-ACTING METHODS: (1) COCs — take daily, 91% typical effectiveness, reversible immediately. (2) POPs — take daily, 91% typical effectiveness, safe for breastfeeding. (3) Condoms (male) — use each time, 82% typical effectiveness, also prevents STIs/HIV. (4) Condoms (female) — use each time, 79% typical effectiveness, woman-controlled. LONG-ACTING REVERSIBLE METHODS (LARC): (5) Depo-Provera — injection every 3 months, 94% typical effectiveness. (6) Sayana Press — self-injection every 3 months, 94% typical effectiveness. (7) Jadelle implant — 5 years, over 99% effectiveness. (8) Implanon NXT — 3 years, over 99% effectiveness. (9) Copper IUD — 12 years, over 99% effectiveness. PERMANENT METHODS: (10) Tubal ligation — over 99%, permanent, for women. (11) Vasectomy — over 99% (after 3 months), permanent, for men. EMERGENCY: (12) Postinor-2 — within 72 hours of unprotected sex, 85% effective. NATURAL: (13) LAM — first 6 months if exclusively breastfeeding, 98% effective. (14) Standard Days Method — 88% typical effectiveness, requires regular cycles. The most effective methods are those that require the least user action (implants, IUDs). Counsel each client based on their individual needs, preferences, and medical eligibility.",
+      "section": "Method Comparison",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "FP Method Comparison"
+    },
+    {
+      "text": "FAMILY PLANNING COUNSELLING — RIGHTS-BASED APPROACH: The Uganda Ministry of Health emphasises that family planning services must respect the rights of every individual. Key principles: (1) INFORMED CHOICE — provide complete, accurate, unbiased information about ALL available methods. The client chooses freely. (2) VOLUNTARISM — no one should be forced or pressured into using or not using any method. (3) CONFIDENTIALITY — all information shared during counselling is private. (4) QUALITY OF CARE — every client deserves respectful, competent care. (5) ACCESS — services should be available regardless of age, sex, marital status, or location. (6) EQUITY — ensure marginalised groups (adolescents, people with disabilities, rural populations) have equal access. Counselling steps (GATHER technique): G — Greet the client warmly. A — Ask about their needs and reproductive goals. T — Tell them about family planning options. H — Help them choose a suitable method. E — Explain how to use the chosen method. R — Return visit planned. Every person has the right to decide freely whether, when, and how many children to have.",
+      "section": "FP Counselling",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "FP Counselling Rights"
+    },
+    {
+      "text": "FAMILY PLANNING AFTER MISCARRIAGE OR ABORTION: A woman can become pregnant again very quickly after a miscarriage or abortion — ovulation can return as early as 2 weeks. Family planning should be offered as part of post-abortion care. Timing: Most methods can be started immediately after an uncomplicated first-trimester miscarriage or abortion: (1) COCs, POPs — can start immediately. (2) Implants — can be inserted immediately. (3) Injectables — can be given immediately. (4) IUD — can be inserted immediately if no infection. (5) Condoms — can be used as soon as ready. After a second-trimester event: IUD insertion should wait until uterine involution (about 4-6 weeks). The WHO recommends waiting at least 6 months after a miscarriage or abortion before becoming pregnant again. This interval allows the body to recover and reduces the risk of adverse outcomes in the next pregnancy. Post-abortion family planning counselling should be compassionate, non-judgmental, and confidential. It is an opportunity to help the woman prevent future unintended pregnancies.",
+      "section": "Post-Abortion FP",
+      "mode": "maternal",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Post-Abortion FP"
+    },
+    {
+      "text": "COMMUNITY-BASED DISTRIBUTION OF FAMILY PLANNING IN UGANDA: Uganda's community-based family planning strategy empowers Village Health Teams (VHTs) and community health workers to provide certain methods at the community level, reducing barriers to access in rural areas. Methods that VHTs can provide: (1) Condoms — distributed freely at household level. (2) Combined oral contraceptives — resupply after initial prescription by a health worker. (3) Progestin-only pills — resupply after initial prescription. (4) Sayana Press (DMPA-SC) — VHTs trained in community-based distribution can administer and teach self-injection. (5) Emergency contraception — distribute and counsel. (6) CycleBeads for Standard Days Method — counsel and distribute. Methods requiring a health facility: Implants, IUDs, tubal ligation, vasectomy, and initial Depo-Provera injection require a trained clinical provider and should be done at Health Centre III or above. VHTs also play a critical role in: providing family planning information and education, dispelling myths, referring clients to the health facility, following up on contraceptive users, and supporting community dialogues about family planning.",
+      "section": "Community-Based FP",
+      "mode": "community",
+      "guideline": "FP Guidelines",
+      "severity": "green",
+      "topic": "Community FP Distribution"
+    }
+  ]
+}

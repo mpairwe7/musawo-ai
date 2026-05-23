@@ -82,6 +82,9 @@ async def voice_stream_ws(
                     await _send(websocket, VoiceEvent("session_ready", {"session_id": session_id}))
                     logger.info("Voice session %s started (lang=%s)", session_id, language)
 
+                elif msg_type == "ping":
+                    await _send(websocket, VoiceEvent("pong", {"timestamp": time.time()}))
+
                 elif msg_type == "barge_in" and session:
                     session.barge_in()
 

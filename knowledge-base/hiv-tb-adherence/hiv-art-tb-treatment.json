@@ -1,0 +1,118 @@
+{
+  "source": "Uganda MoH Consolidated HIV/TB Guidelines / WHO Treat All",
+  "version": "2024",
+  "entries": [
+    {
+      "text": "HIV TESTING (MoH Consolidated Guidelines / WHO): Every person in Uganda should know their HIV status. HIV testing is FREE at all government health facilities, outreach sites, and through community-based testing by trained VHTs and lay counsellors. WHO SHOULD TEST: All adults and adolescents at least once per year, pregnant women at every ANC visit, couples together (couples testing improves disclosure and mutual support), all children born to HIV-positive mothers, any person with TB symptoms, sexually transmitted infections, or prolonged illness. RETESTING AFTER EXPOSURE: If you had unprotected sex, shared needles, or experienced a needle-stick injury, test at 6 weeks and again at 3 months after the event, as HIV antibodies may take time to appear (the window period). HIV testing uses rapid test kits that give results in 15-20 minutes. All results are confidential. A reactive (positive) result is confirmed with a second and third test on the same day. If positive, you will be linked to care the same day for ART initiation.",
+      "section": "HIV Testing",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "green",
+      "topic": "HIV Testing"
+    },
+    {
+      "text": "ART INITIATION — TREAT ALL POLICY (MoH / WHO Treat All): Under Uganda's Treat All policy, EVERY person who tests HIV positive is eligible for antiretroviral therapy (ART) regardless of CD4 count, clinical stage, age, or population. ART should be started on the SAME DAY as diagnosis whenever possible (same-day start), unless the patient has signs of TB or cryptococcal meningitis that must be treated first. FIRST-LINE REGIMEN: TLD — a single fixed-dose combination tablet of Tenofovir (TDF) 300 mg + Lamivudine (3TC) 300 mg + Dolutegravir (DTG) 50 mg, taken ONCE DAILY. TLD is highly effective, has fewer side effects than older regimens, and has a high barrier to resistance. It is the preferred first-line regimen for all adults and adolescents weighing 20 kg or more, including pregnant and breastfeeding women. ART is a lifelong commitment. Starting treatment early, even when you feel healthy, dramatically reduces the virus in your body, keeps your immune system strong, prevents AIDS-related illnesses, and reduces the chance of transmitting HIV to others.",
+      "section": "ART Initiation",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "green",
+      "topic": "ART Treatment"
+    },
+    {
+      "text": "ART ADHERENCE (MoH / WHO): Taking your ART medication correctly every day is the single most important thing you can do to stay healthy with HIV. KEY ADHERENCE PRACTICES: (1) Take your TLD tablet at the SAME TIME every day. Choose a time that fits your routine (e.g., with breakfast or at bedtime). (2) Use reminders: phone alarm, radio program, daily prayer, or a trusted treatment buddy. (3) IF YOU MISS A DOSE: Take it as soon as you remember on the same day. If it is almost time for the next dose, skip the missed one and take the next at the usual time. Never take a double dose. (4) PILL COUNTS: Health workers will count remaining pills at each refill to check adherence. Bring your remaining tablets and medication bottle to every clinic visit. (5) NEVER STOP ART on your own, even if you feel well. Stopping ART allows the virus to multiply and develop drug resistance, making treatment harder. (6) Stock up: Always refill before your tablets run out. If travelling, carry enough medication plus extra days' supply. Store tablets in a cool dry place away from sunlight and moisture. Adherence of 95% or higher (missing no more than 1 dose per month) is needed for the virus to stay suppressed.",
+      "section": "ART Adherence",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "yellow",
+      "topic": "ART Adherence"
+    },
+    {
+      "text": "VIRAL LOAD MONITORING (MoH / WHO): Viral load (VL) is a blood test that measures the amount of HIV in your blood. It is the best way to know if your ART is working. TARGET: The goal is an UNDETECTABLE viral load, which in Uganda is defined as fewer than 1,000 copies per millilitre (<1,000 copies/ml). When your viral load is undetectable, the virus is fully suppressed, your immune system can recover, and you are very unlikely to transmit HIV sexually (Undetectable = Untransmittable, or U=U). WHEN TO TEST: First VL test at 6 months after starting ART. If suppressed (<1,000 copies/ml), repeat every 12 months. If NOT suppressed (>1,000 copies/ml), receive intensive adherence counselling for 3 months and retest. If still unsuppressed after adherence support, your health worker will consider switching to a second-line regimen. High viral load usually means missed doses or drug interactions, so be honest with your health worker about any challenges you face with taking your medication.",
+      "section": "Viral Load Monitoring",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "yellow",
+      "topic": "Viral Load"
+    },
+    {
+      "text": "PMTCT — PREVENTION OF MOTHER-TO-CHILD TRANSMISSION (MoH / WHO): Without intervention, 15-45% of HIV-positive mothers will pass the virus to their babies during pregnancy, labour, delivery, or breastfeeding. With proper PMTCT, this risk drops to below 2%. KEY STEPS: (1) TEST at the first ANC visit and retest at 36 weeks and during labour if previously negative. Partners should also test. (2) START ART immediately if positive — TLD is safe in pregnancy. If already on ART, continue without interruption. (3) DELIVER at a health facility where safe delivery practices reduce transmission. (4) BREASTFEED exclusively for 6 months while taking ART. Continue breastfeeding with complementary foods up to 12-24 months, as the protective benefit of breastfeeding combined with ART outweighs the small risk of transmission. (5) BABY'S MEDICATION: The infant receives Nevirapine (NVP) syrup for the first 6 weeks of life as prophylaxis. High-risk infants (mother not on ART, high viral load) receive dual prophylaxis (NVP + AZT). All exposed infants must be tested for HIV using DNA PCR at 6 weeks (Early Infant Diagnosis).",
+      "section": "Prevention of Mother-to-Child Transmission",
+      "mode": "maternal",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "red",
+      "topic": "PMTCT"
+    },
+    {
+      "text": "EARLY INFANT DIAGNOSIS — EID (MoH / WHO): All babies born to HIV-positive mothers must be tested for HIV as early as possible. Standard antibody rapid tests cannot be used in infants under 18 months because the mother's antibodies cross the placenta and may cause a false positive result. Instead, a DNA PCR TEST is used, which detects the actual virus. TESTING SCHEDULE: (1) FIRST TEST at 6 WEEKS of age (or at the first contact after 6 weeks) using a dried blood spot (DBS) sample from a heel prick. (2) If the first test is negative and the baby is still breastfeeding, retest at 6 weeks after complete cessation of breastfeeding, and again with a rapid antibody test at 18 months. (3) If the DNA PCR is POSITIVE, start the infant on ART IMMEDIATELY — do not wait for a confirmatory test. Early treatment saves lives. (4) Bring all HIV-exposed infants for regular follow-up at the health facility including cotrimoxazole prophylaxis from 6 weeks until HIV infection is ruled out. Mothers should continue breastfeeding and taking their own ART as this keeps both mother and baby healthy.",
+      "section": "Early Infant Diagnosis",
+      "mode": "maternal",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "red",
+      "topic": "EID"
+    },
+    {
+      "text": "ART SIDE EFFECTS (MoH / WHO): TLD (Tenofovir/Lamivudine/Dolutegravir) is generally well tolerated, but some people experience side effects, especially in the first few weeks. COMMON SIDE EFFECTS (usually mild, improve over time): Headache, dizziness, difficulty sleeping or vivid dreams, mild nausea, weight gain (particularly with Dolutegravir), and fatigue. These are usually temporary. Continue taking your medication and inform your health worker at your next visit. SIDE EFFECTS THAT NEED MEDICAL ATTENTION — GO BACK TO THE CLINIC IF: (1) You develop a persistent skin rash. (2) You have severe stomach pain, persistent vomiting, or dark urine (possible liver problems). (3) You experience muscle pain or weakness, or decreased urine output (possible kidney problems from Tenofovir). (4) You feel very depressed, anxious, or have thoughts of self-harm. (5) You notice yellowing of the eyes or skin. IMPORTANT: NEVER stop taking ART because of side effects without first talking to your health worker. Your regimen can be adjusted or switched to an alternative. Stopping on your own risks drug resistance.",
+      "section": "ART Side Effects",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "yellow",
+      "topic": "ART Side Effects"
+    },
+    {
+      "text": "OPPORTUNISTIC INFECTIONS AND PROPHYLAXIS (MoH / WHO): People living with HIV are more vulnerable to infections because HIV weakens the immune system. COTRIMOXAZOLE PROPHYLAXIS: All HIV-positive adults and children should take cotrimoxazole (Septrin) daily to prevent Pneumocystis pneumonia (PCP), toxoplasmosis, some bacterial infections, and malaria. Adults take 960 mg (2 single-strength tablets or 1 double-strength tablet) once daily. Continue until the CD4 count is above 350 for at least 6 months on ART. Children's dose is weight-based. TB SCREENING: At EVERY clinic visit, your health worker should ask about the 4 TB symptom screen questions: (1) Do you have a cough? (2) Do you have fever? (3) Have you lost weight? (4) Do you have night sweats? If you answer YES to any of these, you should be investigated for TB with sputum testing (GeneXpert). If TB is ruled out, you may be given TB Preventive Therapy (TPT) with Isoniazid (INH) 300 mg daily for 6 months to prevent TB. Take INH with Pyridoxine (Vitamin B6) 25 mg to prevent nerve problems.",
+      "section": "Opportunistic Infections",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "yellow",
+      "topic": "Opportunistic Infections"
+    },
+    {
+      "text": "TB SYMPTOMS — WHEN TO SUSPECT TUBERCULOSIS (MoH / National TB & Leprosy Programme / WHO): Tuberculosis (TB) is a bacterial infection that most commonly affects the lungs and is spread through the air when an infected person coughs, sneezes, or spits. SUSPECT TB IF YOU HAVE ANY OF THESE SYMPTOMS: (1) COUGH lasting MORE THAN 2 WEEKS — this is the most important sign. (2) NIGHT SWEATS — waking up drenched in sweat, soaking your bedsheets. (3) UNEXPLAINED WEIGHT LOSS — losing weight without trying. (4) FEVER — especially low-grade afternoon or evening fevers that persist. (5) Other signs may include: chest pain, coughing up blood (haemoptysis), fatigue, and loss of appetite. TB IS CURABLE. If you or anyone in your household has a cough lasting more than 2 weeks, go to the nearest health facility for a sputum test. The GeneXpert test can diagnose TB in just 2 hours. Do not wait — the longer you delay, the more people around you can become infected. People living with HIV, children under 5, household contacts of TB patients, and malnourished individuals are at highest risk.",
+      "section": "TB Symptoms",
+      "mode": "community",
+      "guideline": "Uganda National TB Guidelines",
+      "severity": "red",
+      "topic": "Tuberculosis"
+    },
+    {
+      "text": "TB TREATMENT (MoH / National TB & Leprosy Programme / WHO): TB is fully CURABLE with the correct medications taken for the FULL course. TREATMENT REGIMEN: (1) INTENSIVE PHASE (first 2 months): RHZE — a fixed-dose combination of Rifampicin (R), Isoniazid (H), Pyrazinamide (Z), and Ethambutol (E) taken DAILY. (2) CONTINUATION PHASE (next 4 months): RH — Rifampicin and Isoniazid taken DAILY. Total treatment duration: 6 MONTHS. DIRECTLY OBSERVED THERAPY (DOT): A treatment supporter (health worker, VHT, or family member) watches you take your medication daily, especially in the intensive phase, to ensure no doses are missed. CRITICAL RULES: Take tablets at the same time daily on an empty stomach (1 hour before food). Never skip doses. Complete the FULL 6 months even if you feel better after a few weeks — stopping early causes drug-resistant TB, which is much harder and more expensive to treat. Report side effects (yellow eyes, joint pain, numbness, vision changes) to your health worker but do not stop treatment on your own. Sputum tests are repeated at 2 months, 5 months, and 6 months to confirm cure.",
+      "section": "TB Treatment",
+      "mode": "community",
+      "guideline": "Uganda National TB Guidelines",
+      "severity": "red",
+      "topic": "Tuberculosis"
+    },
+    {
+      "text": "TB-HIV CO-INFECTION (MoH / WHO): TB is the leading cause of death among people living with HIV worldwide. In Uganda, approximately 40% of TB patients are also HIV positive. MANAGEMENT: (1) All TB patients must be tested for HIV. All HIV patients must be screened for TB at every visit. (2) If diagnosed with both TB and HIV, start TB treatment FIRST and begin ART within 2 WEEKS of starting TB treatment (unless you have TB meningitis, in which case ART is delayed to 8 weeks to avoid dangerous immune reconstitution inflammatory syndrome — IRIS). (3) Continue cotrimoxazole prophylaxis throughout TB treatment and beyond. (4) ART REGIMEN: TLD (Tenofovir/Lamivudine/Dolutegravir) is compatible with TB treatment. Dolutegravir dose is increased to 50 mg TWICE daily during TB treatment because Rifampicin reduces Dolutegravir levels. After TB treatment is completed, return to once-daily dosing. (5) Complete the full 6 months of TB treatment without interruption. (6) Take ART lifelong. Both treatments can be taken together — take TB medication in the morning and ART in the evening, or as your health worker directs.",
+      "section": "TB-HIV Co-infection",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV/TB Guidelines",
+      "severity": "red",
+      "topic": "TB-HIV"
+    },
+    {
+      "text": "HIV DISCLOSURE AND STIGMA REDUCTION (MoH / UNAIDS / WHO): Disclosing your HIV status to trusted family members, partners, and friends has important benefits for your health and wellbeing. BENEFITS OF DISCLOSURE: (1) You gain emotional support and encouragement to stay on treatment. (2) Your partner can get tested and start treatment or prevention. (3) Family members can remind you to take your ART and accompany you to clinic. (4) Reduces the stress and isolation of keeping a secret. (5) Helps protect sexual partners. SUPPORT GROUPS: Join a post-test club or PLHIV (People Living with HIV) support group at your health facility. Members share experiences, treatment tips, and give each other encouragement. Many groups also provide income-generating activities. REDUCING STIGMA IN THE COMMUNITY: HIV is a manageable chronic condition — people on ART live long, healthy, productive lives. HIV is NOT transmitted through sharing food, hugging, handshakes, mosquito bites, or using the same toilet. Stigma and discrimination keep people from testing and accessing treatment. Health workers should maintain strict confidentiality of all patients' HIV status. If you experience discrimination, report it to your District Health Officer or the Uganda AIDS Commission.",
+      "section": "HIV Disclosure and Stigma Reduction",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "green",
+      "topic": "HIV Stigma"
+    },
+    {
+      "text": "POSITIVE LIVING WITH HIV (MoH / WHO): An HIV diagnosis is not a death sentence. With daily ART and a healthy lifestyle, people living with HIV can live as long and productively as anyone else. KEY PRACTICES: (1) NUTRITION: Eat a balanced diet with foods from all groups — beans, groundnuts, eggs, fish, green vegetables, fruits, and energy foods (matooke, sweet potatoes, posho). Good nutrition helps your immune system recover faster. (2) EXERCISE: Regular physical activity (walking, farming, cycling) at least 30 minutes most days improves energy, mood, and immune function. (3) AVOID ALCOHOL AND TOBACCO: Alcohol damages the liver (which also processes ART), causes missed doses, and increases risky sexual behaviour. Smoking increases the risk of TB and lung infections. (4) REGULAR CLINIC VISITS: Attend all scheduled appointments for viral load monitoring, medication refills, and health checks. Do not wait until you feel sick. (5) PREVENT OTHER INFECTIONS: Use condoms to prevent STIs and reinfection with a different HIV strain. Sleep under an insecticide-treated net to prevent malaria. Use safe water and practice good hygiene. (6) MENTAL HEALTH: Seek counselling if you feel depressed, anxious, or overwhelmed. Your health facility has trained counsellors available.",
+      "section": "Positive Living",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "green",
+      "topic": "Positive Living"
+    },
+    {
+      "text": "PrEP AND PEP — HIV PREVENTION MEDICATION (MoH / WHO): HIV-negative people at high risk of infection can now take medication to prevent HIV. (1) PrEP (PRE-EXPOSURE PROPHYLAXIS): A daily pill (TDF/FTC — Tenofovir/Emtricitabine, or TDF/3TC — Tenofovir/Lamivudine) taken BEFORE potential exposure to prevent HIV. WHO QUALIFIES: Sero-discordant couples (one partner HIV-positive), people with multiple sexual partners, sex workers, men who have sex with men, people who inject drugs, and anyone at substantial risk. PrEP is available FREE at designated health facilities in Uganda. It must be taken daily to be effective — it reaches full protection after 7 days of consistent use. PrEP users should test for HIV every 3 months and are monitored for kidney function. (2) PEP (POST-EXPOSURE PROPHYLAXIS): A 28-day course of ART (TDF/3TC/DTG) taken AFTER a possible exposure to HIV such as unprotected sex, sexual assault, needle-stick injury, or condom breakage. PEP must be started within 72 HOURS of exposure (the sooner the better). It is available at all government health facilities and is free. Complete the full 28-day course and test for HIV at 3 months after finishing PEP. PEP is NOT a substitute for regular prevention methods like condom use.",
+      "section": "PrEP and PEP",
+      "mode": "community",
+      "guideline": "Uganda Consolidated HIV Guidelines",
+      "severity": "green",
+      "topic": "HIV Prevention"
+    }
+  ]
+}

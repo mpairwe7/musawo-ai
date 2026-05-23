@@ -49,10 +49,23 @@ if PROMETHEUS_AVAILABLE:
     ABSTENTION_TOTAL = Counter(
         "musawo_abstention_total",
         "Queries where system abstained due to low confidence",
+        ["locale"],
     )
     ESCALATION_TOTAL = Counter(
         "musawo_escalation_total",
         "Queries requiring human/facility escalation",
+        ["locale"],
+    )
+    LANG_MISMATCH_TOTAL = Counter(
+        "musawo_language_mismatch_total",
+        "Responses where detected language didn't match requested locale",
+        ["expected", "detected"],
+    )
+    CONFIDENCE_BY_LOCALE = Histogram(
+        "musawo_confidence_by_locale",
+        "Retrieval confidence scores by locale",
+        ["locale"],
+        buckets=[0.0, 0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0],
     )
     FEEDBACK_TOTAL = Counter(
         "musawo_feedback_total",
@@ -111,14 +124,24 @@ def record_red_flag(symptom: str) -> None:
         RED_FLAG_TOTAL.labels(symptom=symptom).inc()
 
 
-def record_abstention() -> None:
+def record_abstention(locale: str = "en") -> None:
     if PROMETHEUS_AVAILABLE:
-        ABSTENTION_TOTAL.inc()
+        ABSTENTION_TOTAL.labels(locale=locale).inc()
 
 
-def record_escalation() -> None:
+def record_escalation(locale: str = "en") -> None:
     if PROMETHEUS_AVAILABLE:
-        ESCALATION_TOTAL.inc()
+        ESCALATION_TOTAL.labels(locale=locale).inc()
+
+
+def record_lang_mismatch(expected: str, detected: str) -> None:
+    if PROMETHEUS_AVAILABLE:
+        LANG_MISMATCH_TOTAL.labels(expected=expected, detected=detected).inc()
+
+
+def record_confidence(locale: str, score: float) -> None:
+    if PROMETHEUS_AVAILABLE:
+        CONFIDENCE_BY_LOCALE.labels(locale=locale).observe(score)
 
 
 def record_feedback(rating: int) -> None:
@@ -166,6 +189,64 @@ def observe_total_latency() -> Generator[None, None, None]:
             yield
     else:
         yield
+
+
+# ── Voice metrics ─────────────────────────────────────────────────────────
+if PROMETHEUS_AVAILABLE:
+    VOICE_ASR_LATENCY = Histogram(
+        "musawo_voice_asr_latency_seconds",
+        "Voice ASR processing latency",
+        buckets=[0.1, 0.25, 0.5, 1.0, 2.0, 5.0],
+    )
+    VOICE_TTS_LATENCY = Histogram(
+        "musawo_voice_tts_first_chunk_seconds",
+        "Time to first TTS audio chunk",
+        buckets=[0.1, 0.25, 0.5, 1.0, 2.0],
+    )
+    VOICE_SESSION_TOTAL = Counter(
+        "musawo_voice_session_total",
+        "Total voice sessions started",
+    )
+    VOICE_BARGE_IN_TOTAL = Counter(
+        "musawo_voice_barge_in_total",
+        "Total barge-in interruptions",
+    )
+    VOICE_UTTERANCE_DURATION = Histogram(
+        "musawo_voice_utterance_duration_seconds",
+        "Duration of user utterances",
+        buckets=[0.5, 1.0, 2.0, 5.0, 10.0, 30.0],
+    )
+else:
+    VOICE_ASR_LATENCY = None  # type: ignore[assignment]
+    VOICE_TTS_LATENCY = None  # type: ignore[assignment]
+    VOICE_SESSION_TOTAL = None  # type: ignore[assignment]
+    VOICE_BARGE_IN_TOTAL = None  # type: ignore[assignment]
+    VOICE_UTTERANCE_DURATION = None  # type: ignore[assignment]
+
+
+def record_voice_session() -> None:
+    if PROMETHEUS_AVAILABLE and VOICE_SESSION_TOTAL:
+        VOICE_SESSION_TOTAL.inc()
+
+
+def record_voice_barge_in() -> None:
+    if PROMETHEUS_AVAILABLE and VOICE_BARGE_IN_TOTAL:
+        VOICE_BARGE_IN_TOTAL.inc()
+
+
+def record_voice_asr_latency(seconds: float) -> None:
+    if PROMETHEUS_AVAILABLE and VOICE_ASR_LATENCY:
+        VOICE_ASR_LATENCY.observe(seconds)
+
+
+def record_voice_tts_latency(seconds: float) -> None:
+    if PROMETHEUS_AVAILABLE and VOICE_TTS_LATENCY:
+        VOICE_TTS_LATENCY.observe(seconds)
+
+
+def record_voice_utterance_duration(seconds: float) -> None:
+    if PROMETHEUS_AVAILABLE and VOICE_UTTERANCE_DURATION:
+        VOICE_UTTERANCE_DURATION.observe(seconds)
 
 
 def get_metrics_text() -> tuple[str, str]:

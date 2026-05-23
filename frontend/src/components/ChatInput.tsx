@@ -21,10 +21,9 @@ export default memo(forwardRef<HTMLTextAreaElement, ChatInputProps>(function Cha
   const setMessage = useChatStore((s) => s.setMessage);
   const locale = useChatStore((s) => s.locale);
   const speechState = useChatStore((s) => s.speechState);
-  const setSpeechState = useChatStore((s) => s.setSpeechState);
+  const setVoiceModalOpen = useChatStore((s) => s.setVoiceModalOpen);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Forward ref so parent can focus the input
   useImperativeHandle(ref, () => textareaRef.current!, []);
 
   const handleKeyDown = useCallback(
@@ -37,48 +36,13 @@ export default memo(forwardRef<HTMLTextAreaElement, ChatInputProps>(function Cha
     [message, disabled, onSend]
   );
 
-  const toggleVoice = useCallback(() => {
-    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
-      setSpeechState("unavailable");
-      return;
-    }
-
-    if (speechState === "listening") {
-      setSpeechState("idle");
-      return;
-    }
-
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-
-    const langMap: Record<string, string> = {
-      en: "en-UG",
-      lg: "lg-UG",
-      nyn: "nyn-UG",
-      sw: "sw-KE",
-    };
-    recognition.lang = langMap[locale] || "en-UG";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setMessage(message ? `${message} ${transcript}` : transcript);
-      setSpeechState("idle");
-    };
-
-    recognition.onerror = () => setSpeechState("error");
-    recognition.onend = () => setSpeechState("idle");
-
-    setSpeechState("listening");
-    recognition.start();
-  }, [speechState, locale, message, setMessage, setSpeechState]);
+  const openVoiceModal = useCallback(() => {
+    setVoiceModalOpen(true);
+  }, [setVoiceModalOpen]);
 
   const handleInput = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setMessage(e.target.value.slice(0, 2000));
-      // Auto-resize
       const el = e.target;
       el.style.height = "auto";
       el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
@@ -90,9 +54,8 @@ export default memo(forwardRef<HTMLTextAreaElement, ChatInputProps>(function Cha
     <div className="composer">
       <button
         className={`composer-btn mic-btn ${speechState === "listening" ? "listening" : ""}`}
-        onClick={toggleVoice}
-        aria-label={speechState === "listening" ? "Stop listening" : "Start voice input"}
-        aria-pressed={speechState === "listening"}
+        onClick={openVoiceModal}
+        aria-label="Open voice input"
         type="button"
       >
         <MicIcon width={20} height={20} />

@@ -1,0 +1,102 @@
+{
+  "source": "Uganda MoH Environmental Health / WHO WASH Guidelines",
+  "version": "2024",
+  "entries": [
+    {
+      "text": "SAFE WATER SOURCES (MoH Environmental Health / WHO WASH): The safest water sources for drinking and cooking in Uganda are boreholes, protected springs, and piped water systems. Boreholes fitted with hand pumps (such as the India Mark II or Afridev) draw water from deep underground where contamination risk is low. Protected springs have a concrete surround and drainage channel that prevents surface water and animal waste from entering the spring eye. Piped water from National Water and Sewerage Corporation (NWSC) or gravity-flow schemes is treated and generally safe at the point of delivery. AVOID using water directly from open sources such as rivers, ponds, swamps, or unprotected wells, as these are frequently contaminated with bacteria, parasites, and chemical runoff. If your community has no improved water source, always treat water before drinking using one of the household methods (boiling, chlorination, or filtration).",
+      "section": "Safe Water Sources",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "green",
+      "topic": "Water Safety"
+    },
+    {
+      "text": "HOUSEHOLD WATER TREATMENT (MoH / WHO WASH): If your water source is unprotected or you are unsure of its safety, treat the water at home before drinking. (1) BOILING: Bring water to a rolling boil for at least 1 minute, then let it cool in a clean covered container. Boiling kills all disease-causing germs including cholera, typhoid, and dysentery bacteria. This is the most reliable method. (2) CHLORINATION: Add WaterGuard or Aquasafe (sodium hypochlorite 1.2%) to water. For WaterGuard, use the capful measure provided: 1 capful per 20 litres of clear water or 2 capfuls if water is cloudy. Mix thoroughly and wait 30 minutes before drinking. The water may taste slightly of chlorine, which is normal and safe. (3) SOLAR DISINFECTION (SODIS): Fill clean transparent PET plastic bottles with water, shake to add oxygen, and place on a corrugated iron roof or dark surface in direct sunlight for at least 6 hours (or 2 days if cloudy). UV radiation and heat kill pathogens. (4) FILTRATION: Ceramic or biosand filters remove bacteria and parasites. Clean filters regularly following the manufacturer's instructions. Always filter or let cloudy water settle before applying chlorine or SODIS.",
+      "section": "Water Treatment at Home",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "green",
+      "topic": "Water Treatment"
+    },
+    {
+      "text": "SAFE WATER STORAGE (MoH / WHO WASH): Even clean water can become contaminated during storage if containers are dirty or left open. Store treated drinking water in a CLEAN COVERED CONTAINER with a narrow mouth or tap so that people do not dip cups, hands, or ladles into the water. Jerricans with a screw cap are ideal. Wash storage containers with soap and clean water before refilling. Do not store water in containers previously used for chemicals or pesticides. Replace cracked or damaged containers. Keep stored water away from direct sunlight, animal access, and areas where children play. Use a clean cup or pour water directly from the container rather than scooping. Treated water stored properly remains safe for up to 24 hours; if stored longer, re-treat before drinking.",
+      "section": "Water Storage",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "green",
+      "topic": "Water Safety"
+    },
+    {
+      "text": "HANDWASHING — THE 5 CRITICAL TIMES (MoH / WHO WASH): Handwashing with soap and water is the single most effective way to prevent diarrhoeal diseases, respiratory infections, and intestinal worms. Wash your hands at these 5 CRITICAL TIMES: (1) BEFORE EATING or serving food. (2) AFTER USING THE TOILET or latrine. (3) BEFORE PREPARING OR COOKING FOOD. (4) AFTER CHANGING A BABY'S NAPPY or cleaning a child who has defecated. (5) AFTER HANDLING ANIMALS, animal feed, or animal waste. In Uganda, diarrhoea kills over 33,000 children under five each year, and proper handwashing at these critical times can reduce diarrhoeal disease by up to 40%. Set up a handwashing station (tippy-tap or basin with soap) near the latrine and near the cooking area so that the practice becomes a habit for every family member including children.",
+      "section": "Handwashing Critical Times",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "green",
+      "topic": "Handwashing"
+    },
+    {
+      "text": "PROPER HANDWASHING TECHNIQUE (MoH / WHO WASH): Effective handwashing requires both soap (or ash) and clean running water. Follow these steps: (1) Wet hands with clean running water. (2) Apply soap — bar soap, liquid soap, or powdered detergent all work. (3) Rub hands together for at least 20 SECONDS: palm to palm, between fingers, backs of hands, under nails, and around wrists. (4) Rinse thoroughly under running water. (5) Dry hands with a clean cloth or shake dry in the air — do NOT dry on dirty clothing. If soap is not available, use WOOD ASH as an alternative: rub a handful of clean ash on wet hands for 20 seconds, then rinse. Studies show ash is effective at removing bacteria. A tippy-tap (a jerry can hung on a stick with a foot pedal) uses minimal water and keeps hands free for rubbing. Teach children the handwashing song (singing the alphabet or any 20-second song) to ensure they wash long enough.",
+      "section": "Handwashing Technique",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "green",
+      "topic": "Handwashing"
+    },
+    {
+      "text": "LATRINE USE AND MAINTENANCE (MoH / WHO WASH): Every household should have and use a latrine. Open defecation spreads cholera, typhoid, dysentery, intestinal worms, and other diseases. (1) PIT LATRINES: Dig at least 3 metres deep and at least 30 metres from any water source. Line the top 1 metre with bricks or logs to prevent collapse. Place a concrete or wooden slab with a squat hole over the pit. (2) VIP LATRINES (Ventilated Improved Pit): Include a vent pipe with fly screen to reduce smell and flies — the pipe should extend above the roof and face the prevailing wind. Keep the inside dark so that flies are attracted to the vent rather than the squat hole. (3) PROPER USE: Use the latrine every time, including children. Keep the squat hole covered with a lid when not in use. Wash hands immediately after. (4) MAINTENANCE: Sweep the floor daily. Sprinkle ash or soil into the pit after use to reduce odour and flies. Repair cracks in the slab promptly. When the pit is three-quarters full, dig a new pit or arrange for emptying. Never throw rubbish or chemicals into the pit.",
+      "section": "Latrine Use and Maintenance",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "green",
+      "topic": "Sanitation"
+    },
+    {
+      "text": "SAFE DISPOSAL OF CHILDREN'S FAECES (MoH / WHO WASH): Children's faeces are just as dangerous as adult faeces and can contain high concentrations of diarrhoeal pathogens. Many caregivers in rural Uganda do not dispose of children's stools safely, leading to contamination of water sources and the household environment. SAFE PRACTICES: (1) Use a potty or container to collect young children's stools, then empty the contents into the latrine. (2) If a child defecates on the ground, pick up the stool immediately with a shovel or leaves and dispose of it in the latrine. (3) Wash the child's bottom with soap and water. (4) Wash your hands with soap after handling the child's faeces. (5) Rinse soiled nappies or cloths away from water sources and wash with soap; hang in sunlight to dry. NEVER dispose of children's faeces near water collection points, cooking areas, or places where children play. Teach older children (3 years and above) to use the latrine with supervision.",
+      "section": "Child Faeces Disposal",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "yellow",
+      "topic": "Sanitation"
+    },
+    {
+      "text": "MENSTRUAL HYGIENE MANAGEMENT (MoH / WHO WASH): Every girl and woman needs access to clean, safe menstrual hygiene materials and private facilities for changing and washing. (1) REUSABLE CLOTH PADS: Locally made reusable pads (such as AFRIpads produced in Uganda) are affordable, eco-friendly, and effective. Wash with soap and clean water after each use, dry in direct sunlight (UV kills bacteria), and store in a clean dry bag. Replace every 12-18 months. (2) DISPOSABLE PADS: Wrap used pads in paper or a bag before disposing in a pit latrine, lined rubbish pit, or incinerator. Never throw used pads into open areas, rivers, or unlined pits. (3) SCHOOL PROGRAMS: Schools should have separate, lockable latrines for girls with water and soap for washing. Menstrual hygiene education should be taught to both girls and boys to reduce stigma and absenteeism. Girls should not miss school because of menstruation. (4) IMPORTANT: Menstruation is a normal, healthy process. Pain, very heavy bleeding, or irregular periods lasting beyond puberty should be assessed at a health facility.",
+      "section": "Menstrual Hygiene Management",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "green",
+      "topic": "Hygiene"
+    },
+    {
+      "text": "FOOD SAFETY AND HYGIENE (MoH / WHO WASH): Contaminated food is a major cause of diarrhoeal disease, typhoid, and hepatitis A in Uganda. Follow these key practices: (1) COOK THOROUGHLY: Meat, poultry, fish, and eggs must be cooked all the way through. Boil soups and stews until bubbling. Reheat leftovers until steaming hot — do not just warm them. (2) STORE SAFELY: Eat cooked food within 2 hours or store in a clean covered container in a cool place. In the absence of a refrigerator, prepare only what will be eaten at one meal. Never mix raw meat with cooked food or fresh vegetables. (3) USE SAFE WATER: Wash all fruits and vegetables with clean water before eating. Use treated water for drinking and cooking. (4) KEEP CLEAN: Wash hands before handling food. Clean all utensils, cutting boards, and cooking surfaces with soap and water. Cover food to protect from flies and dust. (5) MARKET SAFETY: Avoid buying food from vendors with no handwashing facilities, exposed meat or fish, or food stored in the sun. Peel fruits or wash with safe water before eating.",
+      "section": "Food Safety and Hygiene",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "green",
+      "topic": "Food Hygiene"
+    },
+    {
+      "text": "MALARIA PREVENTION (MoH / WHO WASH / National Malaria Control Programme): Malaria is spread by the bite of infected female Anopheles mosquitoes, which breed in stagnant water and bite mainly between dusk and dawn. KEY PREVENTION METHODS: (1) INSECTICIDE-TREATED NETS (ITNs): Sleep under an ITN every night. Tuck the net under the mattress or mat. Each household member should have their own net. Pregnant women and children under 5 are at highest risk and should be prioritised. Replace nets every 3 years or when torn. Wash gently with mild soap no more than once every 3 months to preserve the insecticide. (2) INDOOR RESIDUAL SPRAYING (IRS): When the government sprays your house, do not repaint or replaster walls for at least 6 months, as this removes the insecticide. Move food items and cooking utensils outside during spraying. IRS is safe for people and animals after the sprayed surfaces dry. (3) CLEAR STANDING WATER: Drain puddles, old tyres, broken pots, and any containers that collect rainwater around the home compound. Fill in ditches and clear blocked drainage channels. Cut grass and bushes near the house. (4) ADDITIONAL: Wear long sleeves and trousers in the evening. Use mosquito coils or repellent where available.",
+      "section": "Malaria Prevention",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "yellow",
+      "topic": "Malaria Prevention"
+    },
+    {
+      "text": "ENVIRONMENTAL SANITATION (MoH / WHO WASH): A clean home compound reduces disease-carrying flies, mosquitoes, rats, and contamination of food and water. KEY ACTIONS: (1) COMPOUND CLEANING: Sweep the compound daily. Remove animal droppings and keep livestock in a separate kraal or pen away from the house, especially away from where children play. (2) WASTE DISPOSAL: Dig a rubbish pit at least 1 metre deep and 30 metres from the house and water sources. Burn combustible waste (paper, dry leaves) when safe and bury the rest. Separate organic waste for composting if possible. Never throw rubbish into streams, rivers, or open areas. (3) DRAINAGE: Dig channels to drain wastewater from the kitchen and bathing shelter away from the compound and away from water sources. A soak-away pit filled with stones helps wastewater seep into the ground without creating pools. (4) DISH-DRYING RACK: Build a raised rack in the sun to dry utensils after washing — this prevents contamination from the ground and UV light provides additional disinfection. (5) ANIMAL MANAGEMENT: Deworm livestock regularly, keep them fenced, and do not allow them to graze near water sources.",
+      "section": "Environmental Sanitation",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "green",
+      "topic": "Environmental Health"
+    },
+    {
+      "text": "CHOLERA PREVENTION DURING OUTBREAKS (MoH / WHO WASH): Cholera is caused by contaminated water and food and can kill within hours if untreated due to severe dehydration. During a cholera outbreak, follow these EMERGENCY measures: (1) WATER: Drink ONLY boiled or chlorinated water. Add WaterGuard (1 capful per 20 litres) or Aquasafe and wait 30 minutes. If neither is available, boil water for at least 1 minute. (2) ORS PREPARATION: If someone gets watery diarrhoea, start giving Oral Rehydration Salts (ORS) immediately: dissolve the full sachet in 1 litre of clean water, stir, and give frequent sips. For a homemade solution in an emergency: 1 litre of clean water + 6 level teaspoons of sugar + half a level teaspoon of salt. ORS replaces lost fluids and salts and can save lives while the patient is transported to a health facility. (3) FOOD: Eat only freshly cooked hot food. Avoid raw salads, unpeeled fruits, and food from street vendors. (4) HYGIENE: Wash hands with soap before eating and after using the latrine. Use a latrine — never defecate in the open or near water. (5) SEEK CARE: Anyone with sudden watery diarrhoea (rice-water stool) and vomiting must go to a cholera treatment centre IMMEDIATELY. Cholera is a medical emergency.",
+      "section": "Cholera Prevention During Outbreaks",
+      "mode": "community",
+      "guideline": "WASH",
+      "severity": "red",
+      "topic": "Cholera Prevention"
+    }
+  ]
+}

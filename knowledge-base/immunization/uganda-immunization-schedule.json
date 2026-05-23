@@ -1,0 +1,166 @@
+{
+  "source": "Uganda National Expanded Programme on Immunisation (UNEPI) / WHO",
+  "version": "2024",
+  "entries": [
+    {
+      "text": "BIRTH VACCINES (WITHIN 24 HOURS): Every newborn must receive two vaccines as soon as possible after birth, ideally within 24 hours. BCG vaccine (given as an injection on the left upper arm) protects against tuberculosis (TB), which is common in Uganda. OPV-0 (oral polio vaccine, zero dose) is given as drops in the mouth and provides the first protection against polio. If the baby is born at a health facility, these vaccines should be given before discharge. If born at home, the VHT should advise the family to take the baby to the nearest health facility within the first day of life for these vaccines. BCG leaves a small scar on the arm after 2-6 weeks, which is a normal sign that the vaccine is working.",
+      "section": "Birth Vaccines",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Birth Immunization"
+    },
+    {
+      "text": "6-WEEK VACCINES: At 6 weeks of age, the child should receive four vaccines. Pentavalent-1 (DPT-HepB-Hib) is an injection in the outer left thigh that protects against diphtheria, pertussis (whooping cough), tetanus, hepatitis B, and Haemophilus influenzae type b (a cause of meningitis and pneumonia). OPV-1 is the second dose of oral polio drops. PCV-1 (pneumococcal conjugate vaccine) is an injection in the right thigh that protects against pneumonia and meningitis caused by Streptococcus pneumoniae. Rotavirus-1 is an oral vaccine that protects against severe diarrhoea caused by rotavirus, which is one of the leading causes of child death in Uganda. The VHT should remind caregivers that mild fever and fussiness after these injections is normal and does not mean the child is sick.",
+      "section": "6-Week Vaccines",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Infant Immunization"
+    },
+    {
+      "text": "10-WEEK VACCINES: At 10 weeks of age, the child receives the second doses: Pentavalent-2 (DPT-HepB-Hib, injection in the left thigh), OPV-2 (oral polio drops), PCV-2 (pneumococcal vaccine injection in the right thigh), and Rotavirus-2 (oral drops for diarrhoea protection). These second doses are essential to build stronger immunity — a single dose is not enough to fully protect the child. VHTs should track children in their register and conduct follow-up home visits to remind caregivers when the 10-week vaccines are due. If the child missed the 6-week vaccines, both the first and second doses can be given at the same visit with a minimum 4-week interval between doses.",
+      "section": "10-Week Vaccines",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Infant Immunization"
+    },
+    {
+      "text": "14-WEEK VACCINES: At 14 weeks, the child completes the primary series with four vaccines. Pentavalent-3 (DPT-HepB-Hib, third and final dose injection in the left thigh) completes protection against diphtheria, pertussis, tetanus, hepatitis B, and Hib disease. OPV-3 (third dose of oral polio drops) strengthens polio immunity. IPV (Inactivated Polio Vaccine) is given as an injection, usually in the right thigh, and provides additional polio protection that the oral drops alone cannot fully achieve. PCV-3 (third pneumococcal dose in the right thigh) completes pneumococcal protection. VHTs should emphasize to caregivers that completing all three Pentavalent doses is critical — incomplete vaccination leaves the child vulnerable to whooping cough and other deadly diseases.",
+      "section": "14-Week Vaccines",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Infant Immunization"
+    },
+    {
+      "text": "VITAMIN A SUPPLEMENTATION (6 MONTHS): At 6 months of age, the child receives the first dose of Vitamin A supplement (100,000 IU, blue capsule). Vitamin A is not a vaccine but is given during immunization visits because it boosts the immune system and reduces the risk of death from measles, diarrhoea, and other infections. The capsule is cut open and the liquid squeezed directly into the child's mouth. Vitamin A is then given every 6 months until the child is 5 years old. The second dose at 12 months is 200,000 IU (red capsule), and all subsequent doses are also 200,000 IU. VHTs should remind caregivers about Vitamin A during every Child Health Day and outreach session, as many children miss these doses.",
+      "section": "Vitamin A Supplementation",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Vitamin A"
+    },
+    {
+      "text": "9-MONTH VACCINES — MEASLES-RUBELLA AND YELLOW FEVER: At 9 months, the child receives two critical vaccines. Measles-Rubella-1 (MR-1) is given as an injection in the right upper arm and protects against measles (which causes fever, rash, and can be fatal) and rubella (German measles, which causes birth defects if a pregnant woman is infected). Yellow Fever vaccine is given as an injection in the left upper arm and provides lifelong protection against yellow fever, an often-fatal disease spread by mosquitoes. Both vaccines are given at 9 months regardless of whether the child has had measles before. A child who has had measles still needs the vaccine to protect against rubella and to strengthen measles immunity. These are among the most important vaccines in the UNEPI schedule — VHTs must ensure no child misses the 9-month visit.",
+      "section": "9-Month Vaccines",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "yellow",
+      "topic": "Measles-Rubella and Yellow Fever"
+    },
+    {
+      "text": "12-MONTH VITAMIN A AND 15-MONTH MR-2: At 12 months, the child receives the second Vitamin A dose (200,000 IU, red capsule), which provides ongoing immune support and protection against blindness and severe infections. At 15 months, Measles-Rubella-2 (MR-2) is given as a second dose to children who may have missed it or as part of catch-up campaigns. The second MR dose ensures that children who did not develop full immunity from the first dose are protected — approximately 15% of children do not respond adequately to a single dose. VHTs should check immunization cards at every home visit and refer any child who has not received MR-1 by 12 months for immediate catch-up vaccination. Measles outbreaks continue to occur in Uganda, particularly in communities with low vaccination coverage.",
+      "section": "12-15 Month Vaccines",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "yellow",
+      "topic": "Measles-Rubella Booster"
+    },
+    {
+      "text": "HPV VACCINE FOR GIRLS (10 YEARS): The Human Papillomavirus (HPV) vaccine is given to all girls at 10 years of age (Primary 4 level) to prevent cervical cancer, which is one of the leading causes of cancer death among women in Uganda. The vaccine is given as a single dose injection in the upper arm. HPV vaccine must be given BEFORE exposure to the virus, which is why it targets young girls before they become sexually active. The vaccine is safe and does not encourage early sexual activity — it simply provides protection against a virus that causes cancer later in life. VHTs and community leaders should mobilize families to bring girls for HPV vaccination during school-based campaigns or at health facilities. Cervical cancer is preventable with this vaccine, and every eligible girl should receive it.",
+      "section": "HPV Vaccination",
+      "mode": "community",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "HPV Vaccine"
+    },
+    {
+      "text": "COVID-19 VACCINATION (ADULTS): COVID-19 vaccines are available at health facilities across Uganda for all adults aged 18 years and above. The vaccines are safe, free, and help prevent severe illness, hospitalization, and death from COVID-19. Available vaccines include Johnson & Johnson (single dose) and Pfizer (two doses, 21 days apart), depending on supply. People with chronic conditions such as diabetes, hypertension, HIV, and heart disease should be prioritized as they face higher risk of severe COVID-19. Pregnant women can safely receive COVID-19 vaccination at any stage of pregnancy. Common side effects include mild pain at the injection site, low-grade fever, headache, and fatigue for 1-2 days — these are signs the body is building protection. VHTs should address misinformation and encourage eligible community members to get vaccinated.",
+      "section": "COVID-19 Vaccination",
+      "mode": "community",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "COVID-19 Vaccine"
+    },
+    {
+      "text": "TETANUS TOXOID VACCINATION FOR PREGNANT WOMEN (TT1-TT5): All pregnant women must receive Tetanus Toxoid (TT) vaccine to protect both the mother and the newborn from tetanus, which can enter through the umbilical cord stump and is often fatal in newborns. The TT schedule is: TT1 at the first antenatal visit (or as early as possible in pregnancy), TT2 at least 4 weeks after TT1 (provides protection for 1-3 years), TT3 at least 6 months after TT2 (provides 5 years of protection), TT4 at least 1 year after TT3 (provides 10 years of protection), TT5 at least 1 year after TT4 (provides lifelong protection). A woman who has completed all 5 TT doses is protected for life and does not need further doses in future pregnancies. VHTs should check the TT status of every pregnant woman during home visits and refer those who have missed doses to the health facility.",
+      "section": "Tetanus Toxoid in Pregnancy",
+      "mode": "maternal",
+      "guideline": "UNEPI",
+      "severity": "yellow",
+      "topic": "Tetanus Toxoid"
+    },
+    {
+      "text": "NEONATAL TETANUS PREVENTION THROUGH MATERNAL TT VACCINATION: Neonatal tetanus (tetanus of the newborn) kills within days of birth and is caused by unhygienic cord cutting or application of harmful substances to the cord stump. In Uganda, some traditional practices such as applying cow dung, ash, or herbs to the cord increase the risk. The most effective prevention is ensuring the mother has received at least TT2 before delivery, which passes protective antibodies to the baby. In addition, clean delivery practices must be followed: use a sterile blade to cut the cord, apply chlorhexidine gel (4%) to the cord stump daily for the first week, and do NOT apply any traditional substances. VHTs should counsel every pregnant woman on both TT vaccination and clean cord care. If a newborn develops stiffness, difficulty feeding, or spasms within the first 28 days of life, refer IMMEDIATELY — neonatal tetanus is a medical emergency.",
+      "section": "Neonatal Tetanus Prevention",
+      "mode": "maternal",
+      "guideline": "UNEPI",
+      "severity": "red",
+      "topic": "Neonatal Tetanus"
+    },
+    {
+      "text": "MISSED AND DELAYED VACCINATION — CATCH-UP GUIDANCE: It is NEVER too late to vaccinate. If a child has missed any vaccine, the VHT should refer the child to the health facility immediately for catch-up vaccination. Key catch-up principles: (1) Do not restart the schedule — continue from where the child stopped. (2) Multiple vaccines can be given at the same visit safely. (3) There is no maximum interval between doses — even if years have passed, previously given doses still count. (4) The minimum interval between doses of the same vaccine is usually 4 weeks. (5) For measles: any child up to 5 years who missed MR-1 should receive it as soon as possible. (6) For Pentavalent and OPV: all three doses should be completed even if the child is older than 14 weeks. VHTs should review every child's immunization card during home visits and refer any child with missed vaccines. During outreach and Child Health Days, health workers should screen for and provide catch-up doses.",
+      "section": "Catch-Up Vaccination",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "yellow",
+      "topic": "Missed Vaccines"
+    },
+    {
+      "text": "VACCINE STORAGE AND COLD CHAIN — VHT GUIDANCE: Vaccines must be kept cold (between +2°C and +8°C) at all times to remain effective. If vaccines get too warm or freeze, they lose their potency and will not protect the child. VHTs should know: (1) Never carry vaccines in a pocket or bag without a cold box during outreach. (2) If you are involved in outreach, ensure the vaccine carrier has enough ice packs and the lid is closed tightly. (3) OPV, Rotavirus, and MR vaccines are FREEZE-SENSITIVE — they must never be frozen. (4) BCG and Yellow Fever vaccines, once reconstituted (mixed with diluent), must be used within 6 hours and any remaining vaccine discarded. (5) Report to the health facility if you notice vaccines left out of the fridge or the fridge is not working. (6) During power outages, the fridge door should remain closed to maintain cold temperature. VHTs play a critical role in reporting cold chain breaks, which can compromise entire vaccine stocks.",
+      "section": "Vaccine Cold Chain",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "yellow",
+      "topic": "Cold Chain"
+    },
+    {
+      "text": "COMMON SIDE EFFECTS AFTER VACCINATION AND WHEN TO REFER: Most vaccines cause mild side effects that are normal and show the body is building protection. Common side effects include: mild fever (temperature below 38.5°C), pain, redness or swelling at the injection site, fussiness or irritability for 1-2 days, and reduced appetite. For mild fever and pain, advise the caregiver to breastfeed more frequently, keep the child hydrated, and give paracetamol if needed (not aspirin). REFER TO HEALTH FACILITY IMMEDIATELY if any of the following occur: (1) High fever above 39°C that does not respond to paracetamol. (2) Severe swelling or abscess (pus) at the injection site. (3) Convulsions or seizures. (4) Difficulty breathing, wheezing, or swelling of the face/lips (signs of severe allergic reaction — anaphylaxis). (5) Persistent inconsolable crying lasting more than 3 hours. (6) Limpness or unresponsiveness. These severe reactions are very rare but require immediate medical attention.",
+      "section": "Post-Vaccination Side Effects",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "yellow",
+      "topic": "Vaccine Side Effects"
+    },
+    {
+      "text": "VACCINE CONTRAINDICATIONS AND PRECAUTIONS: Most children can safely receive all vaccines on schedule. However, there are a few situations where vaccination should be delayed or a specific vaccine avoided. TRUE CONTRAINDICATIONS: (1) A child who had a severe allergic reaction (anaphylaxis) to a previous dose of a vaccine should NOT receive that same vaccine again — refer to a doctor. (2) BCG should NOT be given to a child with symptomatic HIV/AIDS (WHO clinical stage 3 or 4) — consult the health facility. (3) Live vaccines (BCG, OPV, MR, Yellow Fever, Rotavirus) should be used with caution in severely immunocompromised children. NOT CONTRAINDICATIONS (vaccines CAN still be given): Mild illness with or without low-grade fever, diarrhoea, current antibiotic treatment, mild malnutrition, prematurity (vaccinate according to chronological age), and a family history of adverse reactions. VHTs should never turn away a child from vaccination due to a minor illness — the risk of the disease is far greater than any risk from the vaccine.",
+      "section": "Contraindications and Precautions",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "yellow",
+      "topic": "Vaccine Contraindications"
+    },
+    {
+      "text": "IMMUNIZATION SCHEDULE OVERVIEW FOR CAREGIVERS: Vaccination is one of the most important things you can do to protect your child from deadly diseases. The Uganda immunization schedule is free at all government health facilities. Your child needs vaccines at: Birth (BCG and Polio drops), 6 weeks, 10 weeks, 14 weeks (injections and oral vaccines at each visit), 6 months (Vitamin A drops), and 9 months (Measles-Rubella and Yellow Fever injections). Always bring the child's immunization card to every visit — the health worker needs it to know which vaccines are due. If you have lost the card, go to the health facility and they will issue a new one and review your child's records. Do not wait for outreach — take your child to the facility on the scheduled dates. A fully vaccinated child is protected against tuberculosis, polio, whooping cough, tetanus, hepatitis B, meningitis, pneumonia, diarrhoea, measles, rubella, and yellow fever.",
+      "section": "Immunization for Caregivers",
+      "mode": "community",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Immunization Schedule"
+    },
+    {
+      "text": "IMMUNIZATION MYTHS AND FACTS: There are many myths about vaccines in communities that prevent children from being vaccinated. MYTH: Vaccines cause infertility. FACT: No vaccine causes infertility — this has been proven by decades of research and billions of vaccinated people worldwide. MYTH: A child with a mild cold or fever should not be vaccinated. FACT: Children with mild illness can and should be vaccinated — do not miss the opportunity. MYTH: Natural infection provides better immunity than vaccines. FACT: Some diseases like measles, tetanus, and whooping cough can kill or disable before natural immunity develops — vaccination is far safer. MYTH: Too many vaccines overload a child's immune system. FACT: Children's immune systems handle thousands of germs daily; the few antigens in vaccines are a tiny addition. VHTs and community health workers should actively address these myths during home visits, community dialogues, and health education sessions to increase vaccination uptake.",
+      "section": "Addressing Vaccine Hesitancy",
+      "mode": "community",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Vaccine Myths"
+    },
+    {
+      "text": "VHT IMMUNIZATION TRACKING AND DEFAULTER TRACING: VHTs have a critical role in ensuring every child in their village completes the full immunization schedule. Key responsibilities: (1) Register every newborn and record the date of birth in the VHT register. (2) Calculate and record when each vaccine is due (6 weeks, 10 weeks, 14 weeks, 9 months from date of birth). (3) Remind caregivers 2-3 days before the scheduled date. (4) After each immunization visit, verify what was given by checking the card. (5) Identify defaulters — children who missed a scheduled vaccine — and conduct home visits within one week to find out why and refer them. (6) Common reasons for defaulting: caregiver forgot, child was mildly ill, fear of side effects, distance to facility, or vaccine stock-out. Address each reason with counseling and problem-solving. (7) Report monthly to the health facility on total children in the village, those fully immunized, and those who have defaulted. Consistent tracking by VHTs is one of the most effective ways to achieve high immunization coverage in rural Uganda.",
+      "section": "VHT Immunization Tracking",
+      "mode": "vht",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Defaulter Tracing"
+    },
+    {
+      "text": "IMMUNIZATION DURING PREGNANCY — PROTECTING MOTHER AND BABY: In addition to Tetanus Toxoid, pregnant women should ensure their own vaccination status is up to date. Influenza vaccine is safe during any trimester and recommended where available. COVID-19 vaccination is safe at any stage of pregnancy and is especially important as pregnant women face higher risk of severe COVID-19. Vaccines that are NOT recommended during pregnancy include: live vaccines such as Yellow Fever, Measles-Rubella, and BCG — these should be given before or after pregnancy. If a woman is found to be rubella non-immune during pregnancy, she should receive MR vaccine after delivery (before leaving the health facility) to protect future pregnancies. VHTs should counsel pregnant women that vaccines received during pregnancy protect both the mother and the unborn baby by passing antibodies through the placenta. The most critical vaccine in pregnancy remains Tetanus Toxoid — no pregnant woman should deliver without at least TT2 protection.",
+      "section": "Vaccination in Pregnancy",
+      "mode": "maternal",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Pregnancy Vaccination"
+    },
+    {
+      "text": "COMMUNITY MOBILIZATION FOR IMMUNIZATION: High immunization coverage protects the entire community, not just individual children — this is called herd immunity. When most children are vaccinated, diseases cannot spread easily, protecting even those who cannot be vaccinated (such as very young infants and immunocompromised individuals). Community leaders, religious leaders, and VHTs should work together to: (1) Announce immunization outreach dates through churches, mosques, schools, and local council meetings. (2) Address vaccine fears and misinformation with facts and respectful dialogue. (3) Support caregivers with transport challenges by organizing group visits to health facilities. (4) Celebrate and recognize families who complete the full immunization schedule. (5) Report suspected disease outbreaks (clusters of fever with rash, acute flaccid paralysis, neonatal deaths) to the health facility immediately. Uganda's goal is to reach 95% immunization coverage in every district to eliminate vaccine-preventable diseases.",
+      "section": "Community Mobilization",
+      "mode": "community",
+      "guideline": "UNEPI",
+      "severity": "green",
+      "topic": "Community Immunization"
+    }
+  ]
+}
