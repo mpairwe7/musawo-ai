@@ -56,7 +56,9 @@ class Settings(BaseSettings):
     # falls through on "model not available". gemini_model is the final fallback.
     gemini_models: str = "gemini-3.5-flash,gemini-3.0-flash,gemini-2.5-flash"
     gemini_model: str = "gemini-2.5-flash"
-    gemini_max_tokens: int = 4096
+    # Cap output for fast, concise answers — gemini-3.x flash will otherwise fill
+    # a large budget with a long reply (~100 tok/s ⇒ 4096 tokens ≈ 30s).
+    gemini_max_tokens: int = 1024
     gemini_temperature: float = 0.3
 
     # Cloudflare AI Gateway — routes Gemini over Cloudflare's reachable edge so it
