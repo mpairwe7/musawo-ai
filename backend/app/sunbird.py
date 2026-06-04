@@ -28,6 +28,9 @@ from .config import settings
 SUNBIRD_API_URL = settings.sunbird_api_url
 SUNBIRD_TIMEOUT = settings.sunbird_timeout
 
+# OpenAI Whisper STT — preferred for English voice when configured
+OPENAI_API_KEY = settings.openai_api_key
+
 # Whisper Luganda LoRA adapter path — fine-tuned on 438hrs Luganda speech
 # (computed local filesystem path; kept as a direct env read)
 WHISPER_LUGANDA_MODEL = os.getenv(
@@ -435,6 +438,25 @@ def _local_stt_fallback(audio_bytes: bytes, language: str) -> dict[str, Any] | N
     return None
 
 
+def _openai_whisper_stt(audio_bytes: bytes, filename: str = "audio.wav") -> dict[str, Any] | None:
+    """Transcribe via the OpenAI Whisper API (whisper-1). Best for English; needs OPENAI_API_KEY."""
+    if not OPENAI_API_KEY:
+        return None
+    try:
+        from openai import OpenAI
+        client = OpenAI(api_key=OPENAI_API_KEY)
+        result = client.audio.transcriptions.create(
+            model="whisper-1",
+            file=(filename, io.BytesIO(audio_bytes)),
+        )
+        text = (getattr(result, "text", "") or "").strip()
+        logger.info("OpenAI Whisper STT: '%s'", text[:80])
+        return {"text": text, "language": "eng", "backend": "openai-whisper"}
+    except Exception as e:
+        logger.warning("OpenAI Whisper STT failed, falling back: %s", e)
+        return None
+
+
 def speech_to_text(
     audio_bytes: bytes,
     language: str = "lug",
@@ -450,6 +472,13 @@ def speech_to_text(
     Returns:
         Dict with 'text' and 'language', or None on failure.
     """
+    # English voice → prefer OpenAI Whisper when configured (best English accuracy).
+    # Ugandan languages stay on Sunbird/local, which handle them far better.
+    if OPENAI_API_KEY and language in ("eng", "en"):
+        result = _openai_whisper_stt(audio_bytes, filename)
+        if result and result["text"]:
+            return result
+
     # Primary: Sunbird API (best for Ugandan languages)
     if is_available():
         try:

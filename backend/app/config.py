@@ -62,6 +62,9 @@ class Settings(BaseSettings):
     groq_max_tokens: int = 4096
     groq_temperature: float = 0.3
 
+    # OpenAI — used for the Whisper STT path (preferred for English voice when set)
+    openai_api_key: str = ""  # secret, optional
+
     # Local model fallback (env names are LLM_*)
     llm_model: str = "Qwen/Qwen3-8B"
     llm_context_window: int = 8192
