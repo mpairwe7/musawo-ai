@@ -28,8 +28,15 @@ from .config import settings
 SUNBIRD_API_URL = settings.sunbird_api_url
 SUNBIRD_TIMEOUT = settings.sunbird_timeout
 
-# OpenAI Whisper STT — preferred for English voice when configured
+# OpenAI Whisper STT — used for English voice when api.openai.com is reachable
 OPENAI_API_KEY = settings.openai_api_key
+
+# Cloudflare Workers AI Whisper — egress-safe English STT on RENU (Cloudflare's edge
+# is reachable where api.openai.com is firewalled). Reuses the Cloudflare account +
+# a Workers AI token.
+CF_ACCOUNT_ID = settings.cf_account_id
+CF_API_TOKEN = settings.cf_api_token
+CF_STT_MODEL = settings.cf_stt_model
 
 # Whisper Luganda LoRA adapter path — fine-tuned on 438hrs Luganda speech
 # (computed local filesystem path; kept as a direct env read)
@@ -445,6 +452,39 @@ def _local_stt_fallback(audio_bytes: bytes, language: str) -> dict[str, Any] | N
     return None
 
 
+def _cloudflare_whisper_stt(audio_bytes: bytes) -> dict[str, Any] | None:
+    """Transcribe English via Cloudflare Workers AI Whisper (whisper-large-v3-turbo).
+
+    Egress-safe on RENU: Cloudflare's edge is reachable where api.openai.com is
+    firewalled. Needs CF_ACCOUNT_ID + CF_API_TOKEN (a Workers AI token)."""
+    if not (CF_ACCOUNT_ID and CF_API_TOKEN):
+        return None
+    try:
+        import base64
+
+        url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/{CF_STT_MODEL}"
+        resp = httpx.post(
+            url,
+            headers={
+                "Authorization": f"Bearer {CF_API_TOKEN}",
+                "Content-Type": "application/json",
+            },
+            json={"audio": base64.b64encode(audio_bytes).decode()},
+            timeout=SUNBIRD_TIMEOUT,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        if not data.get("success"):
+            logger.warning("Cloudflare Whisper STT error: %s", data.get("errors"))
+            return None
+        text = (data.get("result", {}).get("text") or "").strip()
+        logger.info("Cloudflare Whisper STT: '%s'", text[:80])
+        return {"text": text, "language": "eng", "backend": "cloudflare-whisper"}
+    except Exception as e:
+        logger.warning("Cloudflare Whisper STT failed, falling back: %s", e)
+        return None
+
+
 def _openai_whisper_stt(audio_bytes: bytes, filename: str = "audio.wav") -> dict[str, Any] | None:
     """Transcribe via the OpenAI Whisper API (whisper-1). Best for English; needs OPENAI_API_KEY."""
     if not OPENAI_API_KEY:
@@ -479,12 +519,17 @@ def speech_to_text(
     Returns:
         Dict with 'text' and 'language', or None on failure.
     """
-    # English voice → prefer OpenAI Whisper when configured (best English accuracy).
-    # Ugandan languages stay on Sunbird/local, which handle them far better.
-    if OPENAI_API_KEY and language in ("eng", "en"):
-        result = _openai_whisper_stt(audio_bytes, filename)
+    # English voice → Cloudflare Workers AI Whisper first (egress-safe on RENU),
+    # then OpenAI Whisper where api.openai.com is reachable. Ugandan languages stay
+    # on Sunbird/local, which handle them far better.
+    if language in ("eng", "en"):
+        result = _cloudflare_whisper_stt(audio_bytes)
         if result and result["text"]:
             return result
+        if OPENAI_API_KEY:
+            result = _openai_whisper_stt(audio_bytes, filename)
+            if result and result["text"]:
+                return result
 
     # Primary: Sunbird API (best for Ugandan languages)
     if is_available():

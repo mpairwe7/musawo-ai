@@ -114,6 +114,7 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_AI_GATEWAY: ${{ secrets.CF_AI_GATEWAY }}
           CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           SUNBIRD_USERNAME: ${{ secrets.SUNBIRD_USERNAME }}
           SUNBIRD_API_TOKEN: ${{ secrets.SUNBIRD_API_TOKEN }}
           SUNBIRD_FALLBACK_USERNAME: ${{ secrets.SUNBIRD_FALLBACK_USERNAME }}
@@ -132,6 +133,8 @@ jobs:
             -e CF_ACCOUNT_ID="$CF_ACCOUNT_ID" \
             -e CF_AI_GATEWAY="$CF_AI_GATEWAY" \
             -e CF_AIG_TOKEN="$CF_AIG_TOKEN" \
+            -e CF_API_TOKEN="$CF_API_TOKEN" \
+            -e CF_STT_MODEL="@cf/openai/whisper-large-v3-turbo" \
             -e GROQ_API_KEY="$GROQ_API_KEY" \
             -e GROQ_MODEL=llama-3.3-70b-versatile \
             -e OPENAI_API_KEY="$OPENAI_API_KEY" \
