@@ -44,7 +44,11 @@ npm run test:e2e:all
   loads, send→answer, and a regression guard that a comparison answer renders
   cleanly (no vertical-character collapse; the screenshot-bug guard).
 
-Latest live run: **27/27 passing** (24 API + 3 browser).
+A **PWA/service-worker guard** asserts `/sw.js` is network-first for HTML navigations
+(never cache-first, which serves stale docs referencing dead `/_next` chunks after a
+redeploy) and that the HTML's first chunk is reachable.
+
+Latest live run: **29 passing** (26 API + 3 browser).
 
 ## Lighthouse
 

@@ -256,3 +256,25 @@ test.describe("Voice / translation (Sunbird-aware)", () => {
     expect(expected(on)).toContain(s);
   });
 });
+
+test.describe("PWA / service worker", () => {
+  // Regression guard: the SW must be network-first for HTML navigations. Cache-first
+  // on the document serves stale HTML referencing old hashed /_next chunks that 404
+  // after a redeploy, breaking the app for returning users.
+  test("GET /sw.js → network-first navigation, not cache-first HTML", async ({ request }) => {
+    const r = await request.get("/sw.js");
+    expect(r.status()).toBe(200);
+    const sw = await r.text();
+    expect(sw).toContain('request.mode === "navigate"');
+    expect(sw).toContain("networkFirstNavigation");
+  });
+
+  test("the HTML's first /_next chunk is reachable (200, JS)", async ({ request }) => {
+    const html = await (await request.get("/")).text();
+    const chunk = html.match(/\/_next\/static\/chunks\/[A-Za-z0-9_~.-]+\.js/)?.[0];
+    expect(chunk, "no /_next chunk referenced in HTML").toBeTruthy();
+    const res = await request.get(chunk!);
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"] || "").toContain("javascript");
+  });
+});
