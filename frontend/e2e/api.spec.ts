@@ -237,6 +237,18 @@ test.describe("Voice / translation (Sunbird-aware)", () => {
   // on the pod, so allow longer than the default action timeout.
   const SB = 45_000;
 
+  // Minimal 16kHz mono silence WAV (≥100 bytes; Whisper returns text for it).
+  function silenceWav(seconds: number): Buffer {
+    const sr = 16000;
+    const data = Buffer.alloc(Math.floor(sr * seconds) * 2);
+    const h = Buffer.alloc(44);
+    h.write("RIFF", 0); h.writeUInt32LE(36 + data.length, 4); h.write("WAVE", 8);
+    h.write("fmt ", 12); h.writeUInt32LE(16, 16); h.writeUInt16LE(1, 20); h.writeUInt16LE(1, 22);
+    h.writeUInt32LE(sr, 24); h.writeUInt32LE(sr * 2, 28); h.writeUInt16LE(2, 32); h.writeUInt16LE(16, 34);
+    h.write("data", 36); h.writeUInt32LE(data.length, 40);
+    return Buffer.concat([h, data]);
+  }
+
   test("POST /v1/voice/tts behaves per Sunbird config", async ({ request }) => {
     test.setTimeout(60_000);
     const on = await sunbirdOn(request);
@@ -248,6 +260,23 @@ test.describe("Voice / translation (Sunbird-aware)", () => {
     const on = await sunbirdOn(request);
     const s = (await request.post("/v1/translate", { data: { text: "hello", source_locale: "en", target_locale: "lg" }, timeout: SB })).status();
     expect(expected(on)).toContain(s);
+  });
+  test("POST /v1/voice/stt (English) → Cloudflare Whisper transcription", async ({ request }) => {
+    test.setTimeout(60_000);
+    const on = await sunbirdOn(request);
+    const res = await request.post("/v1/voice/stt", {
+      multipart: {
+        audio: { name: "audio.wav", mimeType: "audio/wav", buffer: silenceWav(0.5) },
+        language: "eng",
+      },
+      timeout: SB,
+    });
+    expect(expected(on)).toContain(res.status());
+    if (res.status() === 200) {
+      const body = await res.json();
+      expect(body).toHaveProperty("text");
+      expect(body).toHaveProperty("backend"); // cloudflare-whisper / sunbird / local
+    }
   });
   test("POST /v1/detect-language behaves per Sunbird config", async ({ request }) => {
     test.setTimeout(60_000);
