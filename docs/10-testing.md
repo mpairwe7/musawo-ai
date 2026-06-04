@@ -43,14 +43,16 @@ npm run test:e2e:all
   paths (English TTS asserts a base64 `data:audio` URL). Retries absorb transient
   PaaS gateway blips; Sunbird-backed checks get a 45s timeout.
 - **`e2e/app.spec.ts`** — full stack (browser → `/api` → FastAPI → render): app
-  loads, send→answer, and a regression guard that a comparison answer renders
-  cleanly (no vertical-character collapse; the screenshot-bug guard).
+  loads, send→answer, a regression guard that a comparison answer renders cleanly
+  (no vertical-character collapse; the screenshot-bug guard), and that clicking
+  **"Read aloud"** on an English answer fires `POST /v1/voice/tts` (server MeloTTS,
+  not browser-only).
 
 A **PWA/service-worker guard** asserts `/sw.js` is network-first for HTML navigations
 (never cache-first, which serves stale docs referencing dead `/_next` chunks after a
 redeploy) and that the HTML's first chunk is reachable.
 
-Latest live run: **31 passing** (28 API + 3 browser).
+Latest live run: **32 passing** (28 API + 4 browser).
 
 ## Lighthouse
 
