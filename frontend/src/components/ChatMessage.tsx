@@ -77,10 +77,120 @@ function isAllowedImageSrc(src: string): boolean {
   }
 }
 
+// ── Inline citations: [1] / [1, 2] → superscript anchors to the Sources panel ──
+function linkCitations(s: string): string {
+  return s.replace(/\[(\d+(?:\s*,\s*\d+)*)\]/g, (_m, nums: string) =>
+    nums
+      .split(/\s*,\s*/)
+      .map((n) => `<a href="#cite-${n}" class="cite-ref" data-cite="${n}">${n}</a>`)
+      .join("")
+  );
+}
+
+// ── Inline formatting shared by paragraphs and table cells ──
+function renderInline(s: string): string {
+  s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  s = s.replace(/\*(.+?)\*/g, "<em>$1</em>");
+  s = s.replace(/`(.+?)`/g, '<code class="inline-code">$1</code>');
+  return linkCitations(s);
+}
+
+// ── Markdown tables → responsive <table> (CSS stacks it to cards on mobile) ──
+// A GitHub-style table is a header row, a separator row (dashes/colons/pipes),
+// then data rows. We extract it BEFORE paragraph/<br> passes and swap in a token
+// so the finished <table> never gets mangled or wrapped in a <p>.
+const TABLE_SEP = /^\s*\|?\s*:?-{2,}:?\s*(?:\|\s*:?-{2,}:?\s*)+\|?\s*$/;
+
+function splitTableCells(row: string): string[] {
+  let r = row.trim();
+  if (r.startsWith("|")) r = r.slice(1);
+  if (r.endsWith("|")) r = r.slice(0, -1);
+  return r.split("|").map((c) => c.trim());
+}
+
+function cellAlign(sepCell: string): string {
+  const c = sepCell.trim();
+  const left = c.startsWith(":");
+  const right = c.endsWith(":");
+  if (left && right) return "center";
+  if (right) return "right";
+  if (left) return "left";
+  return "";
+}
+
+function extractTables(src: string, store: string[]): string {
+  const lines = src.split("\n");
+  const out: string[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    const header = lines[i];
+    const sep = lines[i + 1];
+    if (
+      header &&
+      sep != null &&
+      header.includes("|") &&
+      TABLE_SEP.test(sep) &&
+      splitTableCells(header).length >= 2
+    ) {
+      const headers = splitTableCells(header);
+      const aligns = splitTableCells(sep).map(cellAlign);
+      const rows: string[][] = [];
+      let j = i + 2;
+      for (; j < lines.length; j++) {
+        const l = lines[j];
+        if (!l || !l.includes("|") || TABLE_SEP.test(l)) break;
+        rows.push(splitTableCells(l));
+      }
+      const thead =
+        "<thead><tr>" +
+        headers
+          .map((h, k) => {
+            const a = aligns[k] ? ` style="text-align:${aligns[k]}"` : "";
+            return `<th${a}>${renderInline(h)}</th>`;
+          })
+          .join("") +
+        "</tr></thead>";
+      const tbody =
+        "<tbody>" +
+        rows
+          .map(
+            (cells) =>
+              "<tr>" +
+              headers
+                .map((h, k) => {
+                  const a = aligns[k] ? ` style="text-align:${aligns[k]}"` : "";
+                  const label = h.replace(/"/g, "&quot;");
+                  return `<td data-label="${label}"${a}>${renderInline(cells[k] || "")}</td>`;
+                })
+                .join("") +
+              "</tr>"
+          )
+          .join("") +
+        "</tbody>";
+      const token = `@@MDTABLE${store.length}@@`;
+      store.push(
+        `<div class="md-table-wrap"><table class="md-table">${thead}${tbody}</table></div>`
+      );
+      // Surround the token with blank lines so it becomes its own paragraph.
+      out.push("", token, "");
+      i = j - 1;
+    } else {
+      out.push(header);
+    }
+  }
+  return out.join("\n");
+}
+
 // ── Markdown renderer (Grok-inspired clean typography + clinical structure) ──
 function renderMarkdown(text: string): string {
-  // Escape HTML
-  let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  // Escape HTML (&, <, and > — > prevents stray angle brackets from forming tags)
+  let html = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  // Extract markdown tables first; re-inserted as finished <table> at the end.
+  const tables: string[] = [];
+  html = extractTables(html, tables);
 
   // Inline diagrams: ::diagram[key] → SVG placeholder rendered by React
   // (actual SVGs injected post-render via HealthDiagram component below)
@@ -122,6 +232,9 @@ function renderMarkdown(text: string): string {
   html = html.replace(/\b(0800\s?\d{3}\s?\d{3})\b/g, '<a href="tel:$1" class="phone-link">$1</a>');
   html = html.replace(/\b(\+256\s?\d{3}\s?\d{6})\b/g, '<a href="tel:$1" class="phone-link">$1</a>');
 
+  // Citations: [1] / [1, 2] → superscript anchors to the Sources panel
+  html = linkCitations(html);
+
   // Horizontal rule
   html = html.replace(/^---$/gm, '<hr class="content-hr" />');
 
@@ -151,6 +264,10 @@ function renderMarkdown(text: string): string {
     /<strong>REFER NOW<\/strong>/g,
     '<span class="refer-now-badge">REFER NOW</span>'
   );
+
+  // Re-insert tables OUTSIDE any <p> wrapper (a standalone token in its own paragraph)
+  html = html.replace(/<p class="md-p">\s*(@@MDTABLE\d+@@)\s*<\/p>/g, "$1");
+  html = html.replace(/@@MDTABLE(\d+)@@/g, (_m, n: string) => tables[Number(n)] || "");
 
   return html;
 }
@@ -244,13 +361,16 @@ function CitationList({ citations }: { citations: Citation[] }) {
         Sources ({citations.length})
       </summary>
       <ul className="citations-list">
-        {citations.map((c, i) => (
-          <li key={i} className="citation-item">
-            <span className="citation-ref">{c.ref}</span>
-            <span className="citation-source">{c.source}</span>
-            {c.section && <span className="citation-section"> — {c.section}</span>}
-          </li>
-        ))}
+        {citations.map((c, i) => {
+          const n = String(c.ref ?? "").replace(/\D/g, "") || String(i + 1);
+          return (
+            <li key={i} id={`cite-${n}`} className="citation-item">
+              <span className="citation-ref">{c.ref}</span>
+              <span className="citation-source">{c.source}</span>
+              {c.section && <span className="citation-section"> — {c.section}</span>}
+            </li>
+          );
+        })}
       </ul>
     </details>
   );
@@ -297,6 +417,23 @@ export default memo(
     const [collapsed, setCollapsed] = useState(false);
     const [voted, setVoted] = useState<number | null>(null);
     const locale = useChatStore((s) => s.locale);
+    const rootRef = useRef<HTMLDivElement>(null);
+
+    // Clicking an inline [n] citation opens the Sources panel and scrolls to it
+    const handleCiteClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+      const ref = (e.target as HTMLElement).closest<HTMLElement>(".cite-ref");
+      if (!ref) return;
+      e.preventDefault();
+      const n = ref.getAttribute("data-cite");
+      const root = rootRef.current;
+      if (!root || !n) return;
+      const details = root.querySelector<HTMLDetailsElement>("details.citations");
+      if (details) details.open = true;
+      // data-cite is always bare digits, so the id is selector-safe as-is
+      root
+        .querySelector(`#cite-${n.replace(/[^0-9]/g, "")}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, []);
 
     // Detect diagrams to show
     const diagrams = useMemo(() => {
@@ -339,7 +476,7 @@ export default memo(
     }, [speaking, turn.content, turn.escalationRequired]);
 
     return (
-      <div className={`bubble ${turn.role} ${collapsed ? "collapsed" : ""}`} role="article">
+      <div ref={rootRef} className={`bubble ${turn.role} ${collapsed ? "collapsed" : ""}`} role="article">
         {/* Header row */}
         <div className="bubble-header">
           <div className="bubble-header-left">
@@ -384,6 +521,7 @@ export default memo(
         {!collapsed && turn.content ? (
           <div
             className="bubble-content"
+            onClick={handleCiteClick}
             dangerouslySetInnerHTML={{ __html: renderMarkdown(turn.content) }}
           />
         ) : !collapsed && isAssistant && !turn.content ? (

@@ -739,9 +739,11 @@ button, [role="button"], input, select {
 .bubble-content {
   font-size: 0.93rem;
   line-height: 1.75;
-  word-break: break-word;
+  /* break-word (not anywhere) so only over-long words wrap — normal words and
+     pipe-heavy text never shatter into one-character-per-line columns */
+  word-break: normal;
+  overflow-wrap: break-word;
   color: var(--text-1);
-  overflow-wrap: anywhere;
 }
 .bubble-content:empty { display: none; }
 .bubble-content strong { color: var(--text-1); font-weight: 700; }
@@ -941,6 +943,57 @@ button, [role="button"], input, select {
   border: 1px dashed var(--glass-border);
   border-radius: var(--radius-sm);
 }
+
+/* ── Tables in chat (markdown → responsive table; stacks to cards on mobile) ── */
+.bubble-content .md-table-wrap {
+  margin: 0.7rem 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+}
+.bubble-content .md-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  /* a cell can never be squeezed below its content — this is the antidote to the
+     one-character-per-line vertical collapse seen on narrow screens */
+  min-width: max-content;
+}
+.bubble-content .md-table th,
+.bubble-content .md-table td {
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--glass-border);
+  text-align: left;
+  vertical-align: top;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+.bubble-content .md-table th {
+  color: var(--accent-green-light);
+  font-weight: 700;
+  background: rgba(74, 222, 128, 0.10);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.bubble-content .md-table tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Inline citation markers: [1] → green superscript linking to the Sources panel */
+.bubble-content .cite-ref {
+  font-size: 0.68em;
+  vertical-align: super;
+  line-height: 0;
+  color: var(--accent-green-light);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0 0.12em;
+  cursor: pointer;
+}
+.bubble-content .cite-ref:hover { text-decoration: underline; }
+.citation-item:target { background: var(--bg-hover); border-radius: var(--radius-sm); }
 
 /* ── Diagram slots (filled by React HealthDiagram component) ─── */
 .diagram-slot {
@@ -2558,6 +2611,39 @@ summary {
   .app {
     padding: 0;
     max-width: 100%;
+  }
+
+  /* Tables stack into label/value cards on phones — no horizontal scroll,
+     no squeezed columns. Each cell shows its column header via data-label. */
+  .bubble-content .md-table-wrap { overflow-x: visible; border: none; border-radius: 0; }
+  .bubble-content .md-table { min-width: 0; width: 100%; font-size: 0.85rem; }
+  .bubble-content .md-table thead { display: none; }
+  .bubble-content .md-table,
+  .bubble-content .md-table tbody,
+  .bubble-content .md-table tr,
+  .bubble-content .md-table td { display: block; width: 100%; }
+  .bubble-content .md-table tr {
+    margin-bottom: var(--space-md);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-card);
+  }
+  .bubble-content .md-table td {
+    border: none;
+    border-bottom: 1px solid var(--glass-border);
+    padding: 0.45rem 0.65rem;
+    display: flex;
+    gap: 0.5rem;
+    text-align: left !important;
+  }
+  .bubble-content .md-table td:last-child { border-bottom: none; }
+  .bubble-content .md-table td::before {
+    content: attr(data-label);
+    flex: 0 0 42%;
+    font-weight: 700;
+    color: var(--accent-green-light);
+    overflow-wrap: break-word;
   }
 
   /* ── Compact header (Grok-style: minimal, borderless) ────── */
