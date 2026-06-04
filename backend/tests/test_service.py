@@ -132,7 +132,9 @@ class TestHealthServiceGenerate:
         )
         resp = svc.generate(req)
         assert resp.confidence == 0.0
-        assert "blocked" in resp.answer.lower() or "safety" in resp.answer.lower()
+        # localized guard/refusal message — assert refusal semantics, not exact text
+        answer = resp.answer.lower()
+        assert "cannot" in answer or "only provide health guidance" in answer
 
     @patch("app.service.record_query")
     @patch("app.service.record_abstention")

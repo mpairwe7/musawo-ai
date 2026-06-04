@@ -70,7 +70,8 @@ class TestInputGuard:
     def test_rejects_overly_long_input(self):
         result = InputGuard.check("a" * 2001)
         assert result.allowed is False
-        assert "2000" in result.reason
+        # message is localized ("too long…"); assert it conveys a length problem
+        assert "long" in result.reason.lower()
 
     def test_accepts_max_length_input(self):
         result = InputGuard.check("health question " * 125)  # ~2000 chars
