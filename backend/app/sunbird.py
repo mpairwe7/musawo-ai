@@ -37,6 +37,7 @@ OPENAI_API_KEY = settings.openai_api_key
 CF_ACCOUNT_ID = settings.cf_account_id
 CF_API_TOKEN = settings.cf_api_token
 CF_STT_MODEL = settings.cf_stt_model
+CF_TTS_MODEL = settings.cf_tts_model
 
 # Whisper Luganda LoRA adapter path — fine-tuned on 438hrs Luganda speech
 # (computed local filesystem path; kept as a direct env read)
@@ -560,6 +561,37 @@ def speech_to_text(
 
 # ── Text-to-Speech ────────────────────────────────────────────────────────
 
+def _cloudflare_melotts(text: str) -> dict[str, Any] | None:
+    """English TTS via Cloudflare Workers AI MeloTTS. Egress-safe on RENU (Cloudflare
+    edge reachable where edge-tts/others are firewalled). Returns a base64 MP3 data
+    URL the browser can play directly. Needs CF_ACCOUNT_ID + CF_API_TOKEN."""
+    if not (CF_ACCOUNT_ID and CF_API_TOKEN):
+        return None
+    try:
+        url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/{CF_TTS_MODEL}"
+        resp = httpx.post(
+            url,
+            headers={"Authorization": f"Bearer {CF_API_TOKEN}", "Content-Type": "application/json"},
+            json={"prompt": text[:2000], "lang": "en"},
+            timeout=SUNBIRD_TIMEOUT,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        audio_b64 = (data.get("result") or {}).get("audio")
+        if not data.get("success") or not audio_b64:
+            logger.warning("Cloudflare MeloTTS error: %s", data.get("errors"))
+            return None
+        logger.info("Cloudflare MeloTTS: %d chars → %d-byte b64 audio", len(text), len(audio_b64))
+        return {
+            "audio_url": f"data:audio/mpeg;base64,{audio_b64}",
+            "expires_at": None,
+            "backend": "cloudflare-melotts",
+        }
+    except Exception as e:
+        logger.warning("Cloudflare MeloTTS failed, falling back: %s", e)
+        return None
+
+
 def _local_tts_fallback(text: str, locale: str) -> dict[str, Any] | None:
     """Local TTS fallback chain: CosyVoice2 → edge-tts.
 
@@ -674,6 +706,13 @@ def text_to_speech(
     Returns:
         Dict with 'audio_url' and 'expires_at', or None on failure.
     """
+    # English TTS → Cloudflare Workers AI MeloTTS (egress-safe; playable data URL).
+    # Ugandan languages stay on Sunbird native voices below.
+    if locale in ("en", "eng"):
+        result = _cloudflare_melotts(text)
+        if result:
+            return result
+
     # Primary: Sunbird native voices
     speaker_id = TTS_SPEAKERS.get(locale)
     if is_available() and speaker_id:

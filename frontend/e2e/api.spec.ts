@@ -278,6 +278,18 @@ test.describe("Voice / translation (Sunbird-aware)", () => {
       expect(body).toHaveProperty("backend"); // cloudflare-whisper / sunbird / local
     }
   });
+  test("POST /v1/voice/tts (English) → Cloudflare MeloTTS playable audio", async ({ request }) => {
+    test.setTimeout(60_000);
+    const on = await sunbirdOn(request);
+    const res = await request.post("/v1/voice/tts", { data: { text: "Take ORS and zinc for diarrhoea.", locale: "en" }, timeout: SB });
+    expect(expected(on)).toContain(res.status());
+    if (res.status() === 200) {
+      const body = await res.json();
+      // English TTS returns a browser-playable base64 data URL (Cloudflare MeloTTS).
+      expect(body.audio_url || "").toMatch(/^data:audio\/(mpeg|mp3);base64,/);
+      expect(body.backend).toBe("cloudflare-melotts");
+    }
+  });
   test("POST /v1/detect-language behaves per Sunbird config", async ({ request }) => {
     test.setTimeout(60_000);
     const on = await sunbirdOn(request);

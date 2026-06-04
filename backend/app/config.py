@@ -67,8 +67,9 @@ class Settings(BaseSettings):
     cf_account_id: str = ""
     cf_ai_gateway: str = ""
     cf_aig_token: str = ""  # secret — gateway authorization (cf-aig-authorization)
-    cf_api_token: str = ""  # secret — Cloudflare Workers AI token (English STT / Whisper)
-    cf_stt_model: str = "@cf/openai/whisper-large-v3-turbo"  # CF Workers AI Whisper
+    cf_api_token: str = ""  # secret — Cloudflare Workers AI token (English STT/TTS)
+    cf_stt_model: str = "@cf/openai/whisper-large-v3-turbo"  # CF Workers AI Whisper (STT)
+    cf_tts_model: str = "@cf/myshell-ai/melotts"  # CF Workers AI MeloTTS (English TTS)
 
     # Groq (free tier, OpenAI-compatible) — tier 2 (fallback)
     groq_api_key: str = ""  # secret
