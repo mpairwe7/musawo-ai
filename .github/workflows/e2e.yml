@@ -43,3 +43,23 @@ jobs:
           name: playwright-report
           path: frontend/playwright-report
           retention-days: 7
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    env:
+      E2E_BASE_URL: ${{ github.event.inputs.base_url || 'https://musawo-ai-ce243528.renu-01.cranecloud.io' }}
+    steps:
+      - name: Lighthouse audit (perf / a11y / best-practices / SEO)
+        run: |
+          npx -y lighthouse "$E2E_BASE_URL" --quiet --no-update-notifier \
+            --chrome-flags="--headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage" \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --output=html --output=json --output-path=./lighthouse 2>&1 | tail -20
+          node -e "const d=require('./lighthouse.report.json');for(const c of Object.values(d.categories))console.log(c.title, Math.round((c.score||0)*100));"
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: ./lighthouse.report.*
+          retention-days: 7
