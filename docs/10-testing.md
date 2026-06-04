@@ -38,8 +38,10 @@ npm run test:e2e:all
   danger-sign escalation + 422), chat/stream SSE, triage (shape + injection
   blocked), feedback, session persistence, USSD. Side-effect-safe: SMS
   invalid-phone→400, webhook missing-body→400, and voice endpoints are
-  **Sunbird-aware** (503 when unconfigured, 200/502 once configured). Retries
-  absorb transient PaaS gateway blips.
+  **Sunbird-aware** (503 when unconfigured, 200/502 once configured). Voice STT
+  (uploads a WAV) and English TTS exercise the **Cloudflare Workers AI** Whisper/MeloTTS
+  paths (English TTS asserts a base64 `data:audio` URL). Retries absorb transient
+  PaaS gateway blips; Sunbird-backed checks get a 45s timeout.
 - **`e2e/app.spec.ts`** — full stack (browser → `/api` → FastAPI → render): app
   loads, send→answer, and a regression guard that a comparison answer renders
   cleanly (no vertical-character collapse; the screenshot-bug guard).
@@ -48,7 +50,7 @@ A **PWA/service-worker guard** asserts `/sw.js` is network-first for HTML naviga
 (never cache-first, which serves stale docs referencing dead `/_next` chunks after a
 redeploy) and that the HTML's first chunk is reachable.
 
-Latest live run: **29 passing** (26 API + 3 browser).
+Latest live run: **31 passing** (28 API + 3 browser).
 
 ## Lighthouse
 

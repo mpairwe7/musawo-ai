@@ -71,3 +71,16 @@ resolver auto-activates regardless of any flag. Brand-new keys (`CF_*`,
 - `POST /v1/chat` returns in ~3–6 s when the gateway path is live (a ~16–26 s
   reply means Gemini is timing out and falling back to Groq — check `CF_*`).
 - Cloudflare AI Gateway analytics show the Gemini traffic.
+
+## Voice (STT/TTS) — same egress, via Workers AI
+
+English voice has the identical RENU egress problem (`api.openai.com` for Whisper and
+`edge-tts`'s host are firewalled), solved the same way — **Cloudflare Workers AI** over
+the reachable edge (`api.cloudflare.com/client/v4/accounts/{acct}/ai/run/{model}`), with
+a Workers AI token (`CF_API_TOKEN`):
+
+- **STT**: `@cf/openai/whisper-large-v3-turbo` (`CF_STT_MODEL`) — base64 audio in, transcript out (~1.5s).
+- **TTS**: `@cf/myshell-ai/melotts` (`CF_TTS_MODEL`) — text in, base64 MP3 data URL out (~2.2s).
+
+`backend/app/sunbird.py` tries these first for English (`speech_to_text` / `text_to_speech`),
+then OpenAI/local; Ugandan languages stay on Sunbird. See [`06-voice-speech.md`](06-voice-speech.md).

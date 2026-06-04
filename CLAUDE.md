@@ -65,14 +65,16 @@ Important invariants:
 
 ## Voice (`backend/app/sunbird.py`, `voice_ws.py`, `voice_stream.py`)
 
-Two fallback chains, both fail-soft to browser-native APIs:
+Language-aware fallback chains, all fail-soft to browser-native APIs:
 
-| Layer | Cloud primary | Local primary | Local fallback | Browser fallback |
-|-------|---------------|---------------|----------------|------------------|
-| STT   | Sunbird API   | Parakeet TDT 0.6B | Moonshine 27M / faster-whisper / OpenAI Whisper | Web Speech API |
-| TTS   | Sunbird (speaker IDs: LG #248, NYN #243, SW #246) | CosyVoice2-0.5B | edge-tts | `speechSynthesis` |
+| Layer | English (egress-safe) | Ugandan cloud | Local fallbacks | Browser fallback |
+|-------|----------------------|---------------|-----------------|------------------|
+| STT   | **Cloudflare Whisper** (`@cf/openai/whisper-large-v3-turbo`) → OpenAI Whisper | Sunbird API | Parakeet TDT 0.6B / Moonshine 27M / faster-whisper | Web Speech API |
+| TTS   | **Cloudflare MeloTTS** (`@cf/myshell-ai/melotts`, base64 data URL) | Sunbird (speaker IDs: LG #248, NYN #243, SW #246) | CosyVoice2-0.5B / edge-tts | `speechSynthesis` |
 
-Sunbird auth uses `SUNBIRD_USERNAME` + `SUNBIRD_PASSWORD` (preferred over static `SUNBIRD_API_TOKEN`). Tokens auto-refresh every 6 days; all calls go through `_api_call()` which retries on 401. `langCode` mismatches between persona and TTS cause silent fallback to browser — keep `lg-UG` / `nyn-UG` / `sw-KE` codes intact.
+**English voice routes through Cloudflare Workers AI** (`CF_API_TOKEN`) over Cloudflare's reachable edge — `api.openai.com` and `edge-tts`'s host are firewalled on RENU, but Cloudflare isn't (same egress fix as the Gemini gateway). Ugandan languages (lg/nyn/sw) stay on Sunbird's native models. `speech_to_text`/`text_to_speech` branch on language in `backend/app/sunbird.py`.
+
+Sunbird auth uses `SUNBIRD_USERNAME` + `SUNBIRD_PASSWORD` (preferred over static `SUNBIRD_API_TOKEN`; a `SUNBIRD_FALLBACK_API_TOKEN` 2nd account is tried if primary auth fails). Tokens auto-refresh every 6 days; all calls go through `_api_call()` which retries on 401. `langCode` mismatches between persona and TTS cause silent fallback to browser — keep `lg-UG` / `nyn-UG` / `sw-KE` codes intact.
 
 ## Internationalization
 

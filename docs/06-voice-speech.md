@@ -16,18 +16,20 @@ Client speaks → PCM16 chunks → WebSocket
                            + Noise Gate                   │
                            + Semantic Endpointing         │
                                     ↓
-                      ASR: Sunbird → On-device Whisper → Browser
+                      ASR: [English] Cloudflare Whisper → OpenAI Whisper
+                           [Ugandan] Sunbird → on-device → Browser
                                     ↓
                     [If Luganda/etc] MT → English (Sunbird)
                                     ↓
-                          LLM (Groq llama-3.3-70b)
+                          LLM (Gemini Flash via CF AI Gateway → Groq)
                           + RAG from MoH guidelines
                                     ↓
                     [If Luganda/etc] MT → local language
                                     ↓
                     Prosody detection (urgency → rate/pitch)
                                     ↓
-                    Sentence-chunked TTS (Sunbird)
+                    Sentence-chunked TTS:
+                    [English] Cloudflare MeloTTS / [Ugandan] Sunbird
                     (first audio in <250ms target)
                                     ↓
                     Client plays audio chunks
@@ -45,10 +47,26 @@ Client speaks → PCM16 chunks → WebSocket
 - Env var `VOICE_SILERO_ENABLED` (default "true") to disable
 - Requires `onnxruntime` (CPU-only, ~40MB)
 
+### English voice via Cloudflare Workers AI (egress-safe)
+English STT/TTS route through **Cloudflare Workers AI** over Cloudflare's reachable
+edge — on the RENU pod `api.openai.com` (OpenAI Whisper) and `edge-tts`'s host are
+firewalled, but Cloudflare is not (same reason Gemini uses the AI Gateway; see
+[`egress-cloudflare-gateway.md`](egress-cloudflare-gateway.md)). Reuses the Cloudflare
+account + a Workers AI token (`CF_API_TOKEN`).
+
+| Direction | Model (`backend/app/sunbird.py`) | Output |
+|-----------|----------------------------------|--------|
+| STT | `@cf/openai/whisper-large-v3-turbo` (`CF_STT_MODEL`) | transcript (~1.5s) |
+| TTS | `@cf/myshell-ai/melotts` (`CF_TTS_MODEL`) | base64 MP3 **data URL** the browser plays directly (~2.2s) |
+
+Routing: **English** STT = Cloudflare Whisper → OpenAI Whisper → Sunbird/local;
+**English** TTS = Cloudflare MeloTTS → local. **Ugandan** languages stay on Sunbird's
+native STT/voices (far better for lg/nyn/sw), then local fallbacks.
+
 ### On-Device STT
 - **@xenova/transformers** + `Xenova/whisper-tiny` (~50MB, cached in IndexedDB)
 - Runs entirely in browser via Web Worker + ONNX Runtime WASM
-- Automatic fallback when offline or Sunbird API fails
+- Automatic fallback when offline or all server STT fails
 - STT mode badge in VoiceModal: "Sunbird" / "Offline" / "Browser"
 - CSP requires `'wasm-unsafe-eval'` in production `script-src`
 
@@ -129,6 +147,10 @@ Then send binary PCM16 LE mono audio chunks (16kHz, 20ms recommended).
 | `VOICE_VAD_MIN_SPEECH_MS` | 250 | Minimum speech to accept (ms) |
 | `VOICE_VAD_MAX_UTTERANCE_S` | 30 | Hard cutoff (seconds) |
 | `VOICE_SILERO_ENABLED` | true | Enable Silero neural VAD |
+| `CF_API_TOKEN` | — | secret — Cloudflare Workers AI token (English STT/TTS) |
+| `CF_STT_MODEL` | `@cf/openai/whisper-large-v3-turbo` | CF Workers AI Whisper (English STT) |
+| `CF_TTS_MODEL` | `@cf/myshell-ai/melotts` | CF Workers AI MeloTTS (English TTS) |
+| `SUNBIRD_USERNAME` / `SUNBIRD_API_TOKEN` (+ `SUNBIRD_FALLBACK_*`) | — | secret — Sunbird auth for Ugandan-language voice |
 
 ## Files
 

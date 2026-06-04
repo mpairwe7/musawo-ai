@@ -39,7 +39,8 @@ All config is centralized in `backend/app/config.py` (pydantic-settings);
 | `GEMINI_MODELS` | `gemini-3.5-flash,gemini-3.0-flash,gemini-2.5-flash` | Priority list (first available; 404 → next) |
 | `CF_ACCOUNT_ID` / `CF_AI_GATEWAY` / `CF_AIG_TOKEN` | (secret) | Route Gemini via the Cloudflare AI Gateway (RENU egress) |
 | `GROQ_API_KEY` | `gsk_...` (secret) | Groq fallback key |
-| `OPENAI_API_KEY` | `...` (secret, optional) | English voice STT via OpenAI Whisper |
+| `CF_API_TOKEN` | (secret) | Cloudflare Workers AI token — English voice STT/TTS (`CF_STT_MODEL` Whisper, `CF_TTS_MODEL` MeloTTS) |
+| `OPENAI_API_KEY` | `...` (secret, optional) | English STT fallback (OpenAI Whisper; `api.openai.com` is firewalled on RENU) |
 | `SUNBIRD_USERNAME` / `SUNBIRD_API_TOKEN` (+ `SUNBIRD_FALLBACK_*`) | (secret) | Ugandan-language voice/translation |
 | `APP_ENV` | `production` | Strict CORS |
 | `PORT` | `8081` | Backend port (internal) |
