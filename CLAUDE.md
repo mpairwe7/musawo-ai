@@ -30,7 +30,7 @@ The system **never fails silently**: if every LLM tier is down, formatted retrie
 
 In order of preference, each tier silently demotes on failure:
 
-1. **Gemini API** — default, `gemini-2.5-flash` via the OpenAI-compatible endpoint. Set `GEMINI_API_KEY`.
+1. **Gemini API** — default. Tries the `GEMINI_MODELS` priority list (newest first: `gemini-3.5-flash` → `gemini-3.0-flash` → `gemini-2.5-flash`), using the first available and falling through on a "model not available" (404). On RENU it's routed via the Cloudflare AI Gateway. Set `GEMINI_API_KEY`.
 2. **Groq API** — fallback, free tier (Qwen3-32B / Llama-3.3-70B). Token budget enforced to prevent context overflow.
 3. **GGUF via llama-cpp-python** — CPU quantized (Q5_K_M, 4–6GB RAM). Enable by setting `GGUF_MODEL_PATH`.
 4. **4-bit BitsAndBytes** — auto-detected if GPU available (~4GB VRAM, NF4).

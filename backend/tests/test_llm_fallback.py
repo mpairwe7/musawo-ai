@@ -106,3 +106,35 @@ class TestIsReady:
     def test_is_ready_true_with_gemini(self, monkeypatch):
         monkeypatch.setattr(llm, "GEMINI_API_KEY", "gm_test")
         assert llm.is_ready() is True
+
+
+class TestGeminiModelFallthrough:
+    def test_unavailable_model_falls_through_to_next(self, monkeypatch):
+        from unittest.mock import MagicMock
+        monkeypatch.setattr(llm, "GEMINI_API_KEY", "gm_test")
+        monkeypatch.setattr(llm, "GEMINI_VIA_GATEWAY", False)
+        monkeypatch.setattr(llm, "GEMINI_MODELS", ["gemini-3.0-flash", "gemini-2.5-flash"])
+        monkeypatch.setattr(llm, "_gemini_active_model", None)
+
+        resp = MagicMock()
+        resp.choices[0].message.content = "G25"
+        resp.usage = None
+
+        def _create(model, **kw):
+            if "gemini-3.0-flash" in model:  # not yet available → 404
+                raise RuntimeError("404 NOT_FOUND: model is not available")
+            return resp
+
+        client = MagicMock()
+        client.chat.completions.create.side_effect = _create
+        monkeypatch.setattr(llm, "_get_gemini_client", lambda: client)
+
+        out = llm.generate_gemini("treat fever", PASSAGES, mode="community")
+        assert out["text"] == "G25"
+        assert llm._gemini_active_model == "gemini-2.5-flash"  # cached the working one
+
+    def test_model_list_built_newest_first_with_fallback(self):
+        # the live list prioritizes 3.x and always ends with a known-good model
+        assert llm.GEMINI_MODELS[0].startswith("gemini-3")
+        assert "gemini-2.5-flash" in llm.GEMINI_MODELS
+        assert all(m not in llm._RETIRED_GEMINI for m in llm.GEMINI_MODELS)

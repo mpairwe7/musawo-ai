@@ -52,6 +52,9 @@ class Settings(BaseSettings):
 
     # Gemini (default — OpenAI-compatible endpoint) — tier 1
     gemini_api_key: str = ""  # secret
+    # Priority list (newest first); the client uses the first available model and
+    # falls through on "model not available". gemini_model is the final fallback.
+    gemini_models: str = "gemini-3.5-flash,gemini-3.0-flash,gemini-2.5-flash"
     gemini_model: str = "gemini-2.5-flash"
     gemini_max_tokens: int = 4096
     gemini_temperature: float = 0.3

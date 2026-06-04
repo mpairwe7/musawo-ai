@@ -63,14 +63,30 @@ LLM_BACKEND = settings.llm_backend  # "gemini" | "groq" | "local" | "passages"
 
 # Gemini (default — OpenAI-compatible endpoint)
 GEMINI_API_KEY = settings.gemini_api_key
-GEMINI_MODEL = settings.gemini_model
-# Remap retired Gemini flash models to the current one. This survives a stale or
-# stuck GEMINI_MODEL env value — Crane Cloud's `apps update -e` won't flip an
-# already-set key, so the pod can be pinned to a retired model (404 → fallback).
+# Retired flash models → current. Survives a stale/stuck env (Crane's apps update
+# won't flip an already-set key, so a pod can be pinned to a retired model).
 _RETIRED_GEMINI = {"gemini-2.0-flash", "gemini-2.0-flash-001", "gemini-1.5-flash", "gemini-1.0-pro"}
-if GEMINI_MODEL in _RETIRED_GEMINI:
-    logger.info("Remapping retired Gemini model %s → gemini-2.5-flash", GEMINI_MODEL)
-    GEMINI_MODEL = "gemini-2.5-flash"
+
+
+def _norm_gemini(m: str) -> str:
+    return "gemini-2.5-flash" if m in _RETIRED_GEMINI else m
+
+
+GEMINI_MODEL = _norm_gemini(settings.gemini_model)  # guaranteed final fallback
+# Ordered preference list (newest first); the client uses the first AVAILABLE
+# model and falls through on a "model not available" (404). New versions (e.g.
+# gemini-3.x) activate automatically once Google ships them.
+GEMINI_MODELS: list[str] = []
+for _m in settings.gemini_models.split(","):
+    _m = _norm_gemini(_m.strip())
+    if _m and _m not in GEMINI_MODELS:
+        GEMINI_MODELS.append(_m)
+if GEMINI_MODEL not in GEMINI_MODELS:
+    GEMINI_MODELS.append(GEMINI_MODEL)
+if not GEMINI_MODELS:
+    GEMINI_MODELS = ["gemini-2.5-flash"]
+_gemini_active_model: str | None = None  # cached first-working model
+
 GEMINI_MAX_TOKENS = settings.gemini_max_tokens
 GEMINI_TEMPERATURE = settings.gemini_temperature
 
@@ -438,9 +454,22 @@ _GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 _GEMINI_GATEWAY_BASE = "https://gateway.ai.cloudflare.com/v1/{acct}/{gw}/compat"
 
 
-def _gemini_model() -> str:
+def _gemini_model_id(model: str) -> str:
     """Model id — prefixed for the CF gateway's unified provider routing."""
-    return f"google-ai-studio/{GEMINI_MODEL}" if GEMINI_VIA_GATEWAY else GEMINI_MODEL
+    return f"google-ai-studio/{model}" if GEMINI_VIA_GATEWAY else model
+
+
+def _model_unavailable(exc: Exception) -> bool:
+    """True when the error means the model name isn't available (→ try the next)."""
+    s = str(exc).lower()
+    return any(k in s for k in ("not found", "not available", "not_found", "does not exist", "404"))
+
+
+def _gemini_order() -> list[str]:
+    """Candidate models in priority order, the cached working model first."""
+    if _gemini_active_model:
+        return [_gemini_active_model] + [m for m in GEMINI_MODELS if m != _gemini_active_model]
+    return list(GEMINI_MODELS)
 
 
 def _get_gemini_client():
@@ -492,8 +521,7 @@ def generate_gemini(
         "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly to the patient/VHT.",
     })
 
-    create_kwargs: dict[str, Any] = {
-        "model": _gemini_model(),
+    base: dict[str, Any] = {
         "messages": messages,
         "max_tokens": GEMINI_MAX_TOKENS,
         "temperature": GEMINI_TEMPERATURE,
@@ -501,20 +529,29 @@ def generate_gemini(
     if GEMINI_VIA_GATEWAY:
         # CF compat endpoint maps this to a zero thinking budget so Gemini 2.5+
         # doesn't spend max_tokens on hidden reasoning.
-        create_kwargs["extra_body"] = {"reasoning_effort": "minimal"}
-    try:
-        response = client.chat.completions.create(**create_kwargs)
-        answer = (response.choices[0].message.content or "").strip()
-        return {
-            "text": answer,
-            "usage": {
-                "input_tokens": response.usage.prompt_tokens if response.usage else 0,
-                "output_tokens": response.usage.completion_tokens if response.usage else 0,
-            },
-        }
-    except Exception as e:
-        logger.error("Gemini API error: %s", e)
-        raise
+        base["extra_body"] = {"reasoning_effort": "minimal"}
+    global _gemini_active_model
+    last_exc: Exception | None = None
+    for model in _gemini_order():
+        try:
+            response = client.chat.completions.create(model=_gemini_model_id(model), **base)
+            _gemini_active_model = model  # cache the first working model
+            answer = (response.choices[0].message.content or "").strip()
+            return {
+                "text": answer,
+                "usage": {
+                    "input_tokens": response.usage.prompt_tokens if response.usage else 0,
+                    "output_tokens": response.usage.completion_tokens if response.usage else 0,
+                },
+            }
+        except Exception as e:
+            if _model_unavailable(e):
+                logger.info("Gemini model %s unavailable; trying next", model)
+                last_exc = e
+                continue
+            logger.error("Gemini API error (%s): %s", model, e)
+            raise
+    raise last_exc or RuntimeError("no available Gemini model")
 
 
 def stream_gemini(
@@ -538,25 +575,35 @@ def stream_gemini(
         "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly.",
     })
 
-    stream_kwargs: dict[str, Any] = {
-        "model": _gemini_model(),
+    base: dict[str, Any] = {
         "messages": messages,
         "max_tokens": GEMINI_MAX_TOKENS,
         "temperature": GEMINI_TEMPERATURE,
         "stream": True,
     }
     if GEMINI_VIA_GATEWAY:
-        stream_kwargs["extra_body"] = {"reasoning_effort": "minimal"}
-    try:
-        stream = client.chat.completions.create(**stream_kwargs)
-        for chunk in stream:
-            delta = chunk.choices[0].delta if chunk.choices else None
-            if delta and delta.content:
-                yield {"type": "token", "text": delta.content}
-        yield {"type": "done", "usage": {}}
-    except Exception as e:
-        logger.error("Gemini streaming error: %s", e)
-        raise
+        base["extra_body"] = {"reasoning_effort": "minimal"}
+    global _gemini_active_model
+    stream = None
+    last_exc: Exception | None = None
+    for model in _gemini_order():
+        try:
+            stream = client.chat.completions.create(model=_gemini_model_id(model), **base)
+            _gemini_active_model = model
+            break
+        except Exception as e:
+            if _model_unavailable(e):
+                last_exc = e
+                continue
+            logger.error("Gemini streaming error (%s): %s", model, e)
+            raise
+    if stream is None:
+        raise last_exc or RuntimeError("no available Gemini model")
+    for chunk in stream:
+        delta = chunk.choices[0].delta if chunk.choices else None
+        if delta and delta.content:
+            yield {"type": "token", "text": delta.content}
+    yield {"type": "done", "usage": {}}
 
 
 # ── Local model backend (offline fallback) ─────────────────────────────────

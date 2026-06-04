@@ -14,7 +14,7 @@ Anthropic has been removed.
 
 | Setting | Value |
 |---------|-------|
-| Model | `gemini-2.5-flash` (`GEMINI_MODEL`) |
+| Models | `GEMINI_MODELS` priority list (newest first): `gemini-3.5-flash` → `gemini-3.0-flash` → `gemini-2.5-flash`. The client uses the first available and falls through on a 404 "model not available"; retired names auto-remap. New 3.x versions activate automatically when Google ships them. |
 | API | OpenAI-compatible (`generativelanguage.googleapis.com/v1beta/openai`) |
 | Selected when | `GEMINI_API_KEY` is set |
 

@@ -36,7 +36,7 @@ All config is centralized in `backend/app/config.py` (pydantic-settings);
 | Key | Value | Description |
 |-----|-------|-------------|
 | `GEMINI_API_KEY` | `...` (secret) | Google AI Studio key — default LLM |
-| `GEMINI_MODEL` | `gemini-2.5-flash` | Gemini model |
+| `GEMINI_MODELS` | `gemini-3.5-flash,gemini-3.0-flash,gemini-2.5-flash` | Priority list (first available; 404 → next) |
 | `CF_ACCOUNT_ID` / `CF_AI_GATEWAY` / `CF_AIG_TOKEN` | (secret) | Route Gemini via the Cloudflare AI Gateway (RENU egress) |
 | `GROQ_API_KEY` | `gsk_...` (secret) | Groq fallback key |
 | `OPENAI_API_KEY` | `...` (secret, optional) | English voice STT via OpenAI Whisper |
