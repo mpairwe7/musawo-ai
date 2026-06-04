@@ -122,6 +122,7 @@ class Settings(BaseSettings):
     sunbird_password: str = ""  # secret
     sunbird_fallback_username: str = ""  # secret
     sunbird_fallback_password: str = ""  # secret
+    sunbird_fallback_api_token: str = ""  # secret — static fallback token (2nd account)
     cosyvoice_model: str = "iic/CosyVoice2-0.5B"
 
     # ── Twilio SMS (sms_gateway.py) ─────────────────────────────────────────

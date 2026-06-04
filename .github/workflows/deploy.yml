@@ -113,6 +113,8 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SUNBIRD_USERNAME: ${{ secrets.SUNBIRD_USERNAME }}
           SUNBIRD_API_TOKEN: ${{ secrets.SUNBIRD_API_TOKEN }}
+          SUNBIRD_FALLBACK_USERNAME: ${{ secrets.SUNBIRD_FALLBACK_USERNAME }}
+          SUNBIRD_FALLBACK_API_TOKEN: ${{ secrets.SUNBIRD_FALLBACK_API_TOKEN }}
         run: |
           # login (password via stdin, never on argv)
           printf '%s\n%s\n' "$CRANE_CLOUD_PASSWORD" "$CRANE_CLOUD_PASSWORD" \
@@ -128,6 +130,8 @@ jobs:
             -e OPENAI_API_KEY="$OPENAI_API_KEY" \
             -e SUNBIRD_USERNAME="$SUNBIRD_USERNAME" \
             -e SUNBIRD_API_TOKEN="$SUNBIRD_API_TOKEN" \
+            -e SUNBIRD_FALLBACK_USERNAME="$SUNBIRD_FALLBACK_USERNAME" \
+            -e SUNBIRD_FALLBACK_API_TOKEN="$SUNBIRD_FALLBACK_API_TOKEN" \
             -e APP_ENV=production \
             -e LOG_LEVEL=info \
             -e KNOWLEDGE_BASE_DIR=/app/knowledge-base \

@@ -426,8 +426,17 @@ _GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 def _get_gemini_client():
     global _gemini_client
     if _gemini_client is None:
+        import httpx
         from openai import OpenAI
-        _gemini_client = OpenAI(api_key=GEMINI_API_KEY, base_url=_GEMINI_BASE_URL)
+        # Fail fast: where Gemini's host is unreachable (e.g. the RENU pod firewalls
+        # non-Cloudflare egress) a short connect timeout + no retries means we demote
+        # to Groq in seconds instead of stalling on the default timeout.
+        _gemini_client = OpenAI(
+            api_key=GEMINI_API_KEY,
+            base_url=_GEMINI_BASE_URL,
+            timeout=httpx.Timeout(45.0, connect=6.0),
+            max_retries=0,
+        )
     return _gemini_client
 
 

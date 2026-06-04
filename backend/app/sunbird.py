@@ -46,6 +46,7 @@ SUNBIRD_PASSWORD = settings.sunbird_password
 # Fallback credentials — used if primary auth fails
 SUNBIRD_FALLBACK_USERNAME = settings.sunbird_fallback_username
 SUNBIRD_FALLBACK_PASSWORD = settings.sunbird_fallback_password
+SUNBIRD_FALLBACK_API_TOKEN = settings.sunbird_fallback_api_token  # static 2nd-account token
 
 # Token refresh interval: refresh 1 day before expiry (tokens expire after 7 days)
 _TOKEN_REFRESH_DAYS = 6
@@ -115,11 +116,16 @@ def _refresh_token() -> str | None:
         if token:
             return token
 
-    # Try fallback credentials
+    # Try fallback credentials (username/password)
     if SUNBIRD_FALLBACK_USERNAME and SUNBIRD_FALLBACK_PASSWORD:
         token = _try_auth(SUNBIRD_FALLBACK_USERNAME, SUNBIRD_FALLBACK_PASSWORD, "fallback")
         if token:
             return token
+
+    # Static fallback token (2nd account) — used when no password-based refresh works
+    if SUNBIRD_FALLBACK_API_TOKEN:
+        logger.info("Sunbird using static fallback token (2nd account)")
+        return SUNBIRD_FALLBACK_API_TOKEN
 
     logger.error("All Sunbird auth attempts failed")
     return None
@@ -215,6 +221,7 @@ def is_available() -> bool:
         SUNBIRD_API_TOKEN
         or (SUNBIRD_USERNAME and SUNBIRD_PASSWORD)
         or (SUNBIRD_FALLBACK_USERNAME and SUNBIRD_FALLBACK_PASSWORD)
+        or SUNBIRD_FALLBACK_API_TOKEN
     )
 
 

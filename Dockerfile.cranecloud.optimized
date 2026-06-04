@@ -194,13 +194,15 @@ pidfile=/tmp/supervisord.pid
 user=root
 
 [program:backend]
-; Crane Cloud RENU CoreDNS resolves internal services but not external hosts.
-; Pin Cloudflare-fronted Groq + Anthropic IPs in /etc/hosts so LLM calls work.
+; Crane Cloud RENU CoreDNS resolves internal services but not external hosts, and
+; only Cloudflare's anycast edge is reachable (Google/Gemini IPs are firewalled).
+; Pin Groq's Cloudflare-fronted IPs so Groq works; Gemini is NOT reachable directly
+; on RENU and fast-fails to Groq (full fix = route via the Cloudflare AI Gateway).
 ; Refresh via `dig api.groq.com` if Cloudflare reshuffles.
 ; --workers 1: SessionStore is in-memory + thread-safe (NOT process-safe). Multiple
 ; workers split sessions across processes, breaking session resume / deep context.
 ; Concurrency comes from async + the LLM ThreadPoolExecutor, not extra processes.
-command=sh -c "grep -q api.groq.com /etc/hosts || { echo '172.64.149.20 api.groq.com'; echo '104.18.38.236 api.groq.com'; echo '160.79.104.10 api.anthropic.com'; } >> /etc/hosts; exec /opt/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8081 --workers 1"
+command=sh -c "grep -q api.groq.com /etc/hosts || { echo '172.64.149.20 api.groq.com'; echo '104.18.38.236 api.groq.com'; } >> /etc/hosts; exec /opt/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8081 --workers 1"
 directory=/app/backend
 environment=HOME="/app",PORT="8081",LOG_LEVEL="info",LLM_BACKEND="passages",KNOWLEDGE_BASE_DIR="/app/knowledge-base",BM25_STATE_PATH="/app/knowledge-base/bm25_state.json"
 stdout_logfile=/dev/stdout
