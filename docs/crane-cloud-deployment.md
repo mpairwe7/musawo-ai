@@ -30,26 +30,53 @@ The optimized Dockerfile (`Dockerfile.cranecloud.optimized`) reduces image size 
 
 ## Environment Variables
 
+All config is centralized in `backend/app/config.py` (pydantic-settings);
+`.env.example` is the single source of truth. Key Crane Cloud values:
+
 | Key | Value | Description |
 |-----|-------|-------------|
-| `LLM_BACKEND` | `groq` | LLM provider (groq/claude/local/passages) |
-| `GROQ_API_KEY` | `gsk_...` (secret) | Groq free tier API key |
-| `GROQ_MODEL` | `llama-3.3-70b-versatile` | Groq model |
+| `GEMINI_API_KEY` | `...` (secret) | Google AI Studio key — default LLM |
+| `GEMINI_MODEL` | `gemini-2.5-flash` | Gemini model |
+| `CF_ACCOUNT_ID` / `CF_AI_GATEWAY` / `CF_AIG_TOKEN` | (secret) | Route Gemini via the Cloudflare AI Gateway (RENU egress) |
+| `GROQ_API_KEY` | `gsk_...` (secret) | Groq fallback key |
+| `OPENAI_API_KEY` | `...` (secret, optional) | English voice STT via OpenAI Whisper |
+| `SUNBIRD_USERNAME` / `SUNBIRD_API_TOKEN` (+ `SUNBIRD_FALLBACK_*`) | (secret) | Ugandan-language voice/translation |
+| `APP_ENV` | `production` | Strict CORS |
 | `PORT` | `8081` | Backend port (internal) |
-| `BM25_STATE_PATH` | `/app/knowledge-base/bm25_state.json` | Pre-built BM25 index |
-| `KNOWLEDGE_BASE_DIR` | `/app/knowledge-base` | Clinical guidelines directory |
+| `BM25_STATE_PATH` / `KNOWLEDGE_BASE_DIR` | `/app/knowledge-base/...` | Pre-built BM25 index + KB |
 | `LOG_LEVEL` | `info` | Logging level |
+
+> Crane env-merge quirk: `cranecloud apps update -e` adds new keys but won't flip
+> an already-set key (e.g. `LLM_BACKEND` stays at its first value). Harmless — the
+> chain keys off `GEMINI_API_KEY` presence, and the DoH resolver auto-activates.
 
 ## LLM Backend Priority
 
 ```
-Groq (free, fast) → Claude API → Local Qwen3 → Passage-based fallback
+Gemini Flash (default) → Groq → Local Qwen3 → Passage-based fallback
 ```
 
-- **Groq**: Free tier, ~500 tok/s, `llama-3.3-70b-versatile` or `qwen/qwen3-32b`
-- **Claude**: Set `ANTHROPIC_API_KEY` for Claude Sonnet with extended thinking
-- **Local Qwen3**: Set `LLM_BACKEND=local`, needs GPU or GGUF quantized model
-- **Passages**: Always works, returns text from guidelines without LLM
+- **Gemini**: default; `gemini-2.5-flash`. On RENU it's routed through the
+  **Cloudflare AI Gateway** (direct Google IPs are firewalled) — see
+  [`egress-cloudflare-gateway.md`](egress-cloudflare-gateway.md).
+- **Groq**: free tier, ~500 tok/s, Cloudflare-fronted (IPs pinned in the image).
+- **Local Qwen3**: `LLM_BACKEND=local`, needs GPU or GGUF quantized model.
+- **Passages**: always works, returns text from guidelines without an LLM.
+- Claude/Anthropic has been removed.
+
+## CI/CD & egress
+
+- **GitHub Actions** (`.github/workflows/deploy.yml`): on push to `main`, runs the
+  backend pytest + frontend typecheck/tests, builds `Dockerfile.cranecloud.optimized`,
+  pushes to Docker Hub, and `cranecloud apps update`s the app with the full env
+  (secrets pulled from GitHub Actions secrets). Skips gracefully without Docker Hub creds.
+- **`.github/workflows/e2e.yml`**: live API regression (Playwright) + browser E2E +
+  Lighthouse against the deployed URL, on demand + daily.
+- **`--workers 1`** for uvicorn: `SessionStore` is in-memory/thread-safe (not
+  process-safe), so multiple workers would break session resume / deep context.
+- **Egress**: RENU pods have no external DNS and firewall non-Cloudflare TCP/443.
+  The app-side **DoH resolver** + **Cloudflare AI Gateway** routing handle this
+  (see the egress doc).
 
 ## Retrieval Architecture
 

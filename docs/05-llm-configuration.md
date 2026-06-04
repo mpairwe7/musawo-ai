@@ -3,12 +3,27 @@
 ## Fallback Chain
 
 ```
-Groq (free, 500 tok/s) → Claude API → Local Qwen3 → Passage-based
+Gemini Flash (default) → Groq (free, 500 tok/s) → Local Qwen3 → Passage-based
 ```
 
-Priority: try each in order, never fail silently.
+Priority: try each in order, never fail silently. Each tier fails fast (short
+connect timeout, no retries) so a blocked path demotes in seconds. Claude /
+Anthropic has been removed.
 
-## Groq (Primary)
+## Gemini (Default)
+
+| Setting | Value |
+|---------|-------|
+| Model | `gemini-2.5-flash` (`GEMINI_MODEL`) |
+| API | OpenAI-compatible (`generativelanguage.googleapis.com/v1beta/openai`) |
+| Selected when | `GEMINI_API_KEY` is set |
+
+**Cloudflare AI Gateway:** on firewalled pods (RENU) where Google IPs are
+unreachable, set `CF_ACCOUNT_ID` + `CF_AI_GATEWAY` (+ `CF_AIG_TOKEN`) and Gemini
+is routed through `gateway.ai.cloudflare.com/.../compat` over Cloudflare's edge.
+See [`egress-cloudflare-gateway.md`](egress-cloudflare-gateway.md).
+
+## Groq (Fallback)
 
 | Setting | Value |
 |---------|-------|
@@ -17,15 +32,6 @@ Priority: try each in order, never fail silently.
 | Temperature | 0.3 |
 | API | OpenAI-compatible (`api.groq.com/openai/v1`) |
 | Cost | Free tier |
-
-## Claude (Secondary)
-
-| Setting | Value |
-|---------|-------|
-| Model | `claude-sonnet-4-6-20250514` |
-| Prompt caching | Enabled (ephemeral cache control) |
-| Extended thinking | Enabled for complex medical queries |
-| Thinking budget | 10000 tokens |
 
 ## Local Qwen3 (Offline)
 

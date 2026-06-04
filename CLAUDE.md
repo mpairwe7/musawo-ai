@@ -30,7 +30,7 @@ The system **never fails silently**: if every LLM tier is down, formatted retrie
 
 In order of preference, each tier silently demotes on failure:
 
-1. **Gemini API** — default, `gemini-2.0-flash` via the OpenAI-compatible endpoint. Set `GEMINI_API_KEY`.
+1. **Gemini API** — default, `gemini-2.5-flash` via the OpenAI-compatible endpoint. Set `GEMINI_API_KEY`.
 2. **Groq API** — fallback, free tier (Qwen3-32B / Llama-3.3-70B). Token budget enforced to prevent context overflow.
 3. **GGUF via llama-cpp-python** — CPU quantized (Q5_K_M, 4–6GB RAM). Enable by setting `GGUF_MODEL_PATH`.
 4. **4-bit BitsAndBytes** — auto-detected if GPU available (~4GB VRAM, NF4).
@@ -89,8 +89,8 @@ Sunbird auth uses `SUNBIRD_USERNAME` + `SUNBIRD_PASSWORD` (preferred over static
 
 - **No Tailwind.** Design system lives in `app/globals.css` as CSS custom properties (`--severity-*`, etc.). Glass effects and tokens defined in `:root`.
 - LLM responses are rendered as markdown with `## section` headers treated as green-accented dividers. Keep this convention when changing LLM system prompts.
-- **Diagrams**: LLM emits `::diagram[key]` inline; renderer in `components/HealthDiagrams.tsx` resolves to SVG. The LLM system prompt enumerates valid keys — adding a diagram requires updating both.
-- **Lazy components**: `ClinicFinder`, `SettingsPanel`, `MedicationReminders`, `HealthDiagrams` are `React.lazy` — preserve `Suspense` boundaries when refactoring `app/page.tsx`.
+- **Diagrams**: Mermaid. The LLM emits a fenced ```mermaid block only when it genuinely clarifies (decision flow / referral pathway / steps); `components/MermaidDiagram.tsx` (lazy, `securityLevel: strict`, degrades to source on bad syntax) renders it inline. Contextual, never forced — at most one per response.
+- **Lazy components**: `ClinicFinder`, `SettingsPanel`, `MedicationReminders`, `MermaidDiagram` are `React.lazy` — preserve `Suspense` boundaries when refactoring `app/page.tsx`.
 - **State**: Zustand store at `store/useChatStore.ts` persists via `persist` middleware to localStorage; max 50 sessions.
 - **Service worker** at `frontend/public/sw.js` does cache-first for app shell, network-first for `/api`, and a real Background Sync that drains queued chats from IndexedDB to `/api/v1/chat` on reconnect.
 
