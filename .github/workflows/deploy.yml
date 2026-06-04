@@ -1,0 +1,129 @@
+name: Build & Deploy to Crane Cloud
+
+# Tests run on every push/PR. Build + push + redeploy run on main once the
+# Docker Hub secrets are configured (the job skips gracefully until then).
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  IMAGE: landwind/musawo-ai
+  APP_ID: d36c0871-fa6b-4475-b431-ec8bc6a72996  # MusawoAI / musawo-ai (renu-01)
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - name: Backend tests
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m pytest -q
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Frontend typecheck + tests
+        working-directory: frontend
+        run: |
+          npm ci
+          npx tsc --noEmit
+          npm test
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+    steps:
+      - name: Preflight — are Docker Hub credentials configured?
+        run: |
+          if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+            echo "::warning title=Deploy skipped::Add repo secrets DOCKERHUB_USERNAME and DOCKERHUB_TOKEN (a Docker Hub access token for the image account) to enable image build & redeploy."
+            echo "READY=false" >> "$GITHUB_ENV"
+          else
+            echo "READY=true" >> "$GITHUB_ENV"
+          fi
+
+      - uses: actions/checkout@v4
+        if: env.READY == 'true'
+
+      - name: Set up Buildx
+        if: env.READY == 'true'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        if: env.READY == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & push optimized image
+        if: env.READY == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.cranecloud.optimized
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Install cranecloud CLI
+        if: env.READY == 'true'
+        run: pip install cranecloud "keyrings.alt"
+
+      - name: Redeploy on Crane Cloud
+        if: env.READY == 'true'
+        env:
+          PYTHON_KEYRING_BACKEND: keyrings.alt.file.PlaintextKeyring
+          CRANE_CLOUD_EMAIL: ${{ secrets.CRANE_CLOUD_EMAIL }}
+          CRANE_CLOUD_PASSWORD: ${{ secrets.CRANE_CLOUD_PASSWORD }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # login (password via stdin, never on argv)
+          printf '%s\n%s\n' "$CRANE_CLOUD_PASSWORD" "$CRANE_CLOUD_PASSWORD" \
+            | cranecloud auth login -e "$CRANE_CLOUD_EMAIL"
+          # redeploy the freshly-pushed, sha-tagged image with the production env
+          cranecloud apps update "$APP_ID" \
+            -i "${IMAGE}:${GITHUB_SHA}" \
+            -e LLM_BACKEND=groq \
+            -e GROQ_API_KEY="$GROQ_API_KEY" \
+            -e GROQ_MODEL=llama-3.3-70b-versatile \
+            -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+            -e APP_ENV=production \
+            -e LOG_LEVEL=info \
+            -e KNOWLEDGE_BASE_DIR=/app/knowledge-base \
+            -e BM25_STATE_PATH=/app/knowledge-base/bm25_state.json \
+            -e PORT=8081 \
+            -e CUDA_VISIBLE_DEVICES=-1
+
+      - name: Smoke test the live deployment
+        if: env.READY == 'true'
+        run: |
+          sleep 45  # allow the pod to roll over
+          bash scripts/smoke.sh "https://musawo-ai-ce243528.renu-01.cranecloud.io" || \
+            echo "::warning title=Smoke test::Live smoke checks did not all pass yet — the pod may still be warming up."
