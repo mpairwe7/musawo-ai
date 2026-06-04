@@ -9,6 +9,20 @@ export function registerSW() {
     return;
   }
 
+  // If a SW already controls this page, a controller change means a NEW version
+  // took over (e.g. after a redeploy). Reload once so the page runs the fresh HTML
+  // and current chunk names — this auto-recovers users whose old SW was serving
+  // stale cached HTML with dead chunk references. Guarded against reload loops, and
+  // skipped on first-ever install (no prior controller) to avoid a needless reload.
+  if (navigator.serviceWorker.controller) {
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  }
+
   window.addEventListener("load", async () => {
     try {
       const reg = await navigator.serviceWorker.register("/sw.js", {

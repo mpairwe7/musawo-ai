@@ -2,13 +2,21 @@
  * Musawo AI — Service Worker (Offline-first PWA)
  *
  * Strategy:
- * - App shell: Cache-first (HTML, CSS, JS, fonts)
- * - API responses: Network-first with IndexedDB fallback
- * - Knowledge base: Cache-first (long-lived health content)
- * - Images/icons: Cache-first
+ * - HTML navigations: NETWORK-FIRST → cache/offline fallback. Critical: a redeploy
+ *   emits new content-hashed /_next chunk names, so serving stale cached HTML would
+ *   reference chunks that no longer exist (they 404 through the SW and the app fails
+ *   to boot). Network-first guarantees fresh HTML with current chunk names online.
+ * - /_next/ build assets: CACHE-FIRST (content-hashed ⇒ immutable & safe to cache),
+ *   passing network errors through cleanly so a miss never breaks a <script>.
+ * - API responses: network-first with cache/offline fallback.
+ * - Knowledge base / icons: cache-first.
+ *
+ * Every strategy is bulletproofed to never let respondWith() reject — a rejecting
+ * fetch handler is what produced "ServiceWorker intercepted the request and
+ * encountered an unexpected error" on chunk loads.
  */
 
-const CACHE_VERSION = "musawo-v2";
+const CACHE_VERSION = "musawo-v3";
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const API_CACHE = `${CACHE_VERSION}-api`;
 const KB_CACHE = `${CACHE_VERSION}-kb`;
@@ -50,27 +58,80 @@ self.addEventListener("activate", (event) => {
 // ── Fetch: routing strategy ────────────────────────────────────────────
 
 self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
+  const { request } = event;
+  const url = new URL(request.url);
 
   // Skip non-GET and cross-origin
-  if (event.request.method !== "GET") return;
+  if (request.method !== "GET") return;
   if (url.origin !== self.location.origin) return;
+
+  // HTML navigations: network-first so a redeploy's fresh HTML (and its current
+  // hashed chunk names) always loads; fall back to cache/offline when offline.
+  if (request.mode === "navigate") {
+    event.respondWith(networkFirstNavigation(request));
+    return;
+  }
+
+  // Build assets (content-hashed, immutable): cache-first, pass network errors
+  // through cleanly — never substitute a 503 that would break a <script>.
+  if (url.pathname.startsWith("/_next/") || url.pathname.startsWith("/static/")) {
+    event.respondWith(cacheFirstAsset(request, APP_SHELL_CACHE));
+    return;
+  }
 
   // API calls: network-first → cache fallback
   if (url.pathname.startsWith("/api/")) {
-    event.respondWith(networkFirstWithCache(event.request, API_CACHE));
+    event.respondWith(networkFirstWithCache(request, API_CACHE));
     return;
   }
 
   // Knowledge base / health data: cache-first
   if (url.pathname.startsWith("/kb/") || url.pathname.includes("knowledge")) {
-    event.respondWith(cacheFirst(event.request, KB_CACHE));
+    event.respondWith(cacheFirst(request, KB_CACHE));
     return;
   }
 
-  // Everything else (app shell): cache-first → network fallback
-  event.respondWith(cacheFirst(event.request, APP_SHELL_CACHE));
+  // Everything else: network-first → cache fallback (so it self-heals on redeploy)
+  event.respondWith(networkFirstWithCache(request, APP_SHELL_CACHE));
 });
+
+// Network-first for HTML documents. Online → fresh HTML (cached as the offline
+// fallback). Offline → cached page → cached "/" → offline.html.
+async function networkFirstNavigation(request) {
+  try {
+    const response = await fetch(request);
+    if (response && response.ok) {
+      const cache = await caches.open(APP_SHELL_CACHE);
+      cache.put("/", response.clone()).catch(() => {});
+    }
+    return response;
+  } catch {
+    return (
+      (await caches.match(request)) ||
+      (await caches.match("/")) ||
+      (await caches.match("/offline.html")) ||
+      new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain" } })
+    );
+  }
+}
+
+// Cache-first for immutable build assets. On a cache miss we go to the network and
+// cache a copy; on a network failure we surface a network error (Response.error())
+// rather than throwing — throwing is what yields the SW "unexpected error".
+async function cacheFirstAsset(request, cacheName) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+  try {
+    const response = await fetch(request);
+    if (response && response.ok) {
+      const cache = await caches.open(cacheName);
+      cache.put(request, response.clone()).catch(() => {});
+    }
+    return response;
+  } catch {
+    return Response.error();
+  }
+}
 
 // ── Strategies ─────────────────────────────────────────────────────────
 
@@ -79,7 +140,7 @@ async function networkFirstWithCache(request, cacheName) {
     const response = await fetch(request);
     if (response.ok) {
       const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
+      cache.put(request, response.clone()).catch(() => {});
     }
     return response;
   } catch {
@@ -119,7 +180,7 @@ async function cacheFirst(request, cacheName) {
     const response = await fetch(request);
     if (response.ok) {
       const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
+      cache.put(request, response.clone()).catch(() => {});
     }
     return response;
   } catch {

@@ -92,7 +92,7 @@ Sunbird auth uses `SUNBIRD_USERNAME` + `SUNBIRD_PASSWORD` (preferred over static
 - **Diagrams**: Mermaid. The LLM emits a fenced ```mermaid block only when it genuinely clarifies (decision flow / referral pathway / steps); `components/MermaidDiagram.tsx` (lazy, `securityLevel: strict`, degrades to source on bad syntax) renders it inline. Contextual, never forced — at most one per response.
 - **Lazy components**: `ClinicFinder`, `SettingsPanel`, `MedicationReminders`, `MermaidDiagram` are `React.lazy` — preserve `Suspense` boundaries when refactoring `app/page.tsx`.
 - **State**: Zustand store at `store/useChatStore.ts` persists via `persist` middleware to localStorage; max 50 sessions.
-- **Service worker** at `frontend/public/sw.js` does cache-first for app shell, network-first for `/api`, and a real Background Sync that drains queued chats from IndexedDB to `/api/v1/chat` on reconnect.
+- **Service worker** at `frontend/public/sw.js`: **network-first for HTML navigations** (a redeploy emits new content-hashed `/_next` chunk names, so cache-first HTML would serve stale docs referencing dead chunks → app won't boot), **cache-first for immutable `/_next/` assets**, network-first for `/api`, and a real Background Sync that drains queued chats from IndexedDB to `/api/v1/chat` on reconnect. Bump `CACHE_VERSION` on cache-shape changes; registration auto-reloads once when a new SW takes control.
 
 ## Security & audit invariants
 
