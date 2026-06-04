@@ -64,6 +64,13 @@ LLM_BACKEND = settings.llm_backend  # "gemini" | "groq" | "local" | "passages"
 # Gemini (default — OpenAI-compatible endpoint)
 GEMINI_API_KEY = settings.gemini_api_key
 GEMINI_MODEL = settings.gemini_model
+# Remap retired Gemini flash models to the current one. This survives a stale or
+# stuck GEMINI_MODEL env value — Crane Cloud's `apps update -e` won't flip an
+# already-set key, so the pod can be pinned to a retired model (404 → fallback).
+_RETIRED_GEMINI = {"gemini-2.0-flash", "gemini-2.0-flash-001", "gemini-1.5-flash", "gemini-1.0-pro"}
+if GEMINI_MODEL in _RETIRED_GEMINI:
+    logger.info("Remapping retired Gemini model %s → gemini-2.5-flash", GEMINI_MODEL)
+    GEMINI_MODEL = "gemini-2.5-flash"
 GEMINI_MAX_TOKENS = settings.gemini_max_tokens
 GEMINI_TEMPERATURE = settings.gemini_temperature
 
