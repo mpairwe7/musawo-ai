@@ -225,16 +225,28 @@ test.describe("USSD / SMS (side-effect-safe)", () => {
   });
 });
 
-test.describe("Voice / translation (graceful 503 when Sunbird unset)", () => {
-  test("POST /v1/voice/tts → 503 not configured", async ({ request }) => {
-    expect((await request.post("/v1/voice/tts", { data: { text: "oli otya" } })).status()).toBe(503);
+test.describe("Voice / translation (Sunbird-aware)", () => {
+  // 503 when Sunbird is unconfigured; once configured the endpoint runs and
+  // returns 200 (success) or 502 (Sunbird upstream error) — never 5xx-crash.
+  async function sunbirdOn(request: import("@playwright/test").APIRequestContext) {
+    const h = await (await request.get("/health")).json();
+    return Boolean(h.sunbird_ai);
+  }
+  const expected = (on: boolean) => (on ? [200, 502] : [503]);
+
+  test("POST /v1/voice/tts behaves per Sunbird config", async ({ request }) => {
+    const on = await sunbirdOn(request);
+    const s = (await request.post("/v1/voice/tts", { data: { text: "oli otya", locale: "lg" } })).status();
+    expect(expected(on)).toContain(s);
   });
-  test("POST /v1/translate → 503 not configured", async ({ request }) => {
-    expect(
-      (await request.post("/v1/translate", { data: { text: "hello", source_locale: "en", target_locale: "lg" } })).status()
-    ).toBe(503);
+  test("POST /v1/translate behaves per Sunbird config", async ({ request }) => {
+    const on = await sunbirdOn(request);
+    const s = (await request.post("/v1/translate", { data: { text: "hello", source_locale: "en", target_locale: "lg" } })).status();
+    expect(expected(on)).toContain(s);
   });
-  test("POST /v1/detect-language → 503 not configured", async ({ request }) => {
-    expect((await request.post("/v1/detect-language", { data: { text: "oli otya" } })).status()).toBe(503);
+  test("POST /v1/detect-language behaves per Sunbird config", async ({ request }) => {
+    const on = await sunbirdOn(request);
+    const s = (await request.post("/v1/detect-language", { data: { text: "oli otya" } })).status();
+    expect(expected(on)).toContain(s);
   });
 });
