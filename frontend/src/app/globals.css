@@ -995,83 +995,35 @@ button, [role="button"], input, select {
 .bubble-content .cite-ref:hover { text-decoration: underline; }
 .citation-item:target { background: var(--bg-hover); border-radius: var(--radius-sm); }
 
-/* ── Diagram slots (filled by React HealthDiagram component) ─── */
-.diagram-slot {
-  margin: 0.75rem 0;
-  min-height: 60px;
-}
-
-/* ── Health illustration cards ───────────────────────────────── */
-.health-diagram {
+/* ── Mermaid diagrams (rendered inline, only when contextually relevant) ─── */
+.bubble-content .mermaid-diagram {
   margin: 0.75rem 0;
   padding: 0.75rem;
   background: linear-gradient(135deg, rgba(46, 125, 50, 0.06), rgba(212, 168, 67, 0.04));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
+  overflow-x: auto;
   text-align: center;
 }
-.health-diagram svg {
-  display: block;
-  margin: 0 auto 0.5rem;
-  max-width: 100%;
-  height: auto;
-}
-.health-diagram .diagram-title {
+.bubble-content .mermaid-diagram svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+.bubble-content .mermaid-loading {
+  margin: 0.6rem 0;
   font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--accent-green-light);
-  margin-bottom: 0.25rem;
-}
-.health-diagram .diagram-caption {
-  font-size: 0.72rem;
   color: var(--text-3);
-  line-height: 1.5;
+  font-style: italic;
 }
-.health-diagram .diagram-steps {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-top: 0.5rem;
-}
-.health-diagram .diagram-step {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.3rem 0.6rem;
-  background: rgba(0, 0, 0, 0.15);
+.bubble-content .mermaid-fallback {
+  margin: 0.75rem 0;
+  padding: 0.6rem 0.75rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  font-size: 0.72rem;
+  overflow-x: auto;
+  font-size: 0.78rem;
   color: var(--text-2);
-}
-.health-diagram .step-num {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--accent-green);
-  color: white;
-  font-size: 0.6rem;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  white-space: pre-wrap;
 }
 
-/* Severity-colored diagram variants */
-.health-diagram.diagram-danger {
-  background: linear-gradient(135deg, rgba(231, 76, 60, 0.06), rgba(231, 76, 60, 0.02));
-  border-color: rgba(231, 76, 60, 0.2);
-}
-.health-diagram.diagram-danger .diagram-title { color: var(--severity-red); }
-.health-diagram.diagram-danger .step-num { background: var(--severity-red); }
-
-.health-diagram.diagram-maternal {
-  background: linear-gradient(135deg, rgba(233, 30, 99, 0.06), rgba(233, 30, 99, 0.02));
-  border-color: rgba(233, 30, 99, 0.2);
-}
-.health-diagram.diagram-maternal .diagram-title { color: var(--accent-pink); }
-.health-diagram.diagram-maternal .step-num { background: var(--accent-pink); }
 .collapsed-preview {
   color: var(--text-3);
   font-style: italic;

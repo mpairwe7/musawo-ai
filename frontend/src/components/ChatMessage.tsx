@@ -26,8 +26,25 @@ import {
 } from "@/lib/voiceOutput";
 import { t } from "@/lib/i18n";
 
-// Lazy-load diagrams — only loaded when a response includes diagram content
-const HealthDiagram = lazy(() => import("./HealthDiagrams"));
+// Lazy-load Mermaid — heavy, only fetched when a response actually contains a diagram
+const MermaidDiagram = lazy(() => import("./MermaidDiagram"));
+
+// Split a response into ordered markdown / mermaid segments so diagrams render
+// inline at the position the LLM placed them (and only when present).
+type Segment = { type: "md" | "mermaid"; value: string };
+function splitContentSegments(content: string): Segment[] {
+  const segments: Segment[] = [];
+  const re = /```mermaid\s*\n([\s\S]*?)```/gi;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(content)) !== null) {
+    if (m.index > last) segments.push({ type: "md", value: content.slice(last, m.index) });
+    segments.push({ type: "mermaid", value: m[1] });
+    last = m.index + m[0].length;
+  }
+  if (last < content.length) segments.push({ type: "md", value: content.slice(last) });
+  return segments.length ? segments : [{ type: "md", value: content }];
+}
 
 interface ChatMessageProps {
   turn: ChatTurn;
@@ -192,13 +209,6 @@ function renderMarkdown(text: string): string {
   const tables: string[] = [];
   html = extractTables(html, tables);
 
-  // Inline diagrams: ::diagram[key] → SVG placeholder rendered by React
-  // (actual SVGs injected post-render via HealthDiagram component below)
-  html = html.replace(
-    /::diagram\[([a-z_-]+)\]/gi,
-    '<div class="diagram-slot" data-diagram="$1"></div>'
-  );
-
   // Markdown images: ![alt](src) → <figure> with caption
   html = html.replace(
     /!\[([^\]]*)\]\(([^)]+)\)/g,
@@ -264,6 +274,12 @@ function renderMarkdown(text: string): string {
     /<strong>REFER NOW<\/strong>/g,
     '<span class="refer-now-badge">REFER NOW</span>'
   );
+
+  // Pull headings/rules out of paragraphs they were wrapped into (valid block
+  // structure + correct spacing); a leading <br/> after them is dropped.
+  html = html.replace(/<p class="md-p">\s*(<h[34][^>]*>.*?<\/h[34]>)\s*(?:<br \/>)?/g, '$1<p class="md-p">');
+  html = html.replace(/<p class="md-p">\s*(<hr class="content-hr" \/>)\s*(?:<br \/>)?/g, '$1<p class="md-p">');
+  html = html.replace(/<p class="md-p">\s*<\/p>/g, "");
 
   // Re-insert tables OUTSIDE any <p> wrapper (a standalone token in its own paragraph)
   html = html.replace(/<p class="md-p">\s*(@@MDTABLE\d+@@)\s*<\/p>/g, "$1");
@@ -376,38 +392,6 @@ function CitationList({ citations }: { citations: Citation[] }) {
   );
 }
 
-// ── Auto-detect relevant diagrams from response content ─────────────
-const DIAGRAM_TRIGGERS: Record<string, string[]> = {
-  danger_signs: ["danger sign", "convulsion", "unable to drink", "chest indrawing", "unconscious", "vomiting everything"],
-  ors_preparation: ["ors", "oral rehydration", "mix.*sachet", "rehydration salt"],
-  handwashing: ["handwashing", "wash.*hand", "hand hygiene", "soap.*water.*20"],
-  breathing_count: ["breathing rate", "count.*breath", "fast breathing", "breaths per minute"],
-  breastfeeding: ["breastfeed", "latch", "breast.*position", "exclusive.*feeding"],
-  malaria_rdt: ["rdt", "rapid diagnostic", "malaria test", "blood smear"],
-  fever_assessment: ["high fever", "fever.*child", "temperature.*38", "febrile"],
-  immunization_schedule: ["immuniz", "vaccin", "bcg", "pentavalent", "opv", "unepi"],
-  dehydration_check: ["dehydrat", "skin pinch", "sunken eyes", "some dehydration", "severe dehydration"],
-  birth_preparedness: ["birth.*plan", "birth.*prepar", "before.*36.*week", "delivery.*plan"],
-};
-
-function detectDiagrams(content: string): string[] {
-  const lower = content.toLowerCase();
-  const detected: string[] = [];
-  for (const [key, triggers] of Object.entries(DIAGRAM_TRIGGERS)) {
-    if (triggers.some((t) => new RegExp(t, "i").test(lower))) {
-      detected.push(key);
-    }
-  }
-  // Max 2 auto-detected diagrams per message to avoid clutter
-  return detected.slice(0, 2);
-}
-
-// Also detect explicit ::diagram[key] in content
-function extractExplicitDiagrams(content: string): string[] {
-  const matches = content.match(/::diagram\[([a-z_-]+)\]/gi);
-  if (!matches) return [];
-  return matches.map((m) => m.replace(/::diagram\[|\]/g, ""));
-}
 
 // ── Main Message Component ────────────────────────────────────────────
 
@@ -435,13 +419,8 @@ export default memo(
         ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }, []);
 
-    // Detect diagrams to show
-    const diagrams = useMemo(() => {
-      if (!isAssistant || !turn.content) return [];
-      const explicit = extractExplicitDiagrams(turn.content);
-      if (explicit.length > 0) return explicit;
-      return detectDiagrams(turn.content);
-    }, [isAssistant, turn.content]);
+    // Split content into markdown + inline mermaid segments (diagrams render in place)
+    const segments = useMemo(() => splitContentSegments(turn.content || ""), [turn.content]);
 
     const [speaking, setSpeaking] = useState(false);
     const ttsEnabled = useChatStore((s) => s.ttsEnabled);
@@ -458,11 +437,11 @@ export default memo(
       } else {
         setSpeaking(true);
         const cleanText = turn.content
+          .replace(/```mermaid[\s\S]*?```/gi, "") // don't read diagram source aloud
           .replace(/^##+ .+$/gm, "")
           .replace(/\*\*(.+?)\*\*/g, "$1")
           .replace(/\*(.+?)\*/g, "$1")
           .replace(/`(.+?)`/g, "$1")
-          .replace(/::diagram\[[^\]]+\]/g, "")
           .replace(/---/g, "")
           .trim();
         const persona = VOICE_PERSONAS.find((p) => p.id === useChatStore.getState().selectedVoice);
@@ -517,13 +496,19 @@ export default memo(
           </div>
         )}
 
-        {/* Content */}
+        {/* Content — markdown segments + inline mermaid diagrams in place */}
         {!collapsed && turn.content ? (
-          <div
-            className="bubble-content"
-            onClick={handleCiteClick}
-            dangerouslySetInnerHTML={{ __html: renderMarkdown(turn.content) }}
-          />
+          <div className="bubble-content" onClick={handleCiteClick}>
+            {segments.map((seg, i) =>
+              seg.type === "mermaid" ? (
+                <Suspense key={i} fallback={<div className="mermaid-loading">Rendering diagram…</div>}>
+                  <MermaidDiagram code={seg.value} />
+                </Suspense>
+              ) : (
+                <div key={i} dangerouslySetInnerHTML={{ __html: renderMarkdown(seg.value) }} />
+              )
+            )}
+          </div>
         ) : !collapsed && isAssistant && !turn.content ? (
           <div className="bubble-content" style={{ color: "var(--text-3)", fontStyle: "italic" }}>
             Loading response...
@@ -533,15 +518,6 @@ export default memo(
           <div className="bubble-content collapsed-preview">
             {turn.content.slice(0, 120)}...
           </div>
-        )}
-
-        {/* Health diagrams (auto-detected or explicit ::diagram[key]) */}
-        {!collapsed && diagrams.length > 0 && (
-          <Suspense fallback={null}>
-            {diagrams.map((key) => (
-              <HealthDiagram key={key} diagramKey={key} />
-            ))}
-          </Suspense>
         )}
 
         {/* Grounding warning */}

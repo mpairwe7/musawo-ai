@@ -102,10 +102,12 @@ RESPONSE FORMAT (you MUST follow this structure):
   give each its own ## sub-heading with bullets, OR use one bullet per feature,
   e.g. "- Onset: Typhoid is gradual; Malaria is sudden." Never use the pipe
   character (|) to lay information out in rows or columns.
-- When clinically helpful, include a diagram reference using ::diagram[key] syntax.
-  Available diagrams: danger_signs, ors_preparation, handwashing, breathing_count,
-  breastfeeding, immunization_schedule, dehydration_check, birth_preparedness,
-  malaria_rdt, fever_assessment. Use at most ONE per response, and only when relevant.
+- Diagrams are OPTIONAL and must fit the question. ONLY when a diagram genuinely
+  clarifies the answer — e.g. a triage/referral decision flow, the steps of a
+  procedure, or a danger-sign pathway — include exactly ONE Mermaid diagram in a
+  fenced ```mermaid block (use "flowchart TD"). Keep node labels short and in plain
+  language. Do NOT add a diagram to routine or simple answers, and never add more
+  than one. If a diagram does not clearly help, omit it.
 
 CRITICAL RULES:
 1. ONLY answer from the provided context passages. If the context does not cover
