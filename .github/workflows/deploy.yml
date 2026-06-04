@@ -111,6 +111,9 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_AI_GATEWAY: ${{ secrets.CF_AI_GATEWAY }}
+          CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
           SUNBIRD_USERNAME: ${{ secrets.SUNBIRD_USERNAME }}
           SUNBIRD_API_TOKEN: ${{ secrets.SUNBIRD_API_TOKEN }}
           SUNBIRD_FALLBACK_USERNAME: ${{ secrets.SUNBIRD_FALLBACK_USERNAME }}
@@ -125,6 +128,9 @@ jobs:
             -e LLM_BACKEND=gemini \
             -e GEMINI_API_KEY="$GEMINI_API_KEY" \
             -e GEMINI_MODEL=gemini-2.0-flash \
+            -e CF_ACCOUNT_ID="$CF_ACCOUNT_ID" \
+            -e CF_AI_GATEWAY="$CF_AI_GATEWAY" \
+            -e CF_AIG_TOKEN="$CF_AIG_TOKEN" \
             -e GROQ_API_KEY="$GROQ_API_KEY" \
             -e GROQ_MODEL=llama-3.3-70b-versatile \
             -e OPENAI_API_KEY="$OPENAI_API_KEY" \

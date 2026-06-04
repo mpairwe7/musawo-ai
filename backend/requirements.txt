@@ -10,6 +10,9 @@ python-multipart>=0.0.9
 # SSE streaming
 sse-starlette>=2.0.0
 
+# DNS-over-HTTPS resolver (Crane Cloud / RENU egress workaround)
+dnspython>=2.6,<3
+
 # Data & retrieval
 sentence-transformers>=3.4,<4
 qdrant-client>=1.13,<2

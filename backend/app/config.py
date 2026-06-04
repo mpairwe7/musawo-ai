@@ -56,6 +56,13 @@ class Settings(BaseSettings):
     gemini_max_tokens: int = 4096
     gemini_temperature: float = 0.3
 
+    # Cloudflare AI Gateway — routes Gemini over Cloudflare's reachable edge so it
+    # works on firewalled pods (RENU). When account+gateway are set, Gemini calls
+    # go to gateway.ai.cloudflare.com instead of generativelanguage.googleapis.com.
+    cf_account_id: str = ""
+    cf_ai_gateway: str = ""
+    cf_aig_token: str = ""  # secret — gateway authorization (cf-aig-authorization)
+
     # Groq (free tier, OpenAI-compatible) — tier 2 (fallback)
     groq_api_key: str = ""  # secret
     groq_model: str = "llama-3.3-70b-versatile"

@@ -28,6 +28,17 @@ from app.models import (
     Mode,
 )
 from app.config import settings
+
+# RENU egress: if the pod's external DNS is broken, route lookups via DoH (1.1.1.1)
+# so Cloudflare-reachable hosts (incl. the AI Gateway) resolve. No-op where DNS
+# works. Must run before any outbound call (service warmup / LLM clients).
+try:
+    from app.doh_resolver import auto_activate_if_dns_broken
+
+    auto_activate_if_dns_broken()
+except Exception:
+    logging.getLogger("musawo").warning("DoH auto-activate skipped", exc_info=True)
+
 from app.service import HealthService
 
 logger = logging.getLogger("musawo")

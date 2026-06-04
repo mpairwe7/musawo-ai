@@ -67,6 +67,12 @@ GEMINI_MODEL = settings.gemini_model
 GEMINI_MAX_TOKENS = settings.gemini_max_tokens
 GEMINI_TEMPERATURE = settings.gemini_temperature
 
+# Cloudflare AI Gateway routing (works on firewalled RENU pods via the DoH resolver)
+CF_ACCOUNT_ID = settings.cf_account_id
+CF_AI_GATEWAY = settings.cf_ai_gateway
+CF_AIG_TOKEN = settings.cf_aig_token
+GEMINI_VIA_GATEWAY = bool(CF_ACCOUNT_ID and CF_AI_GATEWAY)
+
 # Groq (free tier, OpenAI-compatible)
 GROQ_API_KEY = settings.groq_api_key
 GROQ_MODEL = settings.groq_model
@@ -421,6 +427,13 @@ def stream_groq(
 
 _gemini_client = None
 _GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+# Cloudflare AI Gateway compat endpoint (reachable on firewalled RENU pods)
+_GEMINI_GATEWAY_BASE = "https://gateway.ai.cloudflare.com/v1/{acct}/{gw}/compat"
+
+
+def _gemini_model() -> str:
+    """Model id — prefixed for the CF gateway's unified provider routing."""
+    return f"google-ai-studio/{GEMINI_MODEL}" if GEMINI_VIA_GATEWAY else GEMINI_MODEL
 
 
 def _get_gemini_client():
@@ -428,15 +441,21 @@ def _get_gemini_client():
     if _gemini_client is None:
         import httpx
         from openai import OpenAI
-        # Fail fast: where Gemini's host is unreachable (e.g. the RENU pod firewalls
-        # non-Cloudflare egress) a short connect timeout + no retries means we demote
-        # to Groq in seconds instead of stalling on the default timeout.
-        _gemini_client = OpenAI(
-            api_key=GEMINI_API_KEY,
-            base_url=_GEMINI_BASE_URL,
-            timeout=httpx.Timeout(45.0, connect=6.0),
-            max_retries=0,
-        )
+        kwargs: dict[str, Any] = {
+            "api_key": GEMINI_API_KEY,
+            # Fail fast on unreachable hosts → demote to Groq in seconds.
+            "timeout": httpx.Timeout(45.0, connect=10.0),
+            "max_retries": 0,
+        }
+        if GEMINI_VIA_GATEWAY:
+            # Route Gemini through Cloudflare's reachable AI Gateway edge.
+            kwargs["base_url"] = _GEMINI_GATEWAY_BASE.format(acct=CF_ACCOUNT_ID, gw=CF_AI_GATEWAY)
+            if CF_AIG_TOKEN:
+                kwargs["default_headers"] = {"cf-aig-authorization": f"Bearer {CF_AIG_TOKEN}"}
+            logger.info("Gemini routed via Cloudflare AI Gateway (%s)", CF_AI_GATEWAY)
+        else:
+            kwargs["base_url"] = _GEMINI_BASE_URL
+        _gemini_client = OpenAI(**kwargs)
     return _gemini_client
 
 
@@ -466,13 +485,18 @@ def generate_gemini(
         "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly to the patient/VHT.",
     })
 
+    create_kwargs: dict[str, Any] = {
+        "model": _gemini_model(),
+        "messages": messages,
+        "max_tokens": GEMINI_MAX_TOKENS,
+        "temperature": GEMINI_TEMPERATURE,
+    }
+    if GEMINI_VIA_GATEWAY:
+        # CF compat endpoint maps this to a zero thinking budget so Gemini 2.5+
+        # doesn't spend max_tokens on hidden reasoning.
+        create_kwargs["extra_body"] = {"reasoning_effort": "minimal"}
     try:
-        response = client.chat.completions.create(
-            model=GEMINI_MODEL,
-            messages=messages,
-            max_tokens=GEMINI_MAX_TOKENS,
-            temperature=GEMINI_TEMPERATURE,
-        )
+        response = client.chat.completions.create(**create_kwargs)
         answer = (response.choices[0].message.content or "").strip()
         return {
             "text": answer,
@@ -507,14 +531,17 @@ def stream_gemini(
         "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly.",
     })
 
+    stream_kwargs: dict[str, Any] = {
+        "model": _gemini_model(),
+        "messages": messages,
+        "max_tokens": GEMINI_MAX_TOKENS,
+        "temperature": GEMINI_TEMPERATURE,
+        "stream": True,
+    }
+    if GEMINI_VIA_GATEWAY:
+        stream_kwargs["extra_body"] = {"reasoning_effort": "minimal"}
     try:
-        stream = client.chat.completions.create(
-            model=GEMINI_MODEL,
-            messages=messages,
-            max_tokens=GEMINI_MAX_TOKENS,
-            temperature=GEMINI_TEMPERATURE,
-            stream=True,
-        )
+        stream = client.chat.completions.create(**stream_kwargs)
         for chunk in stream:
             delta = chunk.choices[0].delta if chunk.choices else None
             if delta and delta.content:
