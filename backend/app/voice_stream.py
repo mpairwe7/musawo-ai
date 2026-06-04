@@ -18,7 +18,6 @@ from __future__ import annotations
 import asyncio
 import logging
 import math
-import os
 import pathlib
 import re
 import struct
@@ -29,6 +28,8 @@ from typing import Any, AsyncGenerator
 
 import numpy as np
 
+from .config import settings
+
 logger = logging.getLogger(__name__)
 
 
@@ -36,7 +37,7 @@ logger = logging.getLogger(__name__)
 # Silero VAD — Neural speech confirmation (1.6MB ONNX, <1ms/frame on CPU)
 # ---------------------------------------------------------------------------
 
-_SILERO_ENABLED = os.getenv("VOICE_SILERO_ENABLED", "true").lower() in ("true", "1", "yes")
+_SILERO_ENABLED = settings.voice_silero_enabled
 _SILERO_MODEL_URL = (
     "https://github.com/snakers4/silero-vad/raw/master/files/silero_vad.onnx"
 )
@@ -126,10 +127,10 @@ class SileroVAD:
 # Configuration
 # ---------------------------------------------------------------------------
 
-_VAD_ENERGY_THRESHOLD = float(os.getenv("VOICE_VAD_ENERGY_THRESHOLD", "0.015"))
-_VAD_SILENCE_MS = int(os.getenv("VOICE_VAD_SILENCE_MS", "600"))
-_VAD_MIN_SPEECH_MS = int(os.getenv("VOICE_VAD_MIN_SPEECH_MS", "250"))
-_VAD_MAX_UTTERANCE_S = float(os.getenv("VOICE_VAD_MAX_UTTERANCE_S", "30.0"))
+_VAD_ENERGY_THRESHOLD = settings.voice_vad_energy_threshold
+_VAD_SILENCE_MS = settings.voice_vad_silence_ms
+_VAD_MIN_SPEECH_MS = settings.voice_vad_min_speech_ms
+_VAD_MAX_UTTERANCE_S = settings.voice_vad_max_utterance_s
 _SENTENCE_RE = re.compile(r"(?<=[.!?])\s+")
 
 

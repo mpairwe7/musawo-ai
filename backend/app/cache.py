@@ -29,7 +29,6 @@ import base64
 import contextlib
 import json as _json
 import logging
-import os
 import threading
 import time
 from dataclasses import dataclass, field
@@ -39,13 +38,15 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
-CACHE_BACKEND = os.getenv("CACHE_BACKEND", "memory").lower()
-CACHE_ENABLED = os.getenv("CACHE_ENABLED", "true").lower() == "true"
-CACHE_THRESHOLD = float(os.getenv("CACHE_THRESHOLD", "0.92"))
-CACHE_TTL_SECONDS = int(os.getenv("CACHE_TTL_SECONDS", "3600"))
-CACHE_MAX_SIZE = int(os.getenv("CACHE_MAX_SIZE", "1000"))
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-CACHE_REDIS_PREFIX = os.getenv("CACHE_REDIS_PREFIX", "ura:cache:")
+from .config import settings
+
+CACHE_BACKEND = settings.cache_backend.lower()
+CACHE_ENABLED = settings.cache_enabled
+CACHE_THRESHOLD = settings.cache_threshold
+CACHE_TTL_SECONDS = settings.cache_ttl_seconds
+CACHE_MAX_SIZE = settings.cache_max_size
+REDIS_URL = settings.redis_url
+CACHE_REDIS_PREFIX = settings.cache_redis_prefix
 
 
 @dataclass

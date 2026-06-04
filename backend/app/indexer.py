@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import uuid
 from pathlib import Path
 from typing import Any
@@ -25,21 +24,27 @@ from typing import Any
 logger = logging.getLogger("musawo.indexer")
 
 # ---------------------------------------------------------------------------
-# Configuration
+# Configuration (centralized in app.config)
 # ---------------------------------------------------------------------------
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-QDRANT_COLLECTION = os.getenv("QDRANT_COLLECTION", "musawo_health_kb")
-DENSE_MODEL_NAME = os.getenv("DENSE_MODEL", "BAAI/bge-m3")
-DENSE_DIM = int(os.getenv("DENSE_DIM", "1024"))
-CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "600"))
-CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "100"))
-BATCH_SIZE = int(os.getenv("INDEX_BATCH_SIZE", "64"))
+from .config import settings
+
+QDRANT_URL = settings.qdrant_url
+QDRANT_COLLECTION = settings.qdrant_collection
+DENSE_MODEL_NAME = settings.dense_model
+DENSE_DIM = settings.dense_dim
+CHUNK_SIZE = settings.chunk_size
+CHUNK_OVERLAP = settings.chunk_overlap
+BATCH_SIZE = settings.index_batch_size
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
-KB_DIR = Path(os.getenv("KB_DIR", str(_PROJECT_ROOT / "knowledge-base")))
-BM25_STATE_PATH = Path(
-    os.getenv("BM25_STATE_PATH", str(KB_DIR / "bm25_state.json"))
-)
+# Canonical KNOWLEDGE_BASE_DIR (replaces the old KB_DIR env var). Relative paths
+# resolve against the repo root, preserving the previous absolute default.
+KB_DIR = Path(settings.knowledge_base_dir)
+if not KB_DIR.is_absolute():
+    KB_DIR = _PROJECT_ROOT / KB_DIR
+BM25_STATE_PATH = Path(settings.bm25_state_path)
+if not BM25_STATE_PATH.is_absolute():
+    BM25_STATE_PATH = _PROJECT_ROOT / BM25_STATE_PATH
 
 
 # ---------------------------------------------------------------------------

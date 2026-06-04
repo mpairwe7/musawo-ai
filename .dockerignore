@@ -11,6 +11,9 @@ __pycache__
 node_modules
 .env
 .env.local
+.env.production
+deploy-secrets.env
+*.secrets
 tests
 *.md
 *.pdf

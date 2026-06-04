@@ -9,16 +9,17 @@ Adaptations from the URA Chatbot guardrails for health context:
 
 from __future__ import annotations
 
-import os
 import re
 from dataclasses import dataclass, field
 
-# ── Configuration ──────────────────────────────────────────────────────────
+from .config import settings
 
-MAX_INPUT_LENGTH = int(os.getenv("MAX_INPUT_LENGTH", "2000"))
-ABSTENTION_THRESHOLD = float(os.getenv("ABSTENTION_THRESHOLD", "0.05"))
-ESCALATION_THRESHOLD = float(os.getenv("ESCALATION_THRESHOLD", "0.25"))
-GROUNDING_THRESHOLD = float(os.getenv("GROUNDING_THRESHOLD", "0.3"))
+# ── Configuration (centralized in app.config) ───────────────────────────────
+
+MAX_INPUT_LENGTH = settings.max_input_length
+ABSTENTION_THRESHOLD = settings.abstention_threshold
+ESCALATION_THRESHOLD = settings.escalation_threshold
+GROUNDING_THRESHOLD = settings.grounding_threshold
 
 
 @dataclass

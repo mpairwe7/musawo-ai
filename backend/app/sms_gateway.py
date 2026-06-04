@@ -13,15 +13,16 @@ from __future__ import annotations
 import logging
 import os
 
+from app.config import settings
 from app.i18n import t
 
 logger = logging.getLogger("musawo.sms")
 
-# ── Twilio Config ──────────────────────────────────────────────────────
+# ── Twilio Config (centralized in app.config) ──────────────────────────
 
-TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID", "")
-TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "")
-TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER", "")  # e.g. +1234567890
+TWILIO_ACCOUNT_SID = settings.twilio_account_sid
+TWILIO_AUTH_TOKEN = settings.twilio_auth_token
+TWILIO_PHONE_NUMBER = settings.twilio_phone_number  # e.g. +1234567890
 
 _twilio_client = None
 

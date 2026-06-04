@@ -6,7 +6,6 @@ Pipeline: InputGuard → Supervisor → Cache → Retrieval → Abstention → L
 from __future__ import annotations
 
 import logging
-import os
 import time
 import uuid
 from collections import deque
@@ -67,17 +66,19 @@ _LLM_CIRCUIT = CircuitBreaker(
 )
 audit_logger = logging.getLogger("musawo.audit")
 
-# ── Config ─────────────────────────────────────────────────────────────────
+# ── Config (centralized in app.config) ──────────────────────────────────────
 
-LLM_DEADLINE_SECONDS = int(os.getenv("LLM_INFERENCE_TIMEOUT", "45"))
-GROUNDING_THRESHOLD = float(os.getenv("GROUNDING_THRESHOLD", "0.3"))
-CLINICAL_SAFETY_THRESHOLD = float(os.getenv("CLINICAL_SAFETY_THRESHOLD", "0.2"))
-SESSION_TTL = int(os.getenv("SESSION_TTL_SECONDS", "86400"))
+from .config import settings
+
+LLM_DEADLINE_SECONDS = settings.llm_inference_timeout
+GROUNDING_THRESHOLD = settings.grounding_threshold
+CLINICAL_SAFETY_THRESHOLD = settings.clinical_safety_threshold
+SESSION_TTL = settings.session_ttl_seconds
 MAX_SESSIONS = 5000
 MAX_HISTORY = 40
 HISTORY_WINDOW = 10  # Last 10 turn-pairs sent to LLM for deep context
-LLM_WORKERS = int(os.getenv("LLM_WORKERS", "2"))
-AUDIT_LOG_PATH = os.getenv("AUDIT_LOG_PATH", "/tmp/musawo_audit.jsonl")
+LLM_WORKERS = settings.llm_workers
+AUDIT_LOG_PATH = settings.audit_log_path
 
 # Emergency contacts (Uganda)
 EMERGENCY_CONTACTS = {

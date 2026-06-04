@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import re
 import time
 import uuid
@@ -28,24 +27,21 @@ from app.models import (
     HealthStatus,
     Mode,
 )
+from app.config import settings
 from app.service import HealthService
 
 logger = logging.getLogger("musawo")
 logging.basicConfig(
-    level=getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper()),
+    level=getattr(logging, settings.log_level.upper(), logging.INFO),
     format="%(asctime)s %(name)s %(levelname)s %(message)s",
 )
 
-# ── Config ─────────────────────────────────────────────────────────────────
+# ── Config (centralized in app.config) ──────────────────────────────────────
 
-APP_ENV = os.getenv("APP_ENV", "development")
-PORT = int(os.getenv("PORT", "8000"))
-_default_origins = (
-    "http://localhost:3000,http://localhost:3200,"
-    "http://localhost:8000,http://localhost:8888,"
-    "http://127.0.0.1:3200,http://127.0.0.1:8888"
-)
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", _default_origins).split(",")
+APP_ENV = settings.app_env
+PORT = settings.port
+_default_origins = settings.allowed_origins
+ALLOWED_ORIGINS = _default_origins.split(",")
 # In dev: allow network IPs (for testing via 192.168.x.x) but NOT wildcard
 # In production: strictly enforce ALLOWED_ORIGINS
 if APP_ENV == "development" and ALLOWED_ORIGINS == _default_origins.split(","):
@@ -58,14 +54,27 @@ if APP_ENV == "development" and ALLOWED_ORIGINS == _default_origins.split(","):
         ])
     except Exception:
         pass
-RATE_LIMIT_REQUESTS = int(os.getenv("RATE_LIMIT_REQUESTS", "30"))
-RATE_LIMIT_WINDOW = int(os.getenv("RATE_LIMIT_WINDOW", "60"))
+RATE_LIMIT_REQUESTS = settings.rate_limit_requests
+RATE_LIMIT_WINDOW = settings.rate_limit_window
 
 # API key for SMS send endpoint (prevents unauthorized billing)
-SMS_API_KEY = os.getenv("SMS_API_KEY", "")
+SMS_API_KEY = settings.sms_api_key
 
 # Max audio upload size (10MB)
-MAX_AUDIO_SIZE = int(os.getenv("MAX_AUDIO_SIZE", str(10 * 1024 * 1024)))
+MAX_AUDIO_SIZE = settings.max_audio_size
+
+# Startup config summary — booleans only for secrets, never their values
+logger.info(
+    "config: env=%s backend=%s groq=%s claude=%s sunbird=%s twilio=%s qdrant=%s cache=%s",
+    APP_ENV,
+    settings.llm_backend,
+    bool(settings.groq_api_key),
+    bool(settings.anthropic_api_key),
+    bool(settings.sunbird_username or settings.sunbird_api_token),
+    bool(settings.twilio_auth_token),
+    settings.qdrant_url,
+    settings.cache_backend,
+)
 
 # ── Rate limiter (thread-safe, in-process) ─────────────────────────────────
 
@@ -499,7 +508,7 @@ async def twilio_sms_webhook(request: Request):
     https://your-domain.com/v1/sms/webhook (HTTP POST)
     """
     # Validate Twilio signature if auth token is configured
-    twilio_auth_token = os.getenv("TWILIO_AUTH_TOKEN", "")
+    twilio_auth_token = settings.twilio_auth_token
     if twilio_auth_token:
         try:
             from twilio.request_validator import RequestValidator

@@ -21,25 +21,28 @@ import httpx
 
 logger = logging.getLogger("musawo.sunbird")
 
-# ── Config ────────────────────────────────────────────────────────────────
+# ── Config (centralized in app.config) ─────────────────────────────────────
 
-SUNBIRD_API_URL = os.getenv("SUNBIRD_API_URL", "https://api.sunbird.ai")
-SUNBIRD_TIMEOUT = int(os.getenv("SUNBIRD_TIMEOUT", "30"))
+from .config import settings
+
+SUNBIRD_API_URL = settings.sunbird_api_url
+SUNBIRD_TIMEOUT = settings.sunbird_timeout
 
 # Whisper Luganda LoRA adapter path — fine-tuned on 438hrs Luganda speech
+# (computed local filesystem path; kept as a direct env read)
 WHISPER_LUGANDA_MODEL = os.getenv(
     "WHISPER_LUGANDA_MODEL",
     os.path.join(os.path.dirname(__file__), "../../../../fine-tuning/adapters/whisper-lg"),
 )
 
 # Auth credentials — primary + fallback (for token refresh & resilience)
-SUNBIRD_API_TOKEN = os.getenv("SUNBIRD_API_TOKEN", "")
-SUNBIRD_USERNAME = os.getenv("SUNBIRD_USERNAME", "")
-SUNBIRD_PASSWORD = os.getenv("SUNBIRD_PASSWORD", "")
+SUNBIRD_API_TOKEN = settings.sunbird_api_token
+SUNBIRD_USERNAME = settings.sunbird_username
+SUNBIRD_PASSWORD = settings.sunbird_password
 
 # Fallback credentials — used if primary auth fails
-SUNBIRD_FALLBACK_USERNAME = os.getenv("SUNBIRD_FALLBACK_USERNAME", "")
-SUNBIRD_FALLBACK_PASSWORD = os.getenv("SUNBIRD_FALLBACK_PASSWORD", "")
+SUNBIRD_FALLBACK_USERNAME = settings.sunbird_fallback_username
+SUNBIRD_FALLBACK_PASSWORD = settings.sunbird_fallback_password
 
 # Token refresh interval: refresh 1 day before expiry (tokens expire after 7 days)
 _TOKEN_REFRESH_DAYS = 6
@@ -505,7 +508,7 @@ def _local_tts_fallback(text: str, locale: str) -> dict[str, Any] | None:
         global _cosyvoice_model
         if _cosyvoice_model is None:
             from cosyvoice.cli.cosyvoice import CosyVoice
-            model_name = os.getenv("COSYVOICE_MODEL", "iic/CosyVoice2-0.5B")
+            model_name = settings.cosyvoice_model
             logger.info("Loading CosyVoice model: %s", model_name)
             _cosyvoice_model = CosyVoice(model_name)
 

@@ -4,6 +4,7 @@
 fastapi>=0.115.0,<0.116
 uvicorn[standard]>=0.32.0,<0.35
 pydantic>=2.10.0,<2.12
+pydantic-settings>=2.5,<3
 python-multipart>=0.0.9
 
 # SSE streaming

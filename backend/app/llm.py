@@ -54,30 +54,32 @@ def truncate_history_to_budget(
     return result
 
 
-# ── Config ─────────────────────────────────────────────────────────────────
+# ── Config (centralized in app.config) ──────────────────────────────────────
 
-LLM_BACKEND = os.getenv("LLM_BACKEND", "groq")  # "groq" | "claude" | "local" | "passages"
+from .config import settings
+
+LLM_BACKEND = settings.llm_backend  # "groq" | "claude" | "local" | "passages"
 
 # Groq (free tier, OpenAI-compatible)
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-GROQ_MAX_TOKENS = int(os.getenv("GROQ_MAX_TOKENS", "4096"))
-GROQ_TEMPERATURE = float(os.getenv("GROQ_TEMPERATURE", "0.3"))
+GROQ_API_KEY = settings.groq_api_key
+GROQ_MODEL = settings.groq_model
+GROQ_MAX_TOKENS = settings.groq_max_tokens
+GROQ_TEMPERATURE = settings.groq_temperature
 
 # Claude API
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
-CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6-20250514")
-CLAUDE_THINKING_BUDGET = int(os.getenv("CLAUDE_THINKING_BUDGET", "10000"))
-CLAUDE_PROMPT_CACHING = os.getenv("CLAUDE_PROMPT_CACHING", "true").lower() == "true"
-CLAUDE_MAX_TOKENS = int(os.getenv("CLAUDE_MAX_TOKENS", "4096"))
-CLAUDE_TEMPERATURE = float(os.getenv("CLAUDE_TEMPERATURE", "0.3"))
+ANTHROPIC_API_KEY = settings.anthropic_api_key
+CLAUDE_MODEL = settings.claude_model
+CLAUDE_THINKING_BUDGET = settings.claude_thinking_budget
+CLAUDE_PROMPT_CACHING = settings.claude_prompt_caching
+CLAUDE_MAX_TOKENS = settings.claude_max_tokens
+CLAUDE_TEMPERATURE = settings.claude_temperature
 
 # Local model (offline fallback)
-LOCAL_MODEL = os.getenv("LLM_MODEL", "Qwen/Qwen3-8B")
-LOCAL_CONTEXT_WINDOW = int(os.getenv("LLM_CONTEXT_WINDOW", "8192"))
-LOCAL_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "512"))
-LOCAL_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.2"))
-LOCAL_DEVICE = os.getenv("LLM_DEVICE", "auto")
+LOCAL_MODEL = settings.llm_model
+LOCAL_CONTEXT_WINDOW = settings.llm_context_window
+LOCAL_MAX_TOKENS = settings.llm_max_tokens
+LOCAL_TEMPERATURE = settings.llm_temperature
+LOCAL_DEVICE = settings.llm_device
 
 # ── System Prompts ─────────────────────────────────────────────────────────
 
@@ -96,6 +98,11 @@ RESPONSE FORMAT (you MUST follow this structure):
   4. **Sources** — Cite [1], [2] from passages
 - Keep language simple — many users have limited literacy.
 - Be concise but complete. Avoid long paragraphs — prefer bullet points.
+- Do NOT use markdown tables (no "| column | column |" syntax) — they do not fit
+  the small phone screens used in the community. To compare two or more things,
+  give each its own ## sub-heading with bullets, OR use one bullet per feature,
+  e.g. "- Onset: Typhoid is gradual; Malaria is sudden." Never use the pipe
+  character (|) to lay information out in rows or columns.
 - When clinically helpful, include a diagram reference using ::diagram[key] syntax.
   Available diagrams: danger_signs, ors_preparation, handwashing, breathing_count,
   breastfeeding, immunization_schedule, dehydration_check, birth_preparedness,
@@ -575,11 +582,11 @@ _local_tokenizer = None
 _local_backend = None  # "gguf" | "bnb4" | "bnb8" | "transformers"
 
 # GGUF model path (set via env for llama.cpp backend)
-GGUF_MODEL_PATH = os.getenv("GGUF_MODEL_PATH", "")
-LOCAL_GPU_LAYERS = int(os.getenv("LOCAL_GPU_LAYERS", "0"))  # For GGUF: layers on GPU
+GGUF_MODEL_PATH = settings.gguf_model_path
+LOCAL_GPU_LAYERS = settings.local_gpu_layers  # For GGUF: layers on GPU
 
 # LoRA adapter path — fine-tuned Luganda adapter merged at load time
-LORA_ADAPTER_PATH = os.getenv("LORA_ADAPTER_PATH", "") or None
+LORA_ADAPTER_PATH = settings.lora_adapter_path or None
 
 
 def _load_local_model():

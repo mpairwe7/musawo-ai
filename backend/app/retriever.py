@@ -20,7 +20,6 @@ import hashlib
 import json
 import logging
 import math
-import os
 import re
 import time
 from collections import Counter
@@ -28,22 +27,23 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from .config import settings
 from .resilience import CircuitBreaker, CircuitState  # noqa: F401 (re-export)
 
 logger = logging.getLogger("musawo.retriever")
 
-# ── Config ─────────────────────────────────────────────────────────────────
+# ── Config (centralized in app.config) ──────────────────────────────────────
 
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-QDRANT_COLLECTION = os.getenv("QDRANT_COLLECTION", "musawo_health_kb")
-DENSE_MODEL = os.getenv("DENSE_MODEL", "BAAI/bge-m3")
-DENSE_DIM = int(os.getenv("DENSE_DIM", "1024"))
-RERANKER_MODEL = os.getenv("RERANKER_MODEL", "mixedbread-ai/mxbai-rerank-base-v2")
-RERANK_ENABLED = os.getenv("RERANK_ENABLED", "true").lower() == "true"
-BM25_STATE_PATH = os.getenv("BM25_STATE_PATH", "knowledge-base/bm25_state.json")
+QDRANT_URL = settings.qdrant_url
+QDRANT_COLLECTION = settings.qdrant_collection
+DENSE_MODEL = settings.dense_model
+DENSE_DIM = settings.dense_dim
+RERANKER_MODEL = settings.reranker_model
+RERANK_ENABLED = settings.rerank_enabled
+BM25_STATE_PATH = settings.bm25_state_path
 
 # Prefetch: how many candidates to retrieve before fusion/reranking
-PREFETCH_LIMIT = int(os.getenv("PREFETCH_LIMIT", "20"))
+PREFETCH_LIMIT = settings.prefetch_limit
 
 
 # ── BM25 Sparse Encoder ───────────────────────────────────────────────────
@@ -438,7 +438,7 @@ class HybridRetriever:
             query_tokens = all_tokens
 
         candidates: list[tuple[float, dict]] = []
-        kb_dir = Path(os.getenv("KNOWLEDGE_BASE_DIR", "knowledge-base"))
+        kb_dir = Path(settings.knowledge_base_dir)
         for json_file in kb_dir.rglob("*.json"):
             if json_file.name == "bm25_state.json":
                 continue

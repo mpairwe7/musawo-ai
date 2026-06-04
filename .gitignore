@@ -15,10 +15,13 @@ out/
 frontend/.next/
 frontend/node_modules/
 
-# Environment
+# Environment (only .env.example is tracked)
 .env
 .env.local
 .env.production
+.env.*.local
+deploy-secrets.env
+*.secrets
 
 # IDE
 .vscode/

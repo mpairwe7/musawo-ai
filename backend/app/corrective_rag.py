@@ -17,16 +17,14 @@ Environment variables:
 from __future__ import annotations
 
 import logging
-import os
 from typing import Any
+
+from .config import settings
 
 logger = logging.getLogger(__name__)
 
-CORRECTIVE_ENABLED = os.getenv("CORRECTIVE_RAG_ENABLED", "true").lower() == "true"
-try:
-    CORRECTIVE_THRESHOLD = float(os.getenv("CORRECTIVE_RAG_THRESHOLD", "0.3"))
-except ValueError:
-    CORRECTIVE_THRESHOLD = 0.3
+CORRECTIVE_ENABLED = settings.corrective_rag_enabled
+CORRECTIVE_THRESHOLD = settings.corrective_rag_threshold
 
 
 def _avg_score(hits: list[dict[str, Any]]) -> float:
