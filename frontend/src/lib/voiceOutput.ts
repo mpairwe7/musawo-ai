@@ -51,34 +51,35 @@ export function stopSpeaking(): void {
     window.speechSynthesis.cancel();
     currentUtterance = null;
   }
-  // Also stop Sunbird audio if playing
-  if (typeof sunbirdAudio !== "undefined" && sunbirdAudio) {
-    sunbirdAudio.pause();
-    sunbirdAudio = null;
+  // Also stop server-TTS audio if playing
+  if (typeof serverAudio !== "undefined" && serverAudio) {
+    serverAudio.pause();
+    serverAudio = null;
   }
 }
 
 export function isSpeaking(): boolean {
   const browserSpeaking = isTTSAvailable() && window.speechSynthesis.speaking;
-  const sunbirdPlaying = typeof sunbirdAudio !== "undefined" && sunbirdAudio !== null && !sunbirdAudio.paused;
-  return browserSpeaking || sunbirdPlaying;
+  const serverPlaying = typeof serverAudio !== "undefined" && serverAudio !== null && !serverAudio.paused;
+  return browserSpeaking || serverPlaying;
 }
 
-// ── Sunbird TTS for local languages ──────────────────────────────────
+// ── Server TTS: Sunbird native voices (lg/nyn/sw) + Cloudflare MeloTTS (English) ──
 
-let sunbirdAudio: HTMLAudioElement | null = null;
+let serverAudio: HTMLAudioElement | null = null;
 
 /**
- * Try Sunbird TTS for local languages (Luganda, Runyankole, Swahili).
- * Returns true if Sunbird handled it, false to fall back to browser TTS.
+ * Try server-side TTS via /v1/voice/tts: Sunbird native voices for Ugandan
+ * languages, Cloudflare MeloTTS for English (returned as a base64 data URL).
+ * Returns true if it played, false to fall back to browser speechSynthesis.
  */
-async function trySunbirdTTS(
+async function tryServerTTS(
   text: string,
   locale: string,
   onEnd?: () => void,
 ): Promise<boolean> {
-  // Sunbird TTS supports Luganda, Runyankole, Swahili native voices
-  if (!["lg", "nyn", "sw"].includes(locale)) return false;
+  // Server handles Luganda/Runyankole/Swahili (Sunbird) and English (MeloTTS).
+  if (!["lg", "nyn", "sw", "en", "eng"].includes(locale)) return false;
   if (text.length > 2000) return false;
 
   try {
@@ -86,17 +87,19 @@ async function trySunbirdTTS(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: text.slice(0, 2000), locale }),
+      // Fall back to browser TTS quickly if the server is slow/unreachable.
+      signal: AbortSignal.timeout(10000),
     });
     if (!resp.ok) return false;
     const data = await resp.json();
     if (!data.audio_url) return false;
 
-    // Play the audio from Sunbird's signed URL
-    if (sunbirdAudio) { sunbirdAudio.pause(); sunbirdAudio = null; }
-    sunbirdAudio = new Audio(data.audio_url);
-    sunbirdAudio.onended = () => { sunbirdAudio = null; onEnd?.(); };
-    sunbirdAudio.onerror = () => { sunbirdAudio = null; onEnd?.(); };
-    await sunbirdAudio.play();
+    // Play the returned audio (Sunbird signed URL or MeloTTS base64 data URL)
+    if (serverAudio) { serverAudio.pause(); serverAudio = null; }
+    serverAudio = new Audio(data.audio_url);
+    serverAudio.onended = () => { serverAudio = null; onEnd?.(); };
+    serverAudio.onerror = () => { serverAudio = null; onEnd?.(); };
+    await serverAudio.play();
     return true;
   } catch {
     return false; // Fall back to browser TTS
@@ -105,19 +108,21 @@ async function trySunbirdTTS(
 
 /**
  * Speak text aloud. If urgent, uses higher pitch and rate.
- * For local languages, tries Sunbird AI native voices first.
+ * Tries server TTS first (Sunbird voices for Ugandan languages, Cloudflare
+ * MeloTTS for English), then falls back to browser speechSynthesis.
  */
 export function speak(
   text: string,
   locale: string = "en",
   options: { urgent?: boolean; onEnd?: () => void; gender?: "female" | "male"; langCode?: string } = {}
 ): void {
-  // Primary: Sunbird TTS for local languages (native speakers)
-  // Fallback: browser speechSynthesis
-  if (["lg", "nyn", "sw"].includes(locale)) {
-    trySunbirdTTS(text, locale, options.onEnd).then((handled) => {
+  // Server TTS first — Sunbird native voices for Ugandan languages, Cloudflare
+  // MeloTTS for English (consistent quality; works where browser TTS is poor or
+  // absent, e.g. some Android WebViews). Browser speechSynthesis is the fallback.
+  if (["lg", "nyn", "sw", "en", "eng"].includes(locale)) {
+    tryServerTTS(text, locale, options.onEnd).then((handled) => {
       if (!handled) {
-        console.warn("Sunbird TTS unavailable, falling back to browser");
+        console.warn("Server TTS unavailable, falling back to browser");
         speakBrowser(text, locale, options);
       }
     });
