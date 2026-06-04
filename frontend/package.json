@@ -10,7 +10,10 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:api": "playwright test --project=api",
+    "test:e2e": "playwright test --project=chromium",
+    "test:e2e:all": "playwright test"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.99.0",
@@ -24,6 +27,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.2.0",
+    "@playwright/test": "^1.60.0",
     "@types/node": "22.15.3",
     "@types/react": "19.2.0",
     "@types/react-dom": "19.2.0",

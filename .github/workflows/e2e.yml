@@ -1,0 +1,45 @@
+name: E2E (live Crane Cloud)
+
+# Regression suite that hits the DEPLOYED app: API checks across every endpoint
+# plus browser E2E. Runs on demand and on a daily schedule. Note: the chat/triage
+# tests make a handful of real Groq calls, so this is intentionally not on push.
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Target base URL"
+        default: "https://musawo-ai-ce243528.renu-01.cranecloud.io"
+  schedule:
+    - cron: "0 6 * * *" # daily 06:00 UTC regression check against production
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      E2E_BASE_URL: ${{ github.event.inputs.base_url || 'https://musawo-ai-ce243528.renu-01.cranecloud.io' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install deps
+        working-directory: frontend
+        run: npm ci
+      - name: Install Playwright browser
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: API regression (all endpoints)
+        working-directory: frontend
+        run: npm run test:api
+      - name: Browser E2E
+        working-directory: frontend
+        run: npm run test:e2e
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report
+          retention-days: 7

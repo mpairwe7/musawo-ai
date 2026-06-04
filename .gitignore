@@ -54,6 +54,9 @@ coverage/
 # Test results
 test-results/
 .pytest_cache/
+playwright-report/
+blob-report/
+.last-run.json
 
 # Build artifacts
 *.pyc
