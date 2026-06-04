@@ -18,11 +18,8 @@ numpy>=1.26,<3
 # Voice — Silero VAD neural inference (CPU-only, ~40MB)
 onnxruntime>=1.17.0,<2
 
-# LLM — Groq (free tier, OpenAI-compatible)
+# LLM — Gemini (default) + Groq (fallback), both via the OpenAI-compatible client
 openai>=1.30.0
-
-# LLM — Claude API
-anthropic>=0.45.0
 
 # LLM — Local fallback (Qwen3-8B)
 transformers>=4.46.0

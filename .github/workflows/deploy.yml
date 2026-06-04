@@ -108,8 +108,9 @@ jobs:
           PYTHON_KEYRING_BACKEND: keyrings.alt.file.PlaintextKeyring
           CRANE_CLOUD_EMAIL: ${{ secrets.CRANE_CLOUD_EMAIL }}
           CRANE_CLOUD_PASSWORD: ${{ secrets.CRANE_CLOUD_PASSWORD }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           # login (password via stdin, never on argv)
           printf '%s\n%s\n' "$CRANE_CLOUD_PASSWORD" "$CRANE_CLOUD_PASSWORD" \
@@ -117,10 +118,12 @@ jobs:
           # redeploy the freshly-pushed, sha-tagged image with the production env
           cranecloud apps update "$APP_ID" \
             -i "${IMAGE}:${GITHUB_SHA}" \
-            -e LLM_BACKEND=groq \
+            -e LLM_BACKEND=gemini \
+            -e GEMINI_API_KEY="$GEMINI_API_KEY" \
+            -e GEMINI_MODEL=gemini-2.0-flash \
             -e GROQ_API_KEY="$GROQ_API_KEY" \
             -e GROQ_MODEL=llama-3.3-70b-versatile \
-            -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+            -e OPENAI_API_KEY="$OPENAI_API_KEY" \
             -e APP_ENV=production \
             -e LOG_LEVEL=info \
             -e KNOWLEDGE_BASE_DIR=/app/knowledge-base \

@@ -8,10 +8,12 @@ services:
     buildCommand: pip install -r backend/requirements.txt
     startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: ANTHROPIC_API_KEY
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
         sync: false
       - key: LLM_BACKEND
-        value: claude
+        value: gemini
       - key: QDRANT_URL
         value: http://musawo-qdrant:6333
       - key: APP_ENV

@@ -74,7 +74,7 @@ if PROMETHEUS_AVAILABLE:
     )
     LLM_FALLBACK_TOTAL = Counter(
         "musawo_llm_fallback_total",
-        "Times Claude API failed and system fell back to local model",
+        "Times the primary LLM failed and the system fell back to a lower tier",
     )
 
     # ── Histograms ─────────────────────────────────────────────────────

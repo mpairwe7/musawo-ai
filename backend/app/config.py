@@ -48,23 +48,21 @@ class Settings(BaseSettings):
     max_audio_size: int = 10 * 1024 * 1024  # 10 MB
 
     # ── LLM backend selection (llm.py) ──────────────────────────────────────
-    llm_backend: str = "groq"  # groq | claude | local | passages
+    llm_backend: str = "gemini"  # gemini | groq | local | passages
 
-    # Groq (free tier, OpenAI-compatible) — tier 1
+    # Gemini (default — OpenAI-compatible endpoint) — tier 1
+    gemini_api_key: str = ""  # secret
+    gemini_model: str = "gemini-2.0-flash"
+    gemini_max_tokens: int = 4096
+    gemini_temperature: float = 0.3
+
+    # Groq (free tier, OpenAI-compatible) — tier 2 (fallback)
     groq_api_key: str = ""  # secret
     groq_model: str = "llama-3.3-70b-versatile"
     groq_max_tokens: int = 4096
     groq_temperature: float = 0.3
 
-    # Claude API — tier 2
-    anthropic_api_key: str = ""  # secret
-    claude_model: str = "claude-sonnet-4-6-20250514"
-    claude_thinking_budget: int = 10000
-    claude_prompt_caching: bool = True
-    claude_max_tokens: int = 4096
-    claude_temperature: float = 0.3
-
-    # Local model fallback — tiers 3-5 (env names are LLM_*)
+    # Local model fallback (env names are LLM_*)
     llm_model: str = "Qwen/Qwen3-8B"
     llm_context_window: int = 8192
     llm_max_tokens: int = 512

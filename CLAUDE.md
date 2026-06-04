@@ -30,8 +30,8 @@ The system **never fails silently**: if every LLM tier is down, formatted retrie
 
 In order of preference, each tier silently demotes on failure:
 
-1. **Groq API** — primary, free tier (Qwen3-32B / Llama-3.3-70B). Token budget enforced to prevent context overflow.
-2. **Claude API** — secondary, with prompt caching (~90% cost reduction). Extended thinking for complex queries.
+1. **Gemini API** — default, `gemini-2.0-flash` via the OpenAI-compatible endpoint. Set `GEMINI_API_KEY`.
+2. **Groq API** — fallback, free tier (Qwen3-32B / Llama-3.3-70B). Token budget enforced to prevent context overflow.
 3. **GGUF via llama-cpp-python** — CPU quantized (Q5_K_M, 4–6GB RAM). Enable by setting `GGUF_MODEL_PATH`.
 4. **4-bit BitsAndBytes** — auto-detected if GPU available (~4GB VRAM, NF4).
 5. **Full-precision transformers** — fallback when quant libs unavailable.
@@ -105,9 +105,9 @@ Sunbird auth uses `SUNBIRD_USERNAME` + `SUNBIRD_PASSWORD` (preferred over static
 ## Key environment variables
 
 ```bash
-# LLM (at least one of GROQ_API_KEY or ANTHROPIC_API_KEY recommended)
+# LLM (Gemini default, Groq fallback — set at least one)
+GEMINI_API_KEY=
 GROQ_API_KEY=
-ANTHROPIC_API_KEY=
 GGUF_MODEL_PATH=             # Enables tier 3
 LOCAL_GPU_LAYERS=0           # GPU layers for GGUF
 

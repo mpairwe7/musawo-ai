@@ -65,11 +65,11 @@ MAX_AUDIO_SIZE = settings.max_audio_size
 
 # Startup config summary — booleans only for secrets, never their values
 logger.info(
-    "config: env=%s backend=%s groq=%s claude=%s sunbird=%s twilio=%s qdrant=%s cache=%s",
+    "config: env=%s backend=%s gemini=%s groq=%s sunbird=%s twilio=%s qdrant=%s cache=%s",
     APP_ENV,
     settings.llm_backend,
+    bool(settings.gemini_api_key),
     bool(settings.groq_api_key),
-    bool(settings.anthropic_api_key),
     bool(settings.sunbird_username or settings.sunbird_api_token),
     bool(settings.twilio_auth_token),
     settings.qdrant_url,

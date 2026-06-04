@@ -3,6 +3,16 @@
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def _hermetic_llm_keys(monkeypatch):
+    """Keep tests offline: blank the LLM provider keys on the llm module so no
+    test makes a live API call, even though config.py now loads the real .env.
+    Tests that exercise a provider set the key explicitly (monkeypatch/@patch)."""
+    import app.llm as _llm
+    monkeypatch.setattr(_llm, "GEMINI_API_KEY", "", raising=False)
+    monkeypatch.setattr(_llm, "GROQ_API_KEY", "", raising=False)
+
+
 @pytest.fixture
 def sample_query_malaria():
     return "A 3-year-old child has fever and was tested positive on RDT"

@@ -21,8 +21,8 @@ SECRET_PATTERNS = [r"gsk_[A-Za-z0-9]{8}", r"sk-ant-", r"AC[0-9a-f]{32}", r"hf_[A
 _CLEARED = [
     "ABSTENTION_THRESHOLD", "ESCALATION_THRESHOLD", "GROUNDING_THRESHOLD",
     "CLINICAL_SAFETY_THRESHOLD", "MAX_INPUT_LENGTH", "GROQ_MAX_TOKENS",
-    "CLAUDE_PROMPT_CACHING", "LLM_BACKEND", "CACHE_REDIS_PREFIX",
-    "MAX_AUDIO_SIZE", "RERANK_ENABLED", "CLAUDE_TEMPERATURE",
+    "GROQ_TEMPERATURE", "LLM_BACKEND", "CACHE_REDIS_PREFIX",
+    "MAX_AUDIO_SIZE", "RERANK_ENABLED", "GEMINI_TEMPERATURE",
 ]
 
 
@@ -44,8 +44,8 @@ class TestConfigDefaults:
         assert s.clinical_safety_threshold == 0.2
         assert s.max_input_length == 2000
         assert s.groq_max_tokens == 4096
-        assert s.claude_prompt_caching is True
-        assert s.llm_backend == "groq"
+        assert s.gemini_model == "gemini-2.0-flash"
+        assert s.llm_backend == "gemini"
         assert s.max_audio_size == 10 * 1024 * 1024
 
     def test_fork_leftover_prefix_fixed(self, monkeypatch):
@@ -60,11 +60,11 @@ class TestConfigTypes:
             monkeypatch,
             GROQ_MAX_TOKENS="256",
             RERANK_ENABLED="false",
-            CLAUDE_TEMPERATURE="0.7",
+            GEMINI_TEMPERATURE="0.7",
         )
         assert s.groq_max_tokens == 256 and isinstance(s.groq_max_tokens, int)
         assert s.rerank_enabled is False
-        assert s.claude_temperature == 0.7 and isinstance(s.claude_temperature, float)
+        assert s.gemini_temperature == 0.7 and isinstance(s.gemini_temperature, float)
 
 
 class TestConfigResilience:

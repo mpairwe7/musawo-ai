@@ -1,9 +1,10 @@
 """Musawo AI — LLM integration layer.
 
 Supports multiple backends (priority order):
-1. Groq API (free, fast — llama-3.3-70b / qwen3-32b via OpenAI-compatible API)
-2. Claude API (Anthropic SDK, prompt caching + extended thinking)
-3. Passage-based (zero-cost, instant, no LLM needed)
+1. Gemini API (default — gemini-2.0-flash via OpenAI-compatible API)
+2. Groq API (fallback — llama-3.3-70b / qwen3-32b via OpenAI-compatible API)
+3. Local model (GGUF / transformers, offline)
+4. Passage-based (zero-cost, instant, no LLM needed)
 
 Health-specific system prompts for each mode (VHT, Maternal, Community).
 """
@@ -58,21 +59,19 @@ def truncate_history_to_budget(
 
 from .config import settings
 
-LLM_BACKEND = settings.llm_backend  # "groq" | "claude" | "local" | "passages"
+LLM_BACKEND = settings.llm_backend  # "gemini" | "groq" | "local" | "passages"
+
+# Gemini (default — OpenAI-compatible endpoint)
+GEMINI_API_KEY = settings.gemini_api_key
+GEMINI_MODEL = settings.gemini_model
+GEMINI_MAX_TOKENS = settings.gemini_max_tokens
+GEMINI_TEMPERATURE = settings.gemini_temperature
 
 # Groq (free tier, OpenAI-compatible)
 GROQ_API_KEY = settings.groq_api_key
 GROQ_MODEL = settings.groq_model
 GROQ_MAX_TOKENS = settings.groq_max_tokens
 GROQ_TEMPERATURE = settings.groq_temperature
-
-# Claude API
-ANTHROPIC_API_KEY = settings.anthropic_api_key
-CLAUDE_MODEL = settings.claude_model
-CLAUDE_THINKING_BUDGET = settings.claude_thinking_budget
-CLAUDE_PROMPT_CACHING = settings.claude_prompt_caching
-CLAUDE_MAX_TOKENS = settings.claude_max_tokens
-CLAUDE_TEMPERATURE = settings.claude_temperature
 
 # Local model (offline fallback)
 LOCAL_MODEL = settings.llm_model
@@ -416,154 +415,103 @@ def stream_groq(
         raise
 
 
-# ── Claude API backend ─────────────────────────────────────────────────────
+# ── Gemini backend (default — OpenAI-compatible endpoint) ──────────────────
 
-_client = None
-
-
-def _get_claude_client():
-    global _client
-    if _client is None:
-        import anthropic
-        _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-    return _client
+_gemini_client = None
+_GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 
 
-def _should_use_thinking(query: str) -> bool:
-    """Heuristic: enable extended thinking for complex health queries."""
-    triggers = [
-        "explain", "why", "how does", "mechanism", "compare",
-        "difference between", "what causes", "steps to",
-        "protocol", "dosage calculation", "interact",
-    ]
-    q = query.lower()
-    return any(t in q for t in triggers)
+def _get_gemini_client():
+    global _gemini_client
+    if _gemini_client is None:
+        from openai import OpenAI
+        _gemini_client = OpenAI(api_key=GEMINI_API_KEY, base_url=_GEMINI_BASE_URL)
+    return _gemini_client
 
 
-def generate_claude(
+def generate_gemini(
     query: str,
     passages: list[dict[str, Any]],
     mode: str,
     history: list[dict[str, str]] | None = None,
     locale: str = "en",
 ) -> dict[str, Any]:
-    """Synchronous Claude API generation with prompt caching."""
-    client = _get_claude_client()
+    """Generate via Google Gemini Flash (OpenAI-compatible API). Primary backend."""
+    client = _get_gemini_client()
     system_prompt = _get_system_prompt(mode, locale)
     context = format_passages(passages)
 
-    # Build messages
-    messages: list[dict] = []
-
-    # History (last 5 turns)
+    messages: list[dict] = [{"role": "system", "content": system_prompt}]
     if history:
-        for turn in history[-10:]:  # 5 pairs = 10 messages
-            messages.append(turn)
-
-    # Current query with context
-    user_content = (
-        f"Context from official health guidelines:\n{context}\n\n"
-        f"User question ({locale}): {query}"
-    )
-    messages.append({"role": "user", "content": user_content})
-
-    # System prompt with cache control
-    system_blocks: list[dict] = [{"type": "text", "text": system_prompt}]
-    if CLAUDE_PROMPT_CACHING:
-        system_blocks[0]["cache_control"] = {"type": "ephemeral"}
-
-    # Extended thinking for complex queries
-    use_thinking = _should_use_thinking(query)
-
-    kwargs: dict[str, Any] = {
-        "model": CLAUDE_MODEL,
-        "max_tokens": CLAUDE_MAX_TOKENS,
-        "system": system_blocks,
-        "messages": messages,
-    }
-
-    if use_thinking:
-        kwargs["temperature"] = 1.0  # Required for extended thinking
-        kwargs["thinking"] = {
-            "type": "enabled",
-            "budget_tokens": CLAUDE_THINKING_BUDGET,
-        }
-    else:
-        kwargs["temperature"] = CLAUDE_TEMPERATURE
+        budgeted = truncate_history_to_budget(
+            history[-10:],
+            max_tokens=30000,  # Gemini Flash has a very large context window
+            system_tokens=estimate_tokens(system_prompt),
+            passage_tokens=estimate_tokens(context) + estimate_tokens(query),
+        )
+        messages.extend(budgeted)
+    messages.append({
+        "role": "user",
+        "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly to the patient/VHT.",
+    })
 
     try:
-        response = client.messages.create(**kwargs)
+        response = client.chat.completions.create(
+            model=GEMINI_MODEL,
+            messages=messages,
+            max_tokens=GEMINI_MAX_TOKENS,
+            temperature=GEMINI_TEMPERATURE,
+        )
+        answer = (response.choices[0].message.content or "").strip()
+        return {
+            "text": answer,
+            "usage": {
+                "input_tokens": response.usage.prompt_tokens if response.usage else 0,
+                "output_tokens": response.usage.completion_tokens if response.usage else 0,
+            },
+        }
     except Exception as e:
-        logger.error("Claude API error: %s", e)
-        # Attempt local fallback
-        if LOCAL_MODEL:
-            logger.info("Falling back to local model")
-            return generate_local(query, passages, mode, locale)
+        logger.error("Gemini API error: %s", e)
         raise
 
-    # Extract text from response blocks
-    answer = ""
-    for block in response.content:
-        if block.type == "text":
-            answer += block.text
 
-    return {
-        "text": answer,
-        "usage": {
-            "input_tokens": response.usage.input_tokens,
-            "output_tokens": response.usage.output_tokens,
-            "cache_read": getattr(response.usage, "cache_read_input_tokens", 0),
-            "cache_creation": getattr(response.usage, "cache_creation_input_tokens", 0),
-        },
-    }
-
-
-def stream_claude(
+def stream_gemini(
     query: str,
     passages: list[dict[str, Any]],
     mode: str,
     history: list[dict[str, str]] | None = None,
     locale: str = "en",
 ) -> Generator[dict[str, Any], None, None]:
-    """Streaming Claude API generation for SSE."""
-    client = _get_claude_client()
+    """Streaming generation via Gemini (OpenAI-compatible)."""
+    client = _get_gemini_client()
     system_prompt = _get_system_prompt(mode, locale)
     context = format_passages(passages)
 
-    messages: list[dict] = []
+    messages: list[dict] = [{"role": "system", "content": system_prompt}]
     if history:
         for turn in history[-10:]:
             messages.append(turn)
+    messages.append({
+        "role": "user",
+        "content": f"Context from official health guidelines:\n{context}\n\nUser question ({locale}): {query}\n\nRespond directly.",
+    })
 
-    user_content = (
-        f"Context from official health guidelines:\n{context}\n\n"
-        f"User question ({locale}): {query}"
-    )
-    messages.append({"role": "user", "content": user_content})
-
-    system_blocks: list[dict] = [{"type": "text", "text": system_prompt}]
-    if CLAUDE_PROMPT_CACHING:
-        system_blocks[0]["cache_control"] = {"type": "ephemeral"}
-
-    with client.messages.stream(
-        model=CLAUDE_MODEL,
-        max_tokens=CLAUDE_MAX_TOKENS,
-        temperature=CLAUDE_TEMPERATURE,
-        system=system_blocks,
-        messages=messages,
-    ) as stream:
-        for text in stream.text_stream:
-            yield {"type": "token", "text": text}
-
-        # Final message with usage
-        final = stream.get_final_message()
-        yield {
-            "type": "done",
-            "usage": {
-                "input_tokens": final.usage.input_tokens,
-                "output_tokens": final.usage.output_tokens,
-            },
-        }
+    try:
+        stream = client.chat.completions.create(
+            model=GEMINI_MODEL,
+            messages=messages,
+            max_tokens=GEMINI_MAX_TOKENS,
+            temperature=GEMINI_TEMPERATURE,
+            stream=True,
+        )
+        for chunk in stream:
+            delta = chunk.choices[0].delta if chunk.choices else None
+            if delta and delta.content:
+                yield {"type": "token", "text": delta.content}
+        yield {"type": "done", "usage": {}}
+    except Exception as e:
+        logger.error("Gemini streaming error: %s", e)
+        raise
 
 
 # ── Local model backend (offline fallback) ─────────────────────────────────
@@ -851,22 +799,22 @@ def generate(
 ) -> dict[str, Any]:
     """Generate health guidance using the best available backend.
 
-    Priority: Groq → Claude → Local → Passage-based.
+    Priority: Gemini → Groq → Local → Passage-based.
     Always returns a response — never fails silently.
     """
-    # Try Groq first (free, fast)
+    # Try Gemini first (default — fast, large context)
+    if GEMINI_API_KEY:
+        try:
+            return generate_gemini(query, passages, mode, history, locale)
+        except Exception as e:
+            logger.warning("Gemini failed, falling back: %s", e)
+
+    # Fallback to Groq (free, fast)
     if GROQ_API_KEY:
         try:
             return generate_groq(query, passages, mode, history, locale)
         except Exception as e:
             logger.warning("Groq failed, falling back: %s", e)
-
-    # Try Claude API
-    if ANTHROPIC_API_KEY:
-        try:
-            return generate_claude(query, passages, mode, history, locale)
-        except Exception as e:
-            logger.warning("Claude failed, falling back: %s", e)
 
     # Try local model
     if LLM_BACKEND == "local":
@@ -887,21 +835,21 @@ def stream_tokens(
     locale: str = "en",
 ) -> Generator[dict[str, Any], None, None]:
     """Stream tokens from best available backend."""
-    # Try Groq streaming first
+    # Try Gemini streaming first (default)
+    if GEMINI_API_KEY:
+        try:
+            yield from stream_gemini(query, passages, mode, history, locale)
+            return
+        except Exception as e:
+            logger.warning("Gemini streaming failed: %s", e)
+
+    # Fallback to Groq streaming
     if GROQ_API_KEY:
         try:
             yield from stream_groq(query, passages, mode, history, locale)
             return
         except Exception as e:
             logger.warning("Groq streaming failed: %s", e)
-
-    # Try Claude streaming
-    if ANTHROPIC_API_KEY:
-        try:
-            yield from stream_claude(query, passages, mode, history, locale)
-            return
-        except Exception as e:
-            logger.warning("Claude streaming failed: %s", e)
 
     # Fallback: generate full response and yield as single chunk
     try:
@@ -918,9 +866,9 @@ def stream_tokens(
 
 def is_ready() -> bool:
     """Check if any LLM backend is available."""
-    if GROQ_API_KEY:
+    if GEMINI_API_KEY:
         return True
-    if ANTHROPIC_API_KEY:
+    if GROQ_API_KEY:
         return True
     if LLM_BACKEND == "local":
         try:

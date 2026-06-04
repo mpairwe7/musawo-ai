@@ -165,12 +165,13 @@ class TestGenerateFromPassages:
 class TestIsReady:
     """is_ready returns True because passage-based fallback always works."""
 
+    @patch("app.llm.GEMINI_API_KEY", "")
     @patch("app.llm.GROQ_API_KEY", "")
-    @patch("app.llm.ANTHROPIC_API_KEY", "")
     @patch("app.llm.LLM_BACKEND", "passages")
     def test_always_true_with_passage_fallback(self):
         assert is_ready() is True
 
+    @patch("app.llm.GEMINI_API_KEY", "")
     @patch("app.llm.GROQ_API_KEY", "fake-key")
     def test_true_when_groq_key_present(self):
         assert is_ready() is True
@@ -182,8 +183,8 @@ class TestIsReady:
 class TestGenerate:
     """generate() falls through to passage-based when API clients fail."""
 
+    @patch("app.llm.GEMINI_API_KEY", "")
     @patch("app.llm.GROQ_API_KEY", "")
-    @patch("app.llm.ANTHROPIC_API_KEY", "")
     @patch("app.llm.LLM_BACKEND", "passages")
     def test_falls_through_to_passages_when_no_api_keys(self):
         passages = [
@@ -194,8 +195,8 @@ class TestGenerate:
         assert "## Guidance" in result["text"]
         assert "ACT" in result["text"]
 
+    @patch("app.llm.GEMINI_API_KEY", "")
     @patch("app.llm.GROQ_API_KEY", "fake-key")
-    @patch("app.llm.ANTHROPIC_API_KEY", "")
     @patch("app.llm.LLM_BACKEND", "passages")
     def test_falls_through_when_groq_fails(self):
         passages = [
@@ -206,20 +207,20 @@ class TestGenerate:
         # Should fall through to passage-based
         assert "Breastfeed" in result["text"]
 
+    @patch("app.llm.GEMINI_API_KEY", "fake-key")
     @patch("app.llm.GROQ_API_KEY", "fake-key")
-    @patch("app.llm.ANTHROPIC_API_KEY", "fake-key")
     @patch("app.llm.LLM_BACKEND", "passages")
     def test_falls_through_when_both_apis_fail(self):
         passages = [
             {"text": "Wash hands with soap and water.", "source": "WHO"},
         ]
-        with patch("app.llm.generate_groq", side_effect=Exception("groq down")), \
-             patch("app.llm.generate_claude", side_effect=Exception("claude down")):
+        with patch("app.llm.generate_gemini", side_effect=Exception("gemini down")), \
+             patch("app.llm.generate_groq", side_effect=Exception("groq down")):
             result = generate("hand hygiene", passages, mode="community")
         assert "Wash hands" in result["text"]
 
+    @patch("app.llm.GEMINI_API_KEY", "")
     @patch("app.llm.GROQ_API_KEY", "")
-    @patch("app.llm.ANTHROPIC_API_KEY", "")
     @patch("app.llm.LLM_BACKEND", "passages")
     def test_empty_passages_returns_abstention(self):
         result = generate("random question", [], mode="community")

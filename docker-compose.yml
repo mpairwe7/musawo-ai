@@ -57,13 +57,13 @@ services:
       APP_ENV: ${APP_ENV:-development}
       LOG_LEVEL: ${LOG_LEVEL:-info}
       WORKERS: ${WORKERS:-2}
-      # LLM
-      LLM_BACKEND: ${LLM_BACKEND:-claude}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      CLAUDE_MODEL: ${CLAUDE_MODEL:-claude-sonnet-4-6-20250514}
-      CLAUDE_PROMPT_CACHING: ${CLAUDE_PROMPT_CACHING:-true}
-      CLAUDE_MAX_TOKENS: ${CLAUDE_MAX_TOKENS:-4096}
-      CLAUDE_TEMPERATURE: ${CLAUDE_TEMPERATURE:-0.3}
+      # LLM (Gemini default → Groq fallback)
+      LLM_BACKEND: ${LLM_BACKEND:-gemini}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_MODEL: ${GROQ_MODEL:-llama-3.3-70b-versatile}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       # Retrieval
       QDRANT_URL: http://qdrant:6333
       QDRANT_COLLECTION: ${QDRANT_COLLECTION:-musawo_health_kb}
