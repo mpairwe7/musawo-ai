@@ -32,6 +32,30 @@ test.describe("Musawo AI — deployed frontend", () => {
     ).toBeGreaterThan(40);
   });
 
+  test("English 'Read aloud' narration calls the server TTS (Cloudflare MeloTTS)", async ({ page }) => {
+    test.setTimeout(120_000);
+    await page.goto("/");
+    await page.getByLabel("Health question input").fill("How do I prevent malaria at home?");
+    await page.getByRole("button", { name: "Send message" }).click();
+
+    const answer = page.locator(".bubble.assistant .bubble-content").last();
+    await expect(answer).toBeVisible({ timeout: 90_000 });
+    await expect
+      .poll(async () => (await answer.textContent())?.trim().length ?? 0, { timeout: 90_000, intervals: [1000] })
+      .toBeGreaterThan(40);
+
+    // Clicking "Read aloud" must hit the server TTS endpoint (English → Cloudflare
+    // MeloTTS), not go straight to browser speechSynthesis.
+    const ttsReq = page.waitForRequest(
+      (r) => r.url().includes("/api/v1/voice/tts") && r.method() === "POST",
+      { timeout: 15_000 },
+    );
+    await page.getByRole("button", { name: "Read aloud" }).first().click();
+    const req = await ttsReq;
+    const body = JSON.parse(req.postData() || "{}");
+    expect(["en", "eng"]).toContain(body.locale); // English narration routed server-side
+  });
+
   test("a comparison question renders cleanly — no vertical-character collapse", async ({ page }) => {
     test.setTimeout(120_000);
     await page.goto("/");
