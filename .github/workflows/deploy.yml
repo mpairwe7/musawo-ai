@@ -5,6 +5,13 @@ name: Build & Deploy to Crane Cloud
 on:
   push:
     branches: [main]
+    # Don't rebuild/redeploy for changes that can't affect the image
+    paths-ignore:
+      - "frontend/e2e/**"
+      - "frontend/playwright.config.ts"
+      - ".github/workflows/e2e.yml"
+      - "**/*.md"
+      - "docs/**"
   pull_request:
     branches: [main]
   workflow_dispatch:

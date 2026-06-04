@@ -174,13 +174,18 @@ test.describe("Sessions & feedback", () => {
   test("chat with a session_id persists into history", async ({ request }) => {
     test.setTimeout(LLM_TIMEOUT);
     const sid = `e2e-${Date.now()}`;
-    await request.post("/v1/chat", {
-      data: { query: "What is ORS?", mode: "vht", session_id: sid },
-      timeout: LLM_TIMEOUT,
-    });
+    // Use a query that reliably produces a grounded answer (the persist path runs
+    // only on a full answer, not on an abstention) so the test is deterministic.
+    const chat = await json(
+      await request.post("/v1/chat", {
+        data: { query: "What should I do for a child with mild diarrhoea?", mode: "vht", session_id: sid },
+        timeout: LLM_TIMEOUT,
+      })
+    );
+    expect(chat.session_id).toBe(sid);
     const b = await json(await request.get(`/v1/session/${sid}/history`));
     expect(b.found).toBe(true);
-    expect(b.turns.length).toBeGreaterThan(0);
+    expect(b.turns.length).toBeGreaterThanOrEqual(2); // user + assistant
   });
 
   test("POST /v1/feedback → recorded", async ({ request }) => {
