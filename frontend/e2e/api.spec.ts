@@ -233,20 +233,26 @@ test.describe("Voice / translation (Sunbird-aware)", () => {
     return Boolean(h.sunbird_ai);
   }
   const expected = (on: boolean) => (on ? [200, 502] : [503]);
+  // Sunbird calls go to an external API that can take up to SUNBIRD_TIMEOUT (30s)
+  // on the pod, so allow longer than the default action timeout.
+  const SB = 45_000;
 
   test("POST /v1/voice/tts behaves per Sunbird config", async ({ request }) => {
+    test.setTimeout(60_000);
     const on = await sunbirdOn(request);
-    const s = (await request.post("/v1/voice/tts", { data: { text: "oli otya", locale: "lg" } })).status();
+    const s = (await request.post("/v1/voice/tts", { data: { text: "oli otya", locale: "lg" }, timeout: SB })).status();
     expect(expected(on)).toContain(s);
   });
   test("POST /v1/translate behaves per Sunbird config", async ({ request }) => {
+    test.setTimeout(60_000);
     const on = await sunbirdOn(request);
-    const s = (await request.post("/v1/translate", { data: { text: "hello", source_locale: "en", target_locale: "lg" } })).status();
+    const s = (await request.post("/v1/translate", { data: { text: "hello", source_locale: "en", target_locale: "lg" }, timeout: SB })).status();
     expect(expected(on)).toContain(s);
   });
   test("POST /v1/detect-language behaves per Sunbird config", async ({ request }) => {
+    test.setTimeout(60_000);
     const on = await sunbirdOn(request);
-    const s = (await request.post("/v1/detect-language", { data: { text: "oli otya" } })).status();
+    const s = (await request.post("/v1/detect-language", { data: { text: "oli otya" }, timeout: SB })).status();
     expect(expected(on)).toContain(s);
   });
 });
