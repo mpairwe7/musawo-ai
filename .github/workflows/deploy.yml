@@ -127,7 +127,7 @@ jobs:
             -i "${IMAGE}:${GITHUB_SHA}" \
             -e LLM_BACKEND=gemini \
             -e GEMINI_API_KEY="$GEMINI_API_KEY" \
-            -e GEMINI_MODEL=gemini-2.0-flash \
+            -e GEMINI_MODEL=gemini-2.5-flash \
             -e CF_ACCOUNT_ID="$CF_ACCOUNT_ID" \
             -e CF_AI_GATEWAY="$CF_AI_GATEWAY" \
             -e CF_AIG_TOKEN="$CF_AIG_TOKEN" \

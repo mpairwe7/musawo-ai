@@ -52,7 +52,7 @@ class Settings(BaseSettings):
 
     # Gemini (default — OpenAI-compatible endpoint) — tier 1
     gemini_api_key: str = ""  # secret
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-2.5-flash"
     gemini_max_tokens: int = 4096
     gemini_temperature: float = 0.3
 

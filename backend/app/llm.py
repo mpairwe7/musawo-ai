@@ -1,7 +1,7 @@
 """Musawo AI — LLM integration layer.
 
 Supports multiple backends (priority order):
-1. Gemini API (default — gemini-2.0-flash via OpenAI-compatible API)
+1. Gemini API (default — gemini-2.5-flash via OpenAI-compatible API; CF AI Gateway on RENU)
 2. Groq API (fallback — llama-3.3-70b / qwen3-32b via OpenAI-compatible API)
 3. Local model (GGUF / transformers, offline)
 4. Passage-based (zero-cost, instant, no LLM needed)

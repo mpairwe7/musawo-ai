@@ -44,7 +44,7 @@ class TestConfigDefaults:
         assert s.clinical_safety_threshold == 0.2
         assert s.max_input_length == 2000
         assert s.groq_max_tokens == 4096
-        assert s.gemini_model == "gemini-2.0-flash"
+        assert s.gemini_model == "gemini-2.5-flash"
         assert s.llm_backend == "gemini"
         assert s.max_audio_size == 10 * 1024 * 1024
 
